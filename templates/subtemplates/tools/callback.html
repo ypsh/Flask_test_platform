@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="tabbable" id="tabs-637264">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#panel-01" data-toggle="tab">信审回调</a>
+                </li>
+                <li>
+                    <a href="#panel-02" data-toggle="tab">OA回调</a>
+                </li>
+                <li>
+                    <a href="#panel-03" data-toggle="tab">OB回调</a>
+                </li>
+                <li>
+                    <a href="#panel-04" data-toggle="tab">核心放款</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                {% block pane_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    window.onload = function () {
+        $("ul.submenu#tool").css("display", "block");
+        $("a#callback").parent().addClass("active");
+    };
+
+
+
+</script>
+{% endblock %}

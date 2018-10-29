@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<!--suppress XmlHighlighting -->
+<div>
+
+    <div class="row clearfix" style="padding-top:10px;">
+        <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+            <tr>
+                <th>
+                    文件ID
+                </th>
+                <th>
+                    文件名
+                </th>
+                <th>
+                    类型
+                </th>
+                <th>
+                    大小
+                </th>
+                <th>
+                    上传时间
+                </th>
+                <th>
+                    上传人
+                </th>
+                <th>
+                    备注
+                </th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>
+                    文件ID
+                </th>
+                <th>
+                    文件名
+                </th>
+                <th>
+                    类型
+                </th>
+                <th>
+                    大小
+                </th>
+                <th>
+                    上传时间
+                </th>
+                <th>
+                    上传人
+                </th>
+                <th>
+                    备注
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div id="qrcode" style="position:absolute;display:none;border:1px solid silver;background:silver"></div>
+</div>
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加说明</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+
+                    <div class="form-group">
+                        <label for="header" class="col-sm-2 control-label">文件说明</label>
+                        <div class="col-sm-9">
+                            <textarea type="textare" class=" form-control" id="header" rows="8"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit" onclick="update_remark()" onfocus="">提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var table;
+    var tabledata = [];
+    function init_table() {
+        table = $('#table').DataTable({
+            language: {
+                url: "/static/language/cn.json"
+            },
+            lengthChange: true,
+            ajax: {
+                url: "/apis/filesmanager",
+                type: 'get',
+                data: {
+                    type: 'get'
+                },
+            },
+            select: true,
+            columnDefs: [
+                { className: "wordwrap ellipsis-hover", targets: [6] },
+
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+
+                {
+                    text: '添加说明',
+                    action: function () {
+                        if (selected(table)) {
+                            $('#myModal').modal();
+                        } else {
+                            toastr.info('选择数据')
+                        }
+
+
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '删除',
+                    action: function () {
+                        delete_items();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    'extend': 'copy',
+                    'text': '拷贝数据',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+                {
+                    'extend': 'excelHtml5',
+                    'text': '导出excel',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+                {
+                    text: '上传文件',
+                    action: function () {
+                        $("#upload").modal();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '选择下载',
+                    attr: {
+                        title: 'down',
+                        id: 'download',
+                        onmouseover: "show_qc(this)",
+                        onmouseout: "hide_qc(this)",
+                        onclick: 'download()'
+                    },
+                    class: "btn-default",
+                },
+                'pageLength',
+                {
+                    text: '刷新',
+                    action: function () {
+                        table.ajax.reload();
+                    },
+                    class: "btn-default",
+                },
+            ]
+        });
+    }
+    //鼠标悬浮显示二维码
+    function show_qc(obj) {
+        makeCode();
+        show(obj, "qrcode");
+    }
+
+    function hide_qc(obj) {
+        hide(obj, "qrcode");
+    }
+
+    function show(obj, id) {
+        var objDiv = $("#" + id + "");
+        $(objDiv).css("display", "block");
+        $(objDiv).css("left", event.clientX);
+        $(objDiv).css("top", event.clientY + 10);
+    }
+
+    function hide(obj, id) {
+        var objDiv = $("#" + id + "");
+        $(objDiv).css("display", "none");
+        $(objDiv).find('img').css("display", "none");
+    }
+
+
+    var qrcode
+    function init_qrcode() {
+        qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 300,
+            height: 300,
+            colorDark: '#ff2a75',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+    function makeCode() {
+
+        var elText = ''
+        if (get_file() != '') {
+            elText = window.location.origin + get_file()
+            qrcode.makeCode(elText);
+
+        }
+    }
+    // function toUtf8(path) {
+    //     if (path != '') {
+    //         var out, i, len, c;
+    //         out = "";
+    //         len = path.length;
+    //         for (i = 0; i < len; i++) {
+    //             c = path.charCodeAt(i);
+    //             if ((c >= 0x0001) && (c <= 0x007F)) {
+    //                 out += path.charAt(i);
+    //             } else if (c > 0x07FF) {
+    //                 out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+    //                 out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+    //                 out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    //             } else {
+    //                 out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+    //                 out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+    //             }
+    //         }
+    //         return out;
+    //     }
+    // }
+    //文件下载
+    function download() {
+        var $a = document.createElement('a');
+        var src = get_file();
+        $a.setAttribute("href", src);
+        $a.setAttribute("download", "");
+        var evObj = document.createEvent('MouseEvents');
+        evObj.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+        $a.dispatchEvent(evObj);
+    };
+
+
+    function get_file() {
+        if (selected(table)) {
+            var src = '/apis/filesmanager?type=download'
+            src = src + '&fileid=' + table.rows(['.selected']).data()[0][0]
+            return src;
+        } else {
+            toastr.info('选择数据')
+            return false;
+        }
+    }
+
+    //修改备注
+    function update_remark() {
+        selected(table);
+        $.ajax({
+            url: '/apis/filesmanager',
+            type: 'post',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: selected_jsondata_remark(table),
+            success: function (result) {
+                if (result.message) {
+                    table.ajax.reload();
+                    toastr.info('执行完成');
+                } else {
+                    toastr.error('后台执行报错');
+                }
+            }
+        })
+    }
+
+    //批量删除文件
+    function delete_items() {
+        selected(table);
+        $.ajax({
+            url: '/apis/filesmanager',
+            type: 'post',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: selected_jsondata(table),
+            success: function (result) {
+                if (result.message) {
+                    table.ajax.reload();
+                    toastr.info('执行完成');
+                } else {
+                    toastr.error('后台执行报错');
+                }
+            }
+        })
+    }
+
+    function selected_jsondata(table) {
+        var result = new Array();
+        if (selected(table)) {
+            data = table.rows(['.selected']).data()
+            for (var i = 0, len = data.length; i < len; i++) {
+                result[i] = data[i]
+                result[i].push($('#header').val())
+            }
+            return JSON.stringify({
+                'type': 'delete', 'user': localStorage.user,
+                'data': JSON.stringify(result)
+            })
+        }
+        return []
+    }
+
+    function selected_jsondata_remark(table) {
+        var result = new Array();
+        if (selected(table)) {
+            data = table.rows(['.selected']).data()
+            for (var i = 0, len = data.length; i < len; i++) {
+                result[i] = data[i]
+                result[i].push($('#header').val())
+            }
+            return JSON.stringify({
+                'type': 'remark', 'user': localStorage.user,
+                'data': JSON.stringify(result)
+            })
+        }
+        return []
+    }
+
+    function init_upload() {
+        $("#uploadfile").fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: '/apis/filesmanager', // 后台处理的脚本
+            uploadExtraData: function () {
+                var data = {
+                    user: localStorage.user,
+                    type: 'upload'
+                };
+                return data;
+            },
+            // allowedFileExtensions: ['xlsx'],//限制文件上传的类型
+            uploadAsync: true,
+            showCaption: true,
+            showPreview: true, //是否显示预览
+            overwriteInitial: false,
+            maxFileSize: 10000000,//限制文件上传的大小
+            maxFilesNum: 10
+        });
+        //异步上传返回错误结果处理
+        $('#uploadfile').on('fileerror', function (event, data, msg) {
+            toastr.info('失败')
+        });
+        //异步上传返回结果处理
+        $("#uploadfile").on("fileuploaded", function (event, data, previewId, index) {
+            if (data.response.message) {
+                table.ajax.reload()
+                toastr.info('导入成功')
+            }
+
+        });
+    }
+
+
+
+
+</script>
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#datum").css("display", "block");
+        $("a#filesmanager").parent().addClass("active");
+        init_table();
+        init_upload();
+        init_qrcode();
+    };
+
+
+
+
+
+</script>
+<style>
+    #table {
+        table-layout: fixed;
+    }
+
+    .wordwrap {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: nowrap;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+    /* 超长文字单元格省略号显示 */
+    td:hover {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: unset;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+
+
+</style>
+{% endblock %}

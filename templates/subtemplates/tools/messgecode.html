@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<form class="form-inline" role="form">
+    <div class="form-group">
+        <label for="mobilenumber">手机号：</label>
+        <input type="text" class="form-control" id="mobilenumber" value="{{mobilenumber}}" name="mobilenumber"
+               style="width:600px"
+               placeholder="请输入手机号" onblur="javascript:upperCase('mobilenumber');">
+        <label for="submit" style="padding-right:30px;"></label>
+        <input id="submit" type="button" class="btn btn-default" onclick="submit_message()" value="提交"/>
+    </div>
+</form>
+<form>
+    <div class="form-group">
+        <label for="result" style="padding-top:30px">验证码：</label>
+        <textarea id="result" class="form-control" rows="10">{{result}}</textarea>
+    </div>
+</form>
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#tool").css("display", "block");
+        $("a#messgecode").parent().addClass("active");
+    };
+    window.addEventListener("keydown", function (e) {
+        console.log(e);
+
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            e.cancleBubble = true;
+        }
+    });
+
+
+
+</script>
+{% endblock %}

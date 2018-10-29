@@ -1,0 +1,595 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="col-md-12 column">
+    <div class="page-header">
+        <h1>
+            测试报告 ~ <span id="headername"></span>
+        </h1>
+        <div class="btn-group">
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                        id="datasourcebutton">数据源
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
+                    <div class="col-sm-12 column">
+                        <label for="createrselect">数据源</label>
+                        <input type="text" class="form-control input-sm col-sm-12" id="datasource" list="datasourcelist"
+                               onchange="setbuttondisplay()" ondblclick="clearval('datasource')"/>
+
+                        <datalist id="datasourcelist">
+                            <option value="all">全部</option>
+                            <option value="last">最近执行</option>
+                            <option value="lastmodel">最近模块执行</option>
+                            <option value="lastall">最近批量执行</option>
+                            <option value="lastselect">最近选择执行</option>
+                        </datalist>
+                    </div>
+                    <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
+                             onclick="getreportdata()">
+                            <i type="hover"></i> 提交
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" id="batch" data-toggle="dropdown">批次号
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
+                    <div class="col-sm-12 column">
+                        <label for="batchnumber">批次号</label>
+                        <input type="text" class="form-control input-sm col-sm-12" id="batchnumber"
+                               ondblclick="clearval('createrselect')"/>
+
+                    </div>
+                    <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
+                             onclick="getreportdata()">
+                            <i type="hover"></i> 提交
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="createrbutton">
+                    执行人
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
+                    <div class="col-sm-12 column">
+                        <label for="createrselect">执行人</label>
+                        <input type="text" class="form-control input-sm col-sm-12" id="createrselect"
+                               ondblclick="clearval('createrselect')"
+                               list="createrlist"/>
+                        <datalist id="createrlist">
+                        </datalist>
+                    </div>
+                    <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
+                             onclick="getreportdata()">
+                            <i type="hover"></i> 提交
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="typebutton">
+                    执行类型
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
+                    <div class="col-sm-12 column">
+                        <label for="createrselect">执行类型</label>
+                        <input type="text" ondblclick="clearval('executetype')" class="form-control input-sm col-sm-12"
+                               id="executetype" list="typelist"/>
+                        <datalist id="typelist">
+                            <option value="all">全部</option>
+                            <option value="select">选择执行</option>
+                            <option value="model">模块执行</option>
+                        </datalist>
+                    </div>
+                    <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
+                             onclick="getreportdata()">
+                            <i type="hover"></i> 提交
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="timebutton">
+                    时间范围
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
+                    <div class="col-sm-12 column">
+                        <label for="createrselect">时间范围</label>
+                        <input type="text" ondblclick="clearval('daterange')" class="form-control input-sm col-sm-12"
+                               id="daterange" onchange="getreportdata()"/>
+                    </div>
+                    <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
+                             onclick="getreportdata()">
+                            <i type="hover"></i> 提交
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="btn-group">
+                <div style="padding-top:13px;padding-left: 10px">
+                    <a class="label label-info" id="filters"></a>
+                    <a class="close" style="color:red" onclick="clear_filter()">clear</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="row clearfix">
+    <div class="col-md-3 column">
+        <h2 style="margin-top:0px">
+            概述
+        </h2>
+        <p id='creater'>
+            执行人：
+        </p>
+        <p id='testtime'>
+            测试时间：
+        </p>
+        <p id="usetime">
+            耗时：
+        </p>
+        <p id="passratep">
+            通过率：
+        </p>
+        <p id="pass">
+            通过：
+        </p>
+        <p id="fail">
+            失败：
+        </p>
+        <p id="total">
+            总计：
+        </p>
+    </div>
+    <div class="col-md-3 column">
+        <div id='passrate' style="widows: 200px; height:250px;">
+        </div>
+
+    </div>
+    <div class="col-md-6 column">
+        <div id='performance' style="widows: 100%; height:300px;">
+        </div>
+
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
+
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel" style="text-align:center;">用例详情</h4>
+            </div>
+            <div class="modal-body">
+                <div style="padding-left:10%;padding-right: 10%">
+                    <p><b><span>批次号</span></b><span>：</span>
+                        <span id='span_batch_number'></span></p>
+                    <p><b><span>用例名称</span></b><span>：</span>
+                        <span id='span_case_name'></span></p>
+                    <p><b><span>接口名称</span></b><span>：</span>
+                        <span id='span_api_name'></span></p>
+                    <p><b><span>模块名称</span></b><span>：</span>
+                        <span id='span_model_name'></span></p>
+                    <p><b><span>请求地址</span></b><span>：</span>
+                        <span id='span_request_path' style="word-wrap: break-word"></span></p>
+                    <p><b><span>请求类型</span></b><span>：</span>
+                        <span id='span_request_type' style="word-wrap: break-word"></span></p>
+                    <p><b><span>响应状态</span></b><span>：</span>
+                        <span id='span_status'></span></p>
+                    <p><b><span>耗时</span></b><span>：</span>
+                        <span id='span_use_time'></span><span> ms</span></p>
+                    <p><b><span>执行人</span></b><span>：</span>
+                        <span id='span_creater'></span></p>
+                    <p><b><span>校验类型</span></b><span>：</span>
+                        <span id='span_verification'></span></p>
+                    <p><b><span>执行结果</span></b><span>：</span>
+                        <span id='span_result'></span></p>
+                    <hr/>
+                    <p><b><span>用例输入</span></b><span>：</span></p>
+
+                    <p><span id="span_input"></span></p>
+                    <hr/>
+                    <p><b><span>Headers</span></b><span>：</span></p>
+
+                    <p><span id="span_headers"></span></p>
+                    <hr/>
+                    <p><b><span>期望结果</span></b><span>：</span></p>
+
+                    <p><span id="span_excpt"></span></p>
+                    <hr/>
+                    <p><b><span>实际结果</span></b><span>：</span></p>
+                    <p><span id="span_real"></span></p>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#autotest").css("display", "block");
+        $("a#report").parent().addClass("active");
+        load();
+        getreportdata();
+        get_createrlist();
+        datarange();
+        setbuttondisplay();
+        rate_pass();
+        performance();
+        table_click();
+    };
+    window.onresize = function () {
+        myChart.resize();
+        myChart1.resize();
+    }
+
+
+
+</script>
+<style>
+    #table {
+        table-layout: fixed;
+    }
+
+    .wordwrap {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: nowrap;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+    /* 超长文字单元格省略号显示 */
+    td:hover {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: unset;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+
+
+</style>
+<script type="text/javascript">
+    var casenames = []
+    var performancedata = []
+    var tabledata = []
+    var pass = 0
+    var fail = 0
+    var myChart1 = ''
+    function rate_pass() {
+        var dom = document.getElementById("passrate");
+        myChart1 = echarts.init(dom);
+        var app = {};
+        option = null;
+        option = {
+            title: {
+                text: '通过率',
+                x: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            // legend: {
+            //     orient: 'vertical',
+            //     left: 'left',
+            //     data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+            // },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['50%', '60%'],
+                    data: [
+                        { value: pass, name: '通过' },
+                        { value: fail, name: '失败' },
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart1.setOption(option, true);
+        }
+    }
+    var myChart = ''
+    function performance() {
+        var dom = document.getElementById("performance");
+        myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title: {
+                text: '响应时间(ms)',
+                x: 'left'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    },
+
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            legend: {
+                data: ['响应']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: casenames,
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '时间',
+                    min: 0,
+                    interval: 100,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '耗时',
+                    type: 'bar',
+                    data: performancedata,
+                    center: ['60%', '60%'],
+                }
+
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+
+    function show_filter() {
+        $('#filters').text($('#datasource').val() + " " + $('#batchnumber').val() + " " + $('#createrselect').val() + " " +
+            $('#executetype').val() + " " + $('#daterange').val());
+    }
+    function clear_filter() {
+        // $('#datasource').val('');
+        $('#batchnumber').val('');
+        $('#createrselect').val('');
+        $('#executetype').val('');
+        $('#daterange').val('');
+        getreportdata()
+    }
+
+    //获取测试报告数据
+    var details = ''
+    function getreportdata() {
+        $.get("/apis/report", {
+            source: $('#datasource').val(),
+            batchnumber: $('#batchnumber').val(),
+            creater: $('#createrselect').val(),
+            executetype: $('#executetype').val(),
+            daterange: $('#daterange').val()
+        }, function (data, status) {
+            show_filter()
+            if (JSON.stringify(data) != '{}') {
+                var time = String((data.pass / data.total) * 100);
+                $('#headername').text(localStorage.user)
+                $('#creater').text('执行人：' + data.user);
+                $('#testtime').text('测试时间：' + data.create_time);
+                $('#usetime').text('耗时：' + data.usetime + '秒');
+                $('#passratep').text('通过率：' + (time).substr(0, time.indexOf(".") + 3) + '%');
+                $('#pass').text('通过：' + data.pass + '条');
+                $('#fail').text('失败：' + data.fail + '条');
+                $('#total').text('总计：' + data.total + '条');
+                casenames = data.casenames;
+                performancedata = data.performance;
+                tabledata = data.table;
+                pass = data.pass;
+                fail = data.fail;
+                rate_pass();
+                performance();
+                // load();
+                initDetailTableData(tabledata);
+                details = data.details
+            } else {
+                toastr.error('无数据');
+
+            }
+        }).error(function () {
+
+        })
+
+    }
+
+    function get_createrlist() {
+        $.get("/apis/report", {
+            type: "createrlist",
+        }, function (data, status) {
+            if (data.data.length > 0) {
+                for (var i = 0; i < data.data.length; i++) {
+                    $('#createrlist')
+                        .append('<option label="' + data.data[i] + '" value="' + data.data[i] + '"></option>');
+                }
+            }
+
+        }).error(function () {
+
+        })
+    }
+    function table_click() {
+        $('#table tbody').on('click', 'tr', function () {
+            var id = $('td', this).eq(1).text();
+            $("#detail").modal();
+            var result = search_info(details, id)
+            if (result) {
+                $("#span_batch_number").text(result[1])
+                $("#span_case_name").text(result[2])
+                $("#span_api_name").text(result[3])
+                $("#span_model_name").text(result[4])
+                $("#span_request_path").text(result[5])
+                $("#span_request_type").text(result[15])
+                $("#span_status").text(result[6])
+                $("#span_use_time").text(result[7])
+                $("#span_creater").text(result[8])
+                $("#span_verification").text(result[9])
+                $("#span_result").text(result[10])
+                $("#span_input").text(result[11])
+                $("#span_headers").text(result[12])
+                $("#span_excpt").text(result[13])
+                $("#span_real").text(result[14])
+
+            }
+
+        });
+    }
+
+    function search_info(details, id) {
+        for (var i = 0; i < details.length; i++) {
+            if (details[i][0] == id) {
+                return details[i]
+            }
+        }
+    }
+
+    var table;
+    function load() {
+        table = $('#table').DataTable({
+            language: {
+                url: "/static/language/cn.json"
+            },
+            lengthChange: true,
+            data: tabledata,
+            // select: true,
+            columns: [
+                { title: "序号", width: '6%' },
+                { title: "ID号", width: '6%' },
+                { title: "批次号", width: '10%' },
+                { title: "用例名", width: '10%' },
+                { title: "接口名", width: '15%' },
+                { title: "模块" },
+                { title: "响应状态" },
+                { title: "验证结果" },
+                { title: "耗时（ms）" },
+                { title: "执行时间", width: '10%' },
+                { title: "执行人" }
+            ],
+            aLengthMenu: [[30, 50, 100, -1], ["30条", "50条", "100条", "All"]]
+
+        });
+    }
+    //动态刷新表格
+    function initDetailTableData(dataArr) { //dataArr是表格数据数组，和初始化配置需一样的结构
+        var table = $('#table').dataTable();
+        var oSettings = table.fnSettings(); //这里获取表格的配置
+        table.fnClearTable(this); //动态刷新关键部分语句，先清空数据
+        for (var i = 0, l = dataArr.length; i < l; i++) {
+            table.oApi._fnAddData(oSettings, dataArr[i]); //这里添加一行数据
+        }
+        oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+        table.fnDraw();//绘制表格
+    }
+    // 时间选择控件初始化
+    var start
+    function datarange() {
+        $('#daterange').daterangepicker({
+            "showISOWeekNumbers": false,
+            "timePicker": true,
+            "timePicker24Hour": true,
+            "timePickerSeconds": false,
+            "linkedCalendars": true,
+            "parentEl": "daterange",
+            "locale": {
+                format: 'YYYY/MM/DD HH:mm',
+                applyLabel: "应用",
+                cancelLabel: "取消",
+                resetLabel: "重置",
+            }
+            // "startDate": starttime(),
+            // "endDate": starttime
+        }, function (start, end, label) {
+            // console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+        $('#daterange').val('');
+    }
+    //筛选按钮隐藏
+    function setbuttondisplay() {
+        if ($('#datasource').val() == 'all') {
+            $('#batch').attr("disabled", false);
+            $("#createrbutton").attr("disabled", false);
+            $("#typebutton").attr("disabled", false);
+            $("#timebutton").attr("disabled", false);
+        } else {
+            $('#batch').attr("disabled", true);
+            $("#createrbutton").attr("disabled", true);
+            $("#typebutton").attr("disabled", true);
+            $("#timebutton").attr("disabled", true);
+        }
+    }
+
+
+
+</script>
+
+{% endblock %}

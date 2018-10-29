@@ -1,0 +1,109 @@
+{% extends "subtemplates/tools/callback.html" %}
+
+{% block pane_content %}
+<div class="tab-pane active" id="panel-01">
+    <form class="form-inline" role="form">
+        <div class="form-group" style="padding-top:30px">
+            <label for="mobilenumber01">手机号：</label>
+            <input type="text" class="form-control" id="mobilenumber01" value="{{mobilenumber}}" name="mobilenumber"
+                   style="width:600px" placeholder="请输入手机号" onblur="upperCase('mobilenumber01')">
+            <label for="product01" style="padding-letf:30px;">选择产品：</label>
+            <input type="text" id="product01" class="form-control" list="dropdown-menu01" name="product"
+                   placeholder="请选择产品"
+                   value="{{product}}"/>
+            <datalist id="dropdown-menu01">
+                <option value="SUPER_LOAN">SUPER_LOAN</option>
+                <option value="SUPER_CONSUME">SUPER_CONSUME</option>
+            </datalist>
+            <label for="submit01" style="padding-letf:30px;"></label>
+            <input id="submit01" type="button" class="btn btn-default" value="提交" onclick="submit_credit()"/>
+        </div>
+    </form>
+    <form>
+        <div class="form-group">
+            <label for="body01" style="padding-top:30px">消息体：</label>
+            <textarea id="body01" class="form-control" rows="10"></textarea>
+            <label for="result01" style="padding-top:30px">回调结果：</label>
+            <textarea id="result01" class="form-control" rows="10">{{result}}</textarea>
+        </div>
+    </form>
+</div>
+<div class="tab-pane" id="panel-02">
+    <form class="form-inline" role="form">
+        <div class="form-group" style="padding-top:30px">
+            <label for="mobilenumber02">手机号：</label>
+            <input type="text" class="form-control" id="mobilenumber02" value="{{mobilenumber}}" name="mobilenumber"
+                   placeholder="请输入手机号" onblur="upperCase('mobilenumber02')">
+            <label for="amount">批核金额：</label>
+            <input type="text" class="form-control" id="amount" name="amount" placeholder="批核后的金额">
+            <label for="status" style="padding-letf:30px;">批核结果：</label>
+            <select id="status" class="form-control" style="width:100px">
+                <option value="n">批核</option>
+                <option value="p">直批</option>
+                <option value="r">直拒</option>
+            </select>
+            <label for="submit02" style="padding-right:30px;"></label>
+            <input id="submit02" type="button" class="btn btn-default" value="提交" onclick="submit_oa()"/>
+        </div>
+    </form>
+    <form>
+        <div class="form-group">
+            <label for="body02" style="padding-top:30px">消息体：</label>
+            <textarea id="body02" class="form-control" rows="10">{{body}}</textarea>
+            <label for="result02" style="padding-top:30px">回调结果：</label>
+            <textarea id="result02" class="form-control" rows="10">{{result}}</textarea>
+        </div>
+    </form>
+</div>
+<div class="tab-pane" id="panel-03">
+    <form class="form-inline" role="form">
+        <div class="form-group" style="padding-top:30px">
+            <label for="mobilenumber03">手机号：</label>
+            <input type="text" class="form-control" id="mobilenumber03" value="{{mobilenumber}}" name="mobilenumber"
+                   style="width:600px" placeholder="请输入手机号" onblur="upperCase('mobilenumber03')">
+            <label for="status02" style="padding-letf:30px;">批核结果：</label>
+            <select id="status02" class="form-control" style="width:100px">
+                <option value="n">批核</option>
+                <option value="r">拒绝</option>
+            </select>
+            <label for="submit03" style="padding-right:30px;"></label>
+            <input id="submit03" type="button" class="btn btn-default" value="提交" onclick="submit_ob()"/>
+        </div>
+    </form>
+    <form>
+        <div class="form-group">
+            <label for="body03" style="padding-top:30px">消息体：</label>
+            <textarea id="body03" class="form-control" rows="10">{{body}}</textarea>
+            <label for="result03" style="padding-top:30px">回调结果：</label>
+            <textarea id="result03" class="form-control" rows="10">{{result}}</textarea>
+        </div>
+    </form>
+</div>
+<div class="tab-pane" id="panel-04">
+    <form class="form-inline" role="form">
+        <div class="form-group" style="padding-top:30px">
+            <label for="mobilenumber04">手机号：</label>
+            <input type="text" class="form-control" id="mobilenumber04" value="{{mobilenumber}}" name="mobilenumber"
+                   style="width:600px" placeholder="请输入手机号" onblur="upperCase('mobilenumber04')">
+            <label for="product04" style="padding-letf:30px;">选择产品：</label>
+            <input type="text" id="product04" class="form-control" list="dropdown-menu04" name="product"
+                   placeholder="请选择产品"
+                   value="{{product}}"/>
+            <datalist id="dropdown-menu04">
+                <option value="SUPER_LOAN">SUPER_LOAN</option>
+                <option value="SUPER_CONSUME">SUPER_CONSUME</option>
+            </datalist>
+            <label for="submit04" style="padding-right:30px;"></label>
+            <input id="submit04" type="button" class="btn btn-default" value="提交" onclick="submit_loansucess()"/>
+        </div>
+    </form>
+    <form>
+        <div class="form-group">
+            <label for="body04" style="padding-top:30px">消息体：</label>
+            <textarea id="body04" class="form-control" rows="10">{{body}}</textarea>
+            <label for="result04" style="padding-top:30px">回调结果：</label>
+            <textarea id="result04" class="form-control" rows="10">{{result}}</textarea>
+        </div>
+    </form>
+</div>
+{% endblock %}

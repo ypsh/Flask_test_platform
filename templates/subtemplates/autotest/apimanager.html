@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div>
+    <div class="row clearfix" style="padding-top:10px;">
+        <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead>
+            <tr>
+                <th>
+                    编号
+                </th>
+                <th>
+                    服务名
+                </th>
+                <th>
+                    模块
+                </th>
+                <th>
+                    请求类型
+                </th>
+                <th>
+                    服务路径
+                </th>
+                <th>
+                    请求头信息
+                </th>
+                <th>
+                    TOKEN
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    备注
+                </th>
+                <th>
+                    关联用例
+                </th>
+                <th>
+                    更新人
+                </th>
+
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>
+                    编号
+                </th>
+                <th>
+                    服务名
+                </th>
+                <th>
+                    模块
+                </th>
+                <th>
+                    请求类型
+                </th>
+                <th>
+                    服务路径
+                </th>
+                <th>
+                    请求头信息
+                </th>
+                <th>
+                    TOKEN
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    备注
+                </th>
+                <th>
+                    关联用例
+                </th>
+                <th>
+                    更新人
+                </th>
+
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">更新</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="service_name" class="col-sm-2 control-label">服务名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="service_name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model" class="col-sm-2 control-label">模块</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="model"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="service_type" class="col-sm-2 control-label">请求类型</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="service_type" value="GET">
+                                <option>GET</option>
+                                <option>POST</option>
+                                <option>DELETE</option>
+                                <option>PUT</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">服务路径</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="path"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="header" class="col-sm-2 control-label">消息头</label>
+                        <div class="col-sm-9">
+                            <textarea type="textare" class=" form-control" id="header"
+                                      onmouseout="formate_json('header')"
+                                      rows="4" placeholder="使用字典格式{'xxx':'xxx'}或xxx:xxx(多个参数回车换行)"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="remake" class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea type="textare" class=" form-control" id="remake" rows="8"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="token" class="col-sm-2 control-label">token</label>
+                        <div class="radio col-sm-9" id="token">
+                            <label>
+                                <input type="radio" name="token" id="Yes" value="Yes">
+                                是
+                            </label>
+                            <label>
+                                <input type="radio" name="token" id="No" value="No" checked>否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="col-sm-2 control-label">状态</label>
+                        <div class="radio col-sm-9" id="status">
+                            <label>
+                                <input type="radio" name="status" id="running" value="running" checked>
+                                启用
+                            </label>
+                            <label>
+                                <input type="radio" name="status" id="stop" value="stop">禁用
+                            </label>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit" onclick="add_apimanger()">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var table;
+    function load() {
+        table = $('#table').DataTable({
+            language: {
+                url: "/static/language/cn.json"
+            },
+            lengthChange: true,
+            ajax: "/apis/apimanager",
+            select: true,
+            columnDefs: [
+                { className: "wordwrap ellipsis-hover", targets: [4] },
+                { className: "wordwrap ellipsis-hover", targets: [5] },
+                { className: "wordwrap ellipsis-hover", targets: [8] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: '新增',
+                    action: function () {
+                        $("#myModal").modal();
+                        add_api();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '编辑',
+                    action: function () {
+                        $("#myModal").modal();
+                        update_api();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '删除',
+                    action: function () {
+                        delete_api();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    'extend': 'copy',
+                    'text': '拷贝数据',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+                {
+                    'extend': 'excelHtml5',
+                    'text': '导出excel',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+                {
+                    text: '导入数据',
+                    action: function () {
+                        $("#upload").modal();
+                    },
+                    class: "btn-default",
+                },
+                'pageLength',
+            ]
+        });
+    }
+
+    function delete_api() {
+        $.post("/apis/apimanager", {
+            api_name: table.rows(['.selected']).data()[0][1],
+            operate: 'delete'
+        }, function (data, status) {
+            if (data.message == true) {
+                table.ajax.reload()
+                toastr.info('删除成功')
+            } else {
+                toastr.error('删除失败,API有关联用例')
+                // alert(data.message)
+            }
+        }).error(function () {
+            toastr.info('删除失败')
+        })
+    }
+    function update_api() {
+        $('#myModalLabel').text("更新");
+        $('#submit').text("更新");
+        $("#service_name").attr("disabled", "disabled");
+        operate = 'update';
+        $('#service_name').val(table.rows(['.selected']).data()[0][1]);
+        $('#model').val(table.rows(['.selected']).data()[0][2]);
+        $('#service_type').val(table.rows(['.selected']).data()[0][3]);
+        $('#path').val(table.rows(['.selected']).data()[0][4]);
+        $('#header').val(table.rows(['.selected']).data()[0][5]);
+        // $("input[name='token']:checked").val();
+        // $("input[name='status']:checked").val();
+        $('#remake').val(table.rows(['.selected']).data()[0][8]);
+    }
+    function add_api() {
+        $('#myModalLabel').text("新增");
+        $('#submit').text("新增");
+        operate = 'add';
+        $("#service_name").removeAttr("disabled");
+        $('#service_name').val(table.rows(['.selected']).data()[0][1]);
+        $('#model').val(table.rows(['.selected']).data()[0][2]);
+        $('#service_type').val(table.rows(['.selected']).data()[0][3]);
+        $('#path').val(table.rows(['.selected']).data()[0][4]);
+        $('#header').val(table.rows(['.selected']).data()[0][5]);
+        // $("input[name='token']:checked").val();
+        // $("input[name='status']:checked").val();
+        $('#remake').val(table.rows(['.selected']).data()[0][8]);
+    }
+    function init_upload() {
+        $("#uploadfile").fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: '/apis/apiupload', // 后台处理的脚本
+            uploadExtraData: function () {
+                var data = {
+                    user: localStorage.user
+
+                };
+                return data;
+            },
+            allowedFileExtensions: ['xlsx'],//限制文件上传的类型
+            uploadAsync: true,
+            showCaption: true,
+            showPreview: true, //是否显示预览
+            overwriteInitial: false,
+            maxFileSize: 1000,//限制文件上传的大小
+            maxFilesNum: 10
+        });
+        //异步上传返回错误结果处理
+        $('#uploadfile').on('fileerror', function (event, data, msg) {
+            toastr.info('失败')
+        });
+        //异步上传返回结果处理
+        $("#uploadfile").on("fileuploaded", function (event, data, previewId, index) {
+            if (data.response.message) {
+                table.ajax.reload()
+                toastr.info('导入成功')
+            }
+
+        });
+    }
+
+
+
+</script>
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#autotest").css("display", "block");
+        $("a#apimanager").parent().addClass("active");
+        load();
+        init_upload();
+    };
+
+
+
+
+</script>
+<style>
+    #table {
+        table-layout: fixed;
+    }
+
+    .wordwrap {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: nowrap;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+    /* 超长文字单元格省略号显示 */
+    td:hover {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: unset;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+
+
+</style>
+{% endblock %}

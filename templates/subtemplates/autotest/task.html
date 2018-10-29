@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="tabbable" id="tabs-619095">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#panel-963871" data-toggle="tab">任务配置</a>
+                    </li>
+                    <li>
+                        <a href="#panel-54273" data-toggle="tab">任务管理</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-963871">
+                        <div>
+                            <p style="text-align:right">.</p>
+                            <div class="row clearfix">
+                                <table id="table" class="table table-striped table-bordered table-hover"
+                                       style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            任务ID
+                                        </th>
+                                        <th>
+                                            任务名称
+                                        </th>
+                                        <th>
+                                            模块
+                                        </th>
+                                        <th>
+                                            触发器
+                                        </th>
+                                        <th>
+                                            启动时间
+                                        </th>
+                                        <th>
+                                            频率
+                                        </th>
+                                        <th>
+                                            单位
+                                        </th>
+                                        <th>
+                                            创建人
+                                        </th>
+                                        <th>
+                                            创建时间
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th>
+                                            任务ID
+                                        </th>
+                                        <th>
+                                            任务名称
+                                        </th>
+                                        <th>
+                                            模块
+                                        </th>
+                                        <th>
+                                            触发器
+                                        </th>
+                                        <th>
+                                            启动时间
+                                        </th>
+                                        <th>
+                                            频率
+                                        </th>
+                                        <th>
+                                            单位
+                                        </th>
+                                        <th>
+                                            创建人
+                                        </th>
+                                        <th>
+                                            创建时间
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">更新</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" role="form">
+                                            <div class="form-group">
+                                                <label for="task_name" class=" col-sm-2 control-label">任务名称</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="task_name"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="model" class=" col-sm-2 control-label">模块</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="model"
+                                                           list="modellist"/>
+                                                    <datalist id="modellist">
+
+                                                    </datalist>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="trigger" class="col-sm-2 control-label">触发器</label>
+                                                <div class="col-sm-9">
+                                                    <select type="input" class=" form-control" id="trigger" rows="4"
+                                                            list="datasourcelist" onchange="add_button_block()">
+                                                        <option value="date">指定时间执行</option>
+                                                        <option value="interval">间隔时间执行</option>
+                                                        <option value="cron">每天定点执行</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="start_time" class="col-sm-2 control-label">启动时间</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class=" form-control" id="start_time" rows="4"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="frequency" class="col-sm-2 control-label">频率</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="frequency"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="until" class="col-sm-2 control-label">单位</label>
+                                                <div class="col-sm-9">
+                                                    <select type="input" class=" form-control" id="until" rows="4"
+                                                            list="datasourcelist">
+                                                        <option value="everyday">每天定点</option>
+                                                        <option value="days">天</option>
+                                                        <option value="hours">小时</option>
+                                                        <option value="minutes">分</option>
+                                                        <option value="seconds">秒</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="submit"
+                                                    onclick="add_item()">更新
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="panel-54273">
+                        <div>
+                            <p style="text-align:right">.</p>
+                            <div class="row clearfix">
+                                <table id="executecase" class="table table-striped table-bordered table-hover"
+                                       style="width:100%;">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            任务ID
+                                        </th>
+                                        <th>
+                                            任务名称
+                                        </th>
+                                        <th>
+                                            模块
+                                        </th>
+                                        <th>
+                                            功能
+                                        </th>
+                                        <th>
+                                            启动时间
+                                        </th>
+                                        <th>
+                                            下次执行时间
+                                        </th>
+                                        <th>
+                                            触发器
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th>
+                                            任务ID
+                                        </th>
+                                        <th>
+                                            任务名称
+                                        </th>
+                                        <th>
+                                            模块
+                                        </th>
+                                        <th>
+                                            功能
+                                        </th>
+                                        <th>
+                                            启动时间
+                                        </th>
+                                        <th>
+                                            下次执行时间
+                                        </th>
+                                        <th>
+                                            触发器
+                                        </th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var table;
+    function load() {
+        table = $('#table').DataTable({
+            language: {
+                url: "/static/language/cn.json"
+            },
+            lengthChange: true,
+            ajax: "/apis/task",
+            select: true,
+            columnDefs: [
+                { className: "wordwrap ellipsis-hover", targets: [5] },
+                { className: "wordwrap ellipsis-hover", targets: [6] }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: '新增',
+                    action: function () {
+                        $("#myModal").modal();
+                        add_button_block()
+                        add_api();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '编辑',
+                    action: function () {
+                        $("#myModal").modal();
+                        edit_button_block();
+                        update_api();
+
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '删除',
+                    action: function () {
+                        delete_item();
+                    },
+                    class: "btn-default",
+                },
+                {
+                    'extend': 'copy',
+                    'text': '拷贝数据',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+                {
+                    'extend': 'excelHtml5',
+                    'text': '导出excel',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+
+                'pageLength',
+            ]
+        });
+    }
+
+    function delete_item() {
+        $.post("/apis/task", {
+            task_id: table.rows(['.selected']).data()[0][0],
+            operate: 'delete'
+        }, function (data, status) {
+            if (data.message) {
+                table.ajax.reload()
+                toastr.info('删除成功')
+            }
+        }).error(function () {
+            toastr.info('删除失败')
+        })
+    }
+    function update_api() {
+        $('#myModalLabel').text("更新");
+        $('#submit').text("更新");
+        // $("#case_name").attr("disabled", "disabled");
+        operate = 'update';
+        task_id = table.rows(['.selected']).data()[0][0];
+        $('#task_name').val(table.rows(['.selected']).data()[0][1]);
+        $('#model').val(table.rows(['.selected']).data()[0][2]);
+        $('#trigger').val(table.rows(['.selected']).data()[0][3]);
+        $('#start_time').val(table.rows(['.selected']).data()[0][4]);
+        $('#frequency').val(table.rows(['.selected']).data()[0][5]);
+        $('#until').val(table.rows(['.selected']).data()[0][6]);
+    }
+    function add_api() {
+        $('#myModalLabel').text("新增");
+        $('#submit').text("新增");
+        operate = 'add';
+        $('#task_name').val(table.rows(['.selected']).data()[0][1]);
+        $('#model').val(table.rows(['.selected']).data()[0][2]);
+        $('#trigger').val(table.rows(['.selected']).data()[0][3]);
+        $('#start_time').val(table.rows(['.selected']).data()[0][4]);
+        $('#frequency').val(table.rows(['.selected']).data()[0][5]);
+        $('#until').val(table.rows(['.selected']).data()[0][6]);
+    }
+
+    var execute_table;
+    //当前task看板
+    function init_executecasetable() {
+        execute_table = $('#executecase').DataTable({
+            language: {
+                url: "/static/language/cn.json"
+            },
+            select: true,
+            lengthChange: true,
+            ajax: "/apis/scheduling",
+            // columnDefs: [
+            //     { className: "btn btn-default", targets: [6] }
+            // ],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: '启动',
+                    action: function () {
+                        start_jobs()
+                        toastr.info('已提交请求，勿重复提交')
+
+                    },
+                    class: "btn-default",
+                },
+                {
+                    text: '删除',
+                    action: function () {
+                        delete_jobs()
+                        toastr.info('已提交请求，勿重复提交')
+                    },
+                    class: "btn-default",
+                },
+
+                {
+                    'extend': 'copy',
+                    'text': '拷贝数据',//定义导出excel按钮的文字  
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                },
+
+                'pageLength',
+                {
+                    text: '刷新表格',
+                    action: function () {
+                        execute_table.ajax.reload()
+                    }
+                },
+
+            ]
+        });
+    }
+
+    //添加更新task
+    var operate = 'add';
+    var task_id = '';
+    function add_item() {
+        $('#submit.btn').button('loading');
+        is_selected(table);
+        $.post("/apis/task", {
+            task_id: task_id,
+            task_name: $('#task_name').val(),
+            model: $('#model').val(),
+            trigger: $('#trigger').val(),
+            start_time: $('#start_time').val(),
+            frequency: $('#frequency').val(),
+            until: $('#until').val(),
+            user: localStorage.user,
+            operate: operate,
+        }, function (data, status) {
+            if (data != null && data.message == true) {
+                $('#submit.btn').button('reset');
+                table.ajax.reload()
+                toastr.info('操作成功');
+            } else {
+                alert(operate + data.message);
+                $('#submit.btn').button('reset');
+            }
+        }).error(function () {
+            $('#submit.btn').button('reset');
+            toastr.error('操作失败');
+        })
+    }
+
+    //触发器联动设置
+    function edit_button_block() {
+        var selctedTrigger = table.rows(['.selected']).data()[0][3]
+        if (selctedTrigger === 'date') {
+            $("#start_time").attr("disabled", false);
+            $("#frequency").attr("disabled", true);
+            $("#until").attr("disabled", true);
+            $("#frequency").val('');
+            $("#start_time").val('');
+            $("#until").val('');
+        } else {
+            $("#frequency").attr("disabled", false);
+            $("#until").attr("disabled", false);
+            $("#start_time").attr("disabled", true);
+            $("#frequency").val('');
+            $("#start_time").val('');
+            $("#until").val('');
+        }
+    }
+
+    //触发器联动设置
+    function add_button_block() {
+        if ($("#trigger").val() === 'date') {
+            $("#start_time").attr("disabled", false);
+            $("#frequency").attr("disabled", true);
+            $("#until").attr("disabled", true);
+            $("#frequency").val('');
+            $("#start_time").val('');
+            $("#until").val('');
+        } else {
+            $("#frequency").attr("disabled", false);
+            $("#until").attr("disabled", false);
+            $("#start_time").attr("disabled", true);
+            $("#frequency").val('');
+            $("#start_time").val('');
+            $("#until").val('');
+        }
+    }
+
+    // 时间选择控件初始化
+    var start
+    function datarange() {
+        $('#start_time').daterangepicker({
+            singleDatePicker: true,
+            "showISOWeekNumbers": false,
+            "timePicker": true,
+            "timePicker24Hour": true,
+            "timePickerSeconds": false,
+            "linkedCalendars": true,
+            "parentEl": "daterange",
+
+            "locale": {
+                format: 'YYYY-MM-DD HH:mm:ss',
+                applyLabel: "选择",
+                cancelLabel: "取消",
+                resetLabel: "重置",
+            }
+            // "startDate": starttime(),
+            // "endDate": starttime
+        }, function (start, end, label) {
+            // console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+        $('#start_time').val();
+    }
+
+
+    //启动定时任务
+    function start_jobs() {
+        $('#submit.btn').button('loading')
+        $.post("/apis/scheduling", {
+            operate: 'add',
+        }, function (data, status) {
+            if (data != null && data.message == true) {
+                execute_table.ajax.reload();
+                toastr.info('操作成功');
+            } else {
+                alert(data.message);
+            }
+        }).error(function () {
+            toastr.error('操作失败');
+        })
+    }
+
+    //删除任务
+    function delete_jobs() {
+        $.post("/apis/scheduling", {
+            task_id: execute_table.rows(['.selected']).data()[0][0],
+            operate: 'delete',
+        }, function (data, status) {
+            if (data != null && data.message == true) {
+                execute_table.ajax.reload();
+                toastr.info('操作成功');
+            } else {
+                alert(data.message);
+            }
+        }).error(function () {
+            toastr.error('操作失败');
+        })
+    }
+
+
+
+</script>
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#autotest").css("display", "block");
+        $("a#task").parent().addClass("active");
+        load();
+        init_executecasetable();
+        datarange();
+    };
+
+
+
+
+
+
+</script>
+<style>
+    #table {
+        table-layout: fixed;
+    }
+
+    .wordwrap {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: nowrap;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+    /* 超长文字单元格省略号显示 */
+    td:hover {
+        text-overflow: ellipsis;
+        /*超长部分以...代替*/
+        white-space: unset;
+        /*文本不换行*/
+        max-width: 200px;
+        /*最大宽度*/
+        overflow: hidden;
+        /*超长部分隐藏掉*/
+    }
+
+
+
+</style>
+{% endblock %}
