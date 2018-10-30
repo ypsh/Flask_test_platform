@@ -1,13 +1,19 @@
 # -*- coding: UTF-8 -*-
+import configparser
 import json
 
 from flask import Blueprint
 from flask import render_template
 from flask import request
 
+from com.common.getPath import Path
 from com.service.moker import ServiceOperate
+from config.extendlink import get_titles
 
 view = Blueprint('view', __name__)
+
+conf = configparser.ConfigParser()
+conf.read(Path().get_current_path() + '/config/config.ini')
 
 
 @view.route('/')
@@ -18,6 +24,12 @@ def start():
 @view.route('/dashboard')
 def dashboard():
     return render_template('subtemplates/dashboard/dashboard.html')
+
+
+@view.route('/extendlink')
+def extendlink():
+    titles = get_titles()
+    return render_template('subtemplates/extendlink/extendlink.html', titles=titles)
 
 
 @view.route('/login', methods=['GET', 'POST'])

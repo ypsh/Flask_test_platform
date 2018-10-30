@@ -60,7 +60,7 @@ class Main():
     def add_admin_view(self):
         print(self.globalspath)
         self.admin.add_view(FileAdmin(self.globalspath, '', name='后台文件管理'))
-        self.admin.add_view(MyView(name='返回主页', endpoint='test1'))
+        self.admin.add_view(MyView(name='返回主页', endpoint=''))
         self.admin.add_view(ModelView(User, self.db.session))
         self.admin.add_view(ModelView(Service, self.db.session))
         self.admin.add_view(ModelView(api_manager, self.db.session))
@@ -80,10 +80,8 @@ mapp = main.get_app()
 main.add_apis_path()
 main.add_views_path()
 main.add_admin_view()
-# globalspath = Path().get_global_path('FlaskWeb')
-# logging.config.fileConfig(globalspath + '/config/logger.conf')
+
 if __name__ == '__main__':
-    # app.run()
     # app.run(debug=False, host='0.0.0.0', threaded=True, ssl_context=(main.get_crt(), main.get_key()))
-    app.run(debug=True, host='0.0.0.0', threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=5001, threaded=True)
     # app.run()
