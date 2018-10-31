@@ -207,8 +207,8 @@
     var qrcode
     function init_qrcode() {
         qrcode = new QRCode(document.getElementById("qrcode"), {
-            width: 300,
-            height: 300,
+            width: 200,
+            height: 200,
             colorDark: '#ff2a75',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
@@ -417,8 +417,6 @@
         overflow: hidden;
         /*超长部分隐藏掉*/
     }
-
-
 
 </style>
 {% endblock %}
