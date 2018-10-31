@@ -79,3 +79,6 @@ deactivate命令取消已激活的虚拟环境
 如果运行包包缺失，请手动安装缺失的包
 ## 已开发完成功能
 ![avatar](/static/images/测试平台.png)
+
+## 联系
+各位看官，有好的建议或疑问，请联系：qianmengtmc@163.com、ypsh@live.com
