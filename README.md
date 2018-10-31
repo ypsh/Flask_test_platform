@@ -55,11 +55,11 @@ python3.6
 >
 >source flaskenv/bin/activate
 
-激活后数据python 可以看到是最新的版本
+激活后输入python 可以看到是最新的版本
 
 deactivate命令取消已激活的虚拟环境
 
-对于不需要的虚拟环境
+对于不需要的虚拟环境，直接删除既可
 >rm -r /path/to/ENV
 
 其他关于virtualenv的操作请参考官方教程：https://virtualenv.pypa.io/en/latest/userguide/
@@ -82,3 +82,5 @@ deactivate命令取消已激活的虚拟环境
 
 ## 联系
 各位看官，有好的建议或疑问，请联系：qianmengtmc@163.com、ypsh@live.com
+
+后续在这里更新教程（掘金）：https://juejin.im/user/5bd0f4826fb9a05ce46a0ac5/posts
