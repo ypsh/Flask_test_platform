@@ -5,6 +5,7 @@ import smtplib
 import socket
 from email.mime.text import MIMEText
 
+from com.common.aesUtil import AesUtil
 from com.common.getPath import Path
 
 
@@ -12,7 +13,7 @@ class SentMail:
     def __init__(self):
         self.mail_host = 'smtp.163.com'
         self.mail_user = 'ypshwork@163.com'
-        self.mail_password = 'ypsh1006'
+        self.mail_password = 'xyd218cd2ece742d22d6e41759c12ea60121081029'
         self.port = 465
         self.sender = 'ypshwork@163.com'
         self.global_path = Path().get_current_path()
@@ -32,7 +33,7 @@ class SentMail:
         try:
             send = smtplib.SMTP_SSL(self.mail_host, self.port)
             # 注意！如果是使用SSL端口，这里就要改为SMTP_SSL
-            send.login(self.mail_user, self.mail_password)
+            send.login(self.mail_user, AesUtil().decypt(self.mail_password))
             # 登陆邮箱
             send.sendmail(self.sender, self.receivers, msg.as_string())
             # 发送邮件！

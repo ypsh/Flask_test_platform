@@ -56,7 +56,7 @@ class AesUtil:
 
 
 if __name__ == '__main__':
-    password = '4062523537337991'
+    password = 'test'
     password = AesUtil().encypt(password)
     print(password)
     result = AesUtil().decypt(password)
