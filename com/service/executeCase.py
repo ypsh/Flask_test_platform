@@ -2,6 +2,7 @@
 import configparser
 import datetime
 import json
+import logging
 
 import requests
 
@@ -81,7 +82,7 @@ class ExecuteCase:
         try:
             if info['request_type'].lower() == 'get':
                 self.start_time = datetime.datetime.now()
-                result = requests.get(url=url, data=eval(info['input']), headers=eval(info['headers']))
+                # result = requests.get(url=url, data=eval(info['input']), headers=eval(info['headers']))
                 result = requests.get(url=url, headers=eval(info['headers']))
                 self.end_time = datetime.datetime.now()
                 return result
@@ -106,6 +107,7 @@ class ExecuteCase:
             else:
                 return result
         except Exception as e:
+            logging.error(str(e))
             return str(e)
 
     def execute_result(self, info, result):
@@ -212,7 +214,7 @@ class ExecuteCase:
             for item in self.cases:
                 self.execute_bycaseid(item.id)
         except Exception as e:
-            pass
+            logging.error(str(e)+result)
 
     def execute_bymodel(self, model):
         try:
@@ -221,7 +223,7 @@ class ExecuteCase:
                 for item in result:
                     self.execute_bycaseid(item)
         except Exception as e:
-            pass
+            logging.error(str(e) + result)
 
     def execute_cases(self, data):
         try:
@@ -248,7 +250,7 @@ class ExecuteCase:
                     'data': {'batch_number': self.batch_number, 'Total': self.report.__len__(),
                              'FAIL': self.fail, 'PASS': self.report.__len__() - self.fail}}
         except Exception as e:
-            return {'message': False, 'error': str(e),
+            return {'message': False, 'error': str(e) + result,
                     'data': {'batch_number': self.batch_number, 'Total': self.report.__len__(),
                              'FAIL': self.fail, 'PASS': self.report.__len__() - self.fail}}
 

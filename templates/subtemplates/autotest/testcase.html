@@ -18,89 +18,88 @@
                         <div>
                             <p style="text-align:right">.</p>
                             <div class="row clearfix">
-                                <table id="table" class="table table-striped table-bordered table-hover"
-                                       style="width:100%">
+                                <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
                                     <thead>
-                                    <tr>
-                                        <th>
-                                            编号
-                                        </th>
-                                        <th>
-                                            用例ID
-                                        </th>
-                                        <th>
-                                            用例名称
-                                        </th>
-                                        <th>
-                                            模块分类
-                                        </th>
-                                        <th>
-                                            服务名
-                                        </th>
-                                        <th>
-                                            请求参数
-                                        </th>
+                                        <tr>
+                                            <th>
+                                                编号
+                                            </th>
+                                            <th>
+                                                用例ID
+                                            </th>
+                                            <th>
+                                                用例名称
+                                            </th>
+                                            <th>
+                                                模块分类
+                                            </th>
+                                            <th>
+                                                服务名
+                                            </th>
+                                            <th>
+                                                请求参数
+                                            </th>
 
-                                        <th>
-                                            预期结果
-                                        </th>
-                                        <th>
-                                            验证类型
-                                        </th>
-                                        <th>
-                                            备注
-                                        </th>
-                                        <th>
-                                            创建人
-                                        </th>
-                                        <th>
-                                            更新人
-                                        </th>
-                                    </tr>
+                                            <th>
+                                                预期结果
+                                            </th>
+                                            <th>
+                                                验证类型
+                                            </th>
+                                            <th>
+                                                备注
+                                            </th>
+                                            <th>
+                                                创建人
+                                            </th>
+                                            <th>
+                                                更新人
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tfoot>
-                                    <tr>
-                                        <th>
-                                            编号
-                                        </th>
-                                        <th>
-                                            用例ID
-                                        </th>
-                                        <th>
-                                            用例名称
-                                        </th>
-                                        <th>
-                                            模块分类
-                                        </th>
-                                        <th>
-                                            服务名
-                                        </th>
-                                        <th>
-                                            请求参数
-                                        </th>
+                                        <tr>
+                                            <th>
+                                                编号
+                                            </th>
+                                            <th>
+                                                用例ID
+                                            </th>
+                                            <th>
+                                                用例名称
+                                            </th>
+                                            <th>
+                                                模块分类
+                                            </th>
+                                            <th>
+                                                服务名
+                                            </th>
+                                            <th>
+                                                请求参数
+                                            </th>
 
-                                        <th>
-                                            预期结果
-                                        </th>
-                                        <th>
-                                            验证类型
-                                        </th>
-                                        <th>
-                                            备注
-                                        </th>
-                                        <th>
-                                            创建人
-                                        </th>
-                                        <th>
-                                            更新人
-                                        </th>
-                                    </tr>
+                                            <th>
+                                                预期结果
+                                            </th>
+                                            <th>
+                                                验证类型
+                                            </th>
+                                            <th>
+                                                备注
+                                            </th>
+                                            <th>
+                                                创建人
+                                            </th>
+                                            <th>
+                                                更新人
+                                            </th>
+                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
                         <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
-                             aria-labelledby="myModalLabel">
+                            aria-labelledby="myModalLabel">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -113,14 +112,13 @@
                                             <div class="form-group">
                                                 <label for="case_name" class=" col-sm-2 control-label">用例名称</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="case_name"/>
+                                                    <input type="text" class="form-control" id="case_name" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="service_name" class=" col-sm-2 control-label">服务名称</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="service_name"
-                                                           list="service_data"/>
+                                                    <input type="text" class="form-control" id="service_name" list="service_data" />
                                                     <datalist id="service_data">
 
                                                     </datalist>
@@ -129,17 +127,15 @@
                                             <div class="form-group">
                                                 <label for="parameter" class="col-sm-2 control-label">请求参数</label>
                                                 <div class="col-sm-9">
-                                                    <textarea type="textare" class=" form-control" id="parameter"
-                                                              rows="4"
-                                                              onmouseout="formate_json('parameter')"
-                                                              placeholder="使用字典格式{'xxx':'xxx'}或xxx:xxx(多个参数回车换行)"></textarea>
+                                                    <textarea type="textare" class=" form-control" id="parameter" rows="4"
+                                                        onmouseout="formate_json('parameter')" placeholder="使用字典格式{'xxx':'xxx'}或xxx:xxx(多个参数回车换行)"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="result" class="col-sm-2 control-label">预期结果</label>
                                                 <div class="col-sm-9">
                                                     <textarea type="textare" class=" form-control" id="result" rows="4"
-                                                              placeholder="使用字典格式{'xxx':'xxx'}或xxx:xxx(多个参数回车换行)"></textarea>
+                                                        placeholder="使用字典格式{'xxx':'xxx'}或xxx:xxx(多个参数回车换行)"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -156,16 +152,14 @@
                                             <div class="form-group">
                                                 <label for="remake" class="col-sm-2 control-label">备注</label>
                                                 <div class="col-sm-9">
-                                                    <textarea type="textare" class=" form-control" id="remake"
-                                                              rows="2"></textarea>
+                                                    <textarea type="textare" class=" form-control" id="remake" rows="2"></textarea>
                                                 </div>
                                             </div>
                                         </form>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" class="btn btn-primary" id="submit"
-                                                    onclick="add_testcase()">更新
+                                            <button type="button" class="btn btn-primary" id="submit" onclick="add_testcase()">更新
                                             </button>
                                         </div>
                                     </div>
@@ -175,9 +169,8 @@
                     </div>
                     <div class="tab-pane" id="panel-54273">
                         <div>
-                            <div class="modal fade" id="selectmodel" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel"
-                                 aria-hidden="true">
+                            <div class="modal fade" id="selectmodel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -190,8 +183,7 @@
                                                 <div class="form-group">
                                                     <label for="model" class=" col-sm-2 control-label">选择模块</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="model"
-                                                               list="modellist"/>
+                                                        <input type="text" class="form-control" id="model" list="modellist" />
                                                         <datalist id="modellist">
                                                         </datalist>
                                                     </div>
@@ -208,9 +200,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="environment" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel"
-                                 aria-hidden="true">
+                            <div class="modal fade" id="environment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -224,11 +215,9 @@
                                             </p>
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-group">
-                                                    <label for="setenvironment"
-                                                           class=" col-sm-2 control-label">设置环境</label>
+                                                    <label for="setenvironment" class=" col-sm-2 control-label">设置环境</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" id="setenvironment"
-                                                                onchange="select_change()">
+                                                        <select class="form-control" id="setenvironment" onchange="select_change()">
                                                             <option>测试环境</option>
                                                             <option>生产环境</option>
                                                             <option>自定义</option>
@@ -238,15 +227,14 @@
                                                 <div class="form-group">
                                                     <label for="baseurl" class=" col-sm-2 control-label">输入地址</label>
                                                     <div class="col-sm-9">
-                                                        <input class="form-control" id="baseurl" value="测试环境"/>
+                                                        <input class="form-control" id="baseurl" value="测试环境" />
                                                     </div>
                                                 </div>
                                             </form>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                                                 </button>
-                                                <button type="button" class="btn btn-primary"
-                                                        onclick="set_environment()">提交
+                                                <button type="button" class="btn btn-primary" onclick="set_environment()">提交
                                                 </button>
                                             </div>
                                         </div>
@@ -255,60 +243,59 @@
                             </div>
                             <p id="envp" style="text-align:right;color: red">当前执行环境:测试环境</p>
                             <div class="row clearfix">
-                                <table id="executecase" class="table table-striped table-bordered table-hover"
-                                       style="width:100%;">
+                                <table id="executecase" class="table table-striped table-bordered table-hover" style="width:100%;">
                                     <thead>
-                                    <tr>
-                                        <th>
-                                            用例ID
-                                        </th>
-                                        <th>
-                                            用例名称
-                                        </th>
-                                        <th>
-                                            模块
-                                        </th>
-                                        <th>
-                                            服务名
-                                        </th>
-                                        <th>
-                                            最近执行时间
-                                        </th>
+                                        <tr>
+                                            <th>
+                                                用例ID
+                                            </th>
+                                            <th>
+                                                用例名称
+                                            </th>
+                                            <th>
+                                                模块
+                                            </th>
+                                            <th>
+                                                服务名
+                                            </th>
+                                            <th>
+                                                最近执行时间
+                                            </th>
 
-                                        <th>
-                                            执行人
-                                        </th>
-                                        <th>
-                                            查看结果
-                                        </th>
+                                            <th>
+                                                执行人
+                                            </th>
+                                            <th>
+                                                查看结果
+                                            </th>
 
-                                    </tr>
+                                        </tr>
                                     </thead>
                                     <tfoot>
-                                    <tr>
-                                        <th>
-                                            用例ID
-                                        </th>
-                                        <th>
-                                            用例名称
-                                        </th>
-                                        <th>
-                                            模块
-                                        </th>
-                                        <th>
-                                            服务名
-                                        </th>
-                                        <th>
-                                            最近执行时间
-                                        </th>
+                                        <tr>
+                                            <th>
+                                                用例ID
+                                            </th>
+                                            <th>
+                                                用例名称
+                                            </th>
+                                            <th>
+                                                模块
+                                            </th>
+                                            <th>
+                                                服务名
+                                            </th>
+                                            <th>
+                                                最近执行时间
+                                            </th>
 
-                                        <th>
-                                            执行人
-                                        </th>
-                                        <th>
-                                            查看结果
-                                        </th>
-                                    </tr>
+                                            <th>
+                                                执行人
+                                            </th>
+                                            <th>
+                                                查看结果
+                                            </th>
+                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>
@@ -549,7 +536,7 @@
                     toastr.info('执行完成');
                 } else {
                     toastr.error('后台执行报错');
-                    alert.error(result.error)
+                    alert("用例请求接口：" + result.error)
                 }
             }
         })
@@ -569,7 +556,7 @@
                     toastr.info('执行完成');
                 } else {
                     toastr.error('后台执行报错');
-                    alert.error(result.error)
+                    alert("用例请求接口：" + result.error)
                 }
             }
         })
@@ -589,7 +576,7 @@
                     toastr.info('执行完成');
                 } else {
                     toastr.error('后台执行报错');
-                    alert.error(result.error)
+                    alert("用例请求接口：" + result.error)
                 }
             }
         })
@@ -716,8 +703,5 @@
         overflow: hidden;
         /*超长部分隐藏掉*/
     }
-
-
-
 </style>
 {% endblock %}
