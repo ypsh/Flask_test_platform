@@ -66,7 +66,7 @@ function submit_aes() {
     $.post("/apis/aes", {
         aes: $('#inputtext').val(),
     }, function (data, status) {
-        $('#result').val(JSON.stringify(data, null, 4));
+        $('#result').val(data.result);
         $('#submit.btn').button('reset');
     }).error(function () {
         $('#submit.btn').button('reset');

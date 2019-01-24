@@ -396,6 +396,23 @@ class dash_board(Resource):
             if result:
                 return result
 
+"""
+数据加解密
+"""
+
+
+class aes(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('aes', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+
+    def post(self):
+        result = {"message": None}
+        if (self.ags['aes'] is not None):
+           result=AesUtil().aes(self.ags['aes'])
+        return result
+
 
 api.add_resource(user, '/user')
 api.add_resource(services, '/service')
@@ -410,3 +427,4 @@ api.add_resource(time_task, '/task')
 api.add_resource(scheduling, '/scheduling')
 api.add_resource(files_manager, '/filesmanager')
 api.add_resource(dash_board, '/dashboard')
+api.add_resource(aes, '/aes')
