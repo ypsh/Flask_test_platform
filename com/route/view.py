@@ -40,8 +40,8 @@ def login():
 
 @view.route('/tools/<name>', methods=['GET'])
 def get_messagecode(name):
-    if name == "messagecode":
-        return render_template('subtemplates/tools/messgecode.html', name=name)
+    if name == "makedata":
+        return render_template('subtemplates/tools/makedata.html', name=name)
     elif name == 'aes':
         return render_template('subtemplates/tools/encryption.html', name=name)
     elif name == 'callback':

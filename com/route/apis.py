@@ -21,6 +21,7 @@ from com.service.test_case import TestCaseOperate
 from com.service.test_report import TestReportOperate
 from com.service.timeTask import TaskOperate
 from com.service.user import UserOperate
+from com.service.makedata import MakdeData
 
 apis = Blueprint('apis', __name__)
 api = Api(apis)
@@ -396,6 +397,7 @@ class dash_board(Resource):
             if result:
                 return result
 
+
 """
 数据加解密
 """
@@ -410,8 +412,29 @@ class aes(Resource):
     def post(self):
         result = {"message": None}
         if (self.ags['aes'] is not None):
-           result=AesUtil().aes(self.ags['aes'])
+            result = AesUtil().aes(self.ags['aes'])
         return result
+
+
+"""
+随机生成指定范围的个人信息
+"""
+
+
+class makedata(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('city', type=str)
+        self.parser.add_argument('age', type=str)
+        self.parser.add_argument('sex', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        data = MakdeData().get_info(self.ags)
+        return {"data": data}
+
+    def post(self):
+        pass
 
 
 api.add_resource(user, '/user')
@@ -428,3 +451,4 @@ api.add_resource(scheduling, '/scheduling')
 api.add_resource(files_manager, '/filesmanager')
 api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
+api.add_resource(makedata,'/makedata')
