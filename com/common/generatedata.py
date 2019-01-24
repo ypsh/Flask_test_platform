@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 import random
 import logging
-import string
 from datetime import date, timedelta
+from imp import reload
 
 from com.common.getPath import Path
-
 
 class Generate():
     def __init__(self):
