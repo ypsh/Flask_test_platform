@@ -20,7 +20,7 @@ class Generate():
         :return:地址码字典
         """
         district_code_path = self.global_path + "/config/districtcode.txt"
-        with open(district_code_path) as file:
+        with open(district_code_path,'r', encoding='UTF-8') as file:
             data = file.read()
         district_list = data.split('\n')
         code_list = []
