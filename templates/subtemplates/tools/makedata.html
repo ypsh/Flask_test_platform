@@ -37,13 +37,15 @@
                     <div class="form-group">
                         <label for="city" class="col-sm-2 control-label">地区</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="city" placeholder="如：深圳、西安，限制生成身份证归属地" />
+                            <input type="text" class="form-control" id="city" placeholder="如：深圳、西安，限制生成身份证归属地"
+                                ondblclick="clearval(this)" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="age" class="col-sm-2 control-label">年龄</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="age" placeholder="输入年龄范围如：20-46 用-隔开" />
+                            <input type="text" class="form-control" id="age" placeholder="输入年龄范围如：20-46 用-隔开"
+                                ondblclick="clearval(this)" />
                         </div>
                     </div>
                     <div class="form-group">

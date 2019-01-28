@@ -11,7 +11,7 @@ class AesUtil:
     def __init__(self):
         global_path = Path().get_current_path()
         conf = configparser.ConfigParser()
-        conf.read(global_path + '/config/config.ini')
+        conf.read(global_path + '/config/config.ini',encoding='utf-8')
         self.secret_key = conf.get('aes_key', 'secret_key')
         self.iv = conf.get('aes_key', 'iv')
         self.data = conf.get('aes_key', 'data')

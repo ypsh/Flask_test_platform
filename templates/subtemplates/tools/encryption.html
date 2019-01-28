@@ -4,10 +4,11 @@
 <form class="form-inline" role="form" method="post">
     <div class="form-group">
         <label for="inputtext">加密内容：</label>
-        <input type="text" class="form-control" id="inputtext" name="aes" style="width:600px" placeholder="请输入加密/解密内容">
+        <input type="text" class="form-control" id="inputtext" name="aes" style="width:600px" placeholder="请输入加密/解密内容"
+            ondblclick="clearval(this)">
 
         <label for="submit" style="padding-right:30px;"></label>
-        <input id="submit" type="button" class="btn btn-default" onclick="submit_aes()" value="提交"/>
+        <input id="submit" type="button" class="btn btn-default" onclick="submit_aes()" value="提交" />
     </div>
 </form>
 <form>

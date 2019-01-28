@@ -8,27 +8,25 @@
         </h1>
         <div class="btn-group">
             <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
-                        id="datasourcebutton">数据源
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" id="datasourcebutton">数据源
                     <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
                     <div class="col-sm-12 column">
                         <label for="createrselect">数据源</label>
                         <input type="text" class="form-control input-sm col-sm-12" id="datasource" list="datasourcelist"
-                               onchange="setbuttondisplay()" ondblclick="clearval('datasource')"/>
+                            onchange="setbuttondisplay()" ondblclick="clearval(this)" />
 
                         <datalist id="datasourcelist">
                             <option value="all">全部</option>
                             <option value="last">最近执行</option>
-                            <option value="lastmodel">最近模块执行</option>
+                            <option value="lastmodel">最近项目执行</option>
                             <option value="lastall">最近批量执行</option>
                             <option value="lastselect">最近选择执行</option>
                         </datalist>
                     </div>
                     <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
-                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
-                             onclick="getreportdata()">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;" onclick="getreportdata()">
                             <i type="hover"></i> 提交
                         </div>
                     </div>
@@ -42,13 +40,11 @@
                 <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
                     <div class="col-sm-12 column">
                         <label for="batchnumber">批次号</label>
-                        <input type="text" class="form-control input-sm col-sm-12" id="batchnumber"
-                               ondblclick="clearval('createrselect')"/>
+                        <input type="text" class="form-control input-sm col-sm-12" id="batchnumber" ondblclick="clearval(this)" />
 
                     </div>
                     <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
-                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
-                             onclick="getreportdata()">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;" onclick="getreportdata()">
                             <i type="hover"></i> 提交
                         </div>
                     </div>
@@ -63,15 +59,13 @@
                 <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
                     <div class="col-sm-12 column">
                         <label for="createrselect">执行人</label>
-                        <input type="text" class="form-control input-sm col-sm-12" id="createrselect"
-                               ondblclick="clearval('createrselect')"
-                               list="createrlist"/>
+                        <input type="text" class="form-control input-sm col-sm-12" id="createrselect" ondblclick="clearval(this)"
+                            list="createrlist" />
                         <datalist id="createrlist">
                         </datalist>
                     </div>
                     <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
-                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
-                             onclick="getreportdata()">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;" onclick="getreportdata()">
                             <i type="hover"></i> 提交
                         </div>
                     </div>
@@ -86,17 +80,16 @@
                 <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
                     <div class="col-sm-12 column">
                         <label for="createrselect">执行类型</label>
-                        <input type="text" ondblclick="clearval('executetype')" class="form-control input-sm col-sm-12"
-                               id="executetype" list="typelist"/>
+                        <input type="text" ondblclick="clearval(this)" class="form-control input-sm col-sm-12" id="executetype"
+                            list="typelist" />
                         <datalist id="typelist">
                             <option value="all">全部</option>
                             <option value="select">选择执行</option>
-                            <option value="model">模块执行</option>
+                            <option value="model">项目执行</option>
                         </datalist>
                     </div>
                     <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
-                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
-                             onclick="getreportdata()">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;" onclick="getreportdata()">
                             <i type="hover"></i> 提交
                         </div>
                     </div>
@@ -112,12 +105,11 @@
                 <div class="dropdown-menu col-sm-12 column" style="height: 150px;width: 300px">
                     <div class="col-sm-12 column">
                         <label for="createrselect">时间范围</label>
-                        <input type="text" ondblclick="clearval('daterange')" class="form-control input-sm col-sm-12"
-                               id="daterange" onchange="getreportdata()"/>
+                        <input type="text" ondblclick="clearval(this)" class="form-control input-sm col-sm-12" id="daterange"
+                            onchange="getreportdata()" />
                     </div>
                     <div style="position:absolute;bottom:0px;width: 100%;background-color:gainsboro">
-                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;"
-                             onclick="getreportdata()">
+                        <div type="hover" class="text-center" style="padding: 15px;margin: 0px;" onclick="getreportdata()">
                             <i type="hover"></i> 提交
                         </div>
                     </div>
@@ -196,7 +188,7 @@
                         <span id='span_case_name'></span></p>
                     <p><b><span>接口名称</span></b><span>：</span>
                         <span id='span_api_name'></span></p>
-                    <p><b><span>模块名称</span></b><span>：</span>
+                    <p><b><span>项目名称</span></b><span>：</span>
                         <span id='span_model_name'></span></p>
                     <p><b><span>请求地址</span></b><span>：</span>
                         <span id='span_request_path' style="word-wrap: break-word"></span></p>
@@ -212,19 +204,19 @@
                         <span id='span_verification'></span></p>
                     <p><b><span>执行结果</span></b><span>：</span>
                         <span id='span_result'></span></p>
-                    <hr/>
+                    <hr />
                     <p><b><span>用例输入</span></b><span>：</span></p>
 
                     <p><span id="span_input"></span></p>
-                    <hr/>
+                    <hr />
                     <p><b><span>Headers</span></b><span>：</span></p>
 
                     <p><span id="span_headers"></span></p>
-                    <hr/>
+                    <hr />
                     <p><b><span>期望结果</span></b><span>：</span></p>
 
                     <p><span id="span_excpt"></span></p>
-                    <hr/>
+                    <hr />
                     <p><b><span>实际结果</span></b><span>：</span></p>
                     <p><span id="span_real"></span></p>
 
@@ -528,7 +520,7 @@
                 { title: "批次号", width: '10%' },
                 { title: "用例名", width: '10%' },
                 { title: "接口名", width: '15%' },
-                { title: "模块" },
+                { title: "项目" },
                 { title: "响应状态" },
                 { title: "验证结果" },
                 { title: "耗时（ms）" },

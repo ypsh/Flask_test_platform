@@ -18,7 +18,7 @@ class SentMail:
         self.sender = 'ypshwork@163.com'
         self.global_path = Path().get_current_path()
         conf = configparser.ConfigParser()
-        conf.read(self.global_path + '/config/config.ini')
+        conf.read(self.global_path + '/config/config.ini',encoding='utf-8')
         self.receivers = eval(conf.get('mail', 'resport_reciver'))
 
     def send(self, to_receiver, subject, body):

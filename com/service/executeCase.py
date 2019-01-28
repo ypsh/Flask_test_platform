@@ -31,7 +31,7 @@ class ExecuteCase:
         self.env = ''
         self.globalpath = Path().get_current_path()
         self.conf = configparser.ConfigParser()
-        self.conf.read(self.globalpath + '/config/config.ini')
+        self.conf.read(self.globalpath + '/config/config.ini',encoding='utf-8')
         self.batch_number = ''
         self.fail = 0
 
@@ -64,12 +64,13 @@ class ExecuteCase:
 
     def do_request(self, info):
         result = None
-        if self.env == '测试环境':
-            url = self.conf.get('env', 'testenv')
-        elif self.env == '生产环境':
-            url = self.conf.get('env', 'product')
-        else:
-            url = self.env
+        # if self.env == '测试环境':
+        #     url = self.conf.get('env', 'testenv')
+        # elif self.env == '生产环境':
+        #     url = self.conf.get('env', 'product')
+        # else:
+        #     url = self.env
+        url = self.conf.get('project_env',info['model'])
         url = url + info['request_path']
         if info['input'] == '':
             info['input'] = 'None'

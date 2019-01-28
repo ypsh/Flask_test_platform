@@ -31,7 +31,7 @@
                                                 用例名称
                                             </th>
                                             <th>
-                                                模块分类
+                                                项目
                                             </th>
                                             <th>
                                                 服务名
@@ -69,7 +69,7 @@
                                                 用例名称
                                             </th>
                                             <th>
-                                                模块分类
+                                                项目
                                             </th>
                                             <th>
                                                 服务名
@@ -176,14 +176,14 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span></button>
-                                            <h4 class="modal-title">选择模块</h4>
+                                            <h4 class="modal-title">选择项目</h4>
                                         </div>
                                         <div class="modal-body">
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-group">
-                                                    <label for="model" class=" col-sm-2 control-label">选择模块</label>
+                                                    <label for="model" class=" col-sm-2 control-label">选择项目</label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" class="form-control" id="model" list="modellist" />
+                                                        <input type="text" class="form-control" id="model" list="modellist" ondblclick="clearval(this)"/>
                                                         <datalist id="modellist">
                                                         </datalist>
                                                     </div>
@@ -207,7 +207,7 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span></button>
-                                            <h4 class="modal-title">设置环境</h4>
+                                            <h4 class="modal-title">项目地址</h4>
                                         </div>
                                         <div class="modal-body">
                                             <p style="color:red">
@@ -215,19 +215,17 @@
                                             </p>
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-group">
-                                                    <label for="setenvironment" class=" col-sm-2 control-label">设置环境</label>
+                                                    <label for="setenvironment" class=" col-sm-2 control-label">项目地址</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" id="setenvironment" onchange="select_change()">
-                                                            <option>测试环境</option>
-                                                            <option>生产环境</option>
-                                                            <option>自定义</option>
-                                                        </select>
+                                                        <input type="text" class="form-control" id="setenvironment"
+                                                            list="modellist" onchange="select_change()" ondblclick="clearval(this)"/>
+                                                        <datalist id="modellist">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="baseurl" class=" col-sm-2 control-label">输入地址</label>
                                                     <div class="col-sm-9">
-                                                        <input class="form-control" id="baseurl" value="测试环境" />
+                                                        <input class="form-control" id="baseurl" value="" />
                                                     </div>
                                                 </div>
                                             </form>
@@ -253,7 +251,7 @@
                                                 用例名称
                                             </th>
                                             <th>
-                                                模块
+                                                项目
                                             </th>
                                             <th>
                                                 服务名
@@ -280,7 +278,7 @@
                                                 用例名称
                                             </th>
                                             <th>
-                                                模块
+                                                项目
                                             </th>
                                             <th>
                                                 服务名
@@ -479,7 +477,7 @@
                     class: "btn-default",
                 },
                 {
-                    text: '模块执行',
+                    text: '项目执行',
                     action: function () {
                         $("#selectmodel").modal();
                     },
@@ -513,7 +511,6 @@
                 {
                     text: '设置测试环境',
                     action: function () {
-                        $('#baseurl').attr("disabled", "disabled");
                         $("#environment").modal('show')
                         // execute_table.ajax.reload()
                     }
@@ -561,7 +558,7 @@
             }
         })
     }
-    //按模块执行
+    //按项目执行
     function execute_model() {
         $("#selectmodel").modal('hide');
         $.ajax({
@@ -598,28 +595,47 @@
     }
     //测试环境选择联动
     function select_change() {
-        $('#baseurl').val($('#setenvironment').val());
-        $('#baseurl').attr("disabled", "disabled");
-        if ($('#setenvironment').val() == '自定义') {
-            $('#baseurl').removeAttr("disabled");
-            $('#baseurl').val('');
-        }
+        var url = ''
+        url = get_url($('#setenvironment').val())
+
     }
+    //获取项目对应的url地址
+    function get_url(project) {
+        $.ajax({
+            url: '/apis/seturl',
+            type: 'get',
+            data: {
+                project: project
+            },
+            success: function (result) {
+                data = result.data
+                $('#baseurl').val(data)
+            }
+        })
+    }
+
     //设置测试环境配置到cookies
     function set_environment() {
-        if ($('#setenvironment').val() == '自定义') {
-            if (($('#baseurl').val()).includes('http')) {
-                localStorage.setItem('environment', $('#baseurl').val())
-                toastr.info('环境设置成功')
-                get_environment();
+        if (($('#baseurl').val()).includes('http') && $('#setenvironment').val()!='') {
+                 $.ajax({
+                url: '/apis/seturl',
+                type: 'post',
+                data: {
+                    project: $('#setenvironment').val(),
+                    url: $('#baseurl').val()
+                },
+                success: function (result) {
+                    if (result){
+                        toastr.info('设置成功')
+                    }else{
+                        toastr.error('设置失败，请检查数据')
+                    }
+                }
+            })
             } else {
                 toastr.error('地址输入错误')
             }
-        } else {
-            localStorage.setItem('environment', $('#baseurl').val())
-            toastr.info('环境设置成功')
-            get_environment();
-        }
+       
     }
     //获取当前测试环境
     function get_environment() {

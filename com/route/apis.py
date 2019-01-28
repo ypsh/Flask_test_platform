@@ -16,6 +16,7 @@ from com.service.dashboard import ContCase
 from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
 from com.service.moker import ServiceOperate
+from com.service.set_url import Set_url
 from com.service.task_schedul import TaskSchedul
 from com.service.test_case import TestCaseOperate
 from com.service.test_report import TestReportOperate
@@ -224,6 +225,33 @@ class TestCaseUpload(Resource):
         return result
 
 
+"""
+设置项目环境地址
+"""
+
+
+class set_project_url(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('project', type=str )
+        self.parser.add_argument('url', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        data = Set_url().get_url(self.ags.project)
+        result = {"data": data}
+        return result
+
+    def post(self):
+        result = Set_url().add_url(self.ags.project,self.ags.url)
+        return result
+
+
+"""
+执行测试用例
+"""
+
+
 class execute_case(Resource):
     # def __init__(self):
     #     self.parser = reqparse.RequestParser()
@@ -239,6 +267,11 @@ class execute_case(Resource):
     def post(self):
         result = ExecuteCase().execute_cases(request.json)
         return result
+
+
+"""
+获取项目列表
+"""
 
 
 class get_modellist(Resource):
@@ -443,6 +476,7 @@ api.add_resource(api_manger, '/apimanager')
 api.add_resource(test_case, '/testcase')
 api.add_resource(ApiUpload, '/apiupload')
 api.add_resource(TestCaseUpload, '/testcaseupload')
+api.add_resource(set_project_url,'/seturl')
 api.add_resource(execute_case, '/executecase')
 api.add_resource(get_modellist, '/modelist')
 api.add_resource(get_reportdata, '/report')
@@ -451,4 +485,4 @@ api.add_resource(scheduling, '/scheduling')
 api.add_resource(files_manager, '/filesmanager')
 api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
-api.add_resource(makedata,'/makedata')
+api.add_resource(makedata, '/makedata')

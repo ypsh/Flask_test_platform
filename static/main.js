@@ -270,5 +270,5 @@ Date.prototype.format = function (format) {
 }
 
 function clearval(id) {
-    $('#' + id).val('')
+    id.value = ''
 }

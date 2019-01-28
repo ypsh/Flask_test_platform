@@ -21,7 +21,7 @@ class Redis:
         nodes = []
         try:
             conf = configparser.ConfigParser()
-            conf.read(self.global_path + '/config/config.ini')
+            conf.read(self.global_path + '/config/config.ini',encoding='utf-8')
             host_port = conf.get('redis', 'nodes')
             ips = host_port.split(',')
             self.password = conf.get('redis', 'password')

@@ -13,7 +13,7 @@ from config.extendlink import get_titles
 view = Blueprint('view', __name__)
 
 conf = configparser.ConfigParser()
-conf.read(Path().get_current_path() + '/config/config.ini')
+conf.read(Path().get_current_path() + '/config/config.ini',encoding='utf-8')
 
 
 @view.route('/')
