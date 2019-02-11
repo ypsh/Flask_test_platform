@@ -174,6 +174,7 @@ class files_manager(db.Model):
     file_size = db.Column(db.String)
     creater = db.Column(db.String)
     remark = db.Column(db.String)
+    file_path = db.Column(db.String)
     create_time = db.Column(db.TIMESTAMP)
 
     def __repr__(self):

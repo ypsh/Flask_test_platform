@@ -19,7 +19,7 @@ class FileUpload:
             file.save(upload_path)
             file_size = os.path.getsize(upload_path)
             file_type = file.filename[file.filename.rfind('.') + 1:]
-            return {'file_size': file_size, 'file_type': file_type, 'file_name': file_name}
+            return {'file_size': file_size, 'file_type': file_type, 'file_name': file_name,'file_path':path}
         except Exception as e:
             logging.error(str(e))
             return None
@@ -28,7 +28,7 @@ class FileUpload:
         try:
             for item in args:
                 for data in item:
-                    file_path = os.path.join(Path().get_current_path(), 'static/filesmanager',
+                    file_path = os.path.join(Path().get_current_path(), data[6],
                                              data[1])
                     os.remove(file_path)
             return True

@@ -15,6 +15,7 @@ from com.service.api_manger import ApiMangerOperate
 from com.service.dashboard import ContCase
 from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
+from com.service.jmeter import Jmeter
 from com.service.moker import ServiceOperate
 from com.service.set_url import Set_url
 from com.service.task_schedul import TaskSchedul
@@ -233,7 +234,7 @@ class TestCaseUpload(Resource):
 class set_project_url(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('project', type=str )
+        self.parser.add_argument('project', type=str)
         self.parser.add_argument('url', type=str)
         self.ags = self.parser.parse_args()
 
@@ -243,7 +244,7 @@ class set_project_url(Resource):
         return result
 
     def post(self):
-        result = Set_url().add_url(self.ags.project,self.ags.url)
+        result = Set_url().add_url(self.ags.project, self.ags.url)
         return result
 
 
@@ -359,20 +360,25 @@ class files_manager(Resource):
         self.parser.add_argument('type', type=str, help='Rate to charge for this resource')
         self.parser.add_argument('remark', type=str, help='Rate to charge for this resource')
         self.parser.add_argument('fileid', type=str, help='Rate to charge for this resource')
+        self.parser.add_argument('filepath', type=str, help='Rate to charge for this resource')
         self.ags = self.parser.parse_args()
 
     def get(self):
+        if self.ags['filepath'] == 'jmeter':
+            path = 'jmeter/jmx'
+        else:
+            path = 'static/filesmanager'
         if self.ags['type'] == 'get':
-            result = FilesManager().get_list()
+            result = FilesManager().get_list(path)
             if result:
                 return {'message': True, 'data': result}
             else:
                 return {'message': False, 'data': None}
         elif self.ags['type'] == 'download':
             basename = FilesManager().get_file_name(self.ags['fileid'])
-            file_path = os.path.join(Path().get_current_path(), 'static/filesmanager',
+            file_path = os.path.join(Path().get_current_path(), path,
                                      basename)
-            dir_path = os.path.join(Path().get_current_path(), 'static/filesmanager')
+            dir_path = os.path.join(Path().get_current_path(), path)
             if os.path.exists(file_path):
                 response = make_response(send_from_directory(dir_path, basename, as_attachment=True))
                 # response.headers["Content-Disposition"] = "; filename=%s;" % (str(self.ags['filename']))
@@ -389,7 +395,10 @@ class files_manager(Resource):
 
     def post(self):
         if self.ags['type'] == 'upload':
-            result = FileUpload().save_file(request.files['files'], 'static/filesmanager')
+            if self.ags['filepath'] == 'jmeter':
+                result = FileUpload().save_file(request.files['files'], 'jmeter/jmx')
+            else:
+                result = FileUpload().save_file(request.files['files'], 'static/filesmanager')
             if result:
                 result['user'] = self.ags['user']
                 result['remark'] = self.ags['remark']
@@ -470,13 +479,35 @@ class makedata(Resource):
         pass
 
 
+"""
+执行jmeter命令、获取执行报告
+"""
+
+
+class jmeter(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('jmx', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        pass
+
+    def post(self):
+        try:
+            result = Jmeter().execute_jmx(json.loads(request.json['data'])[0][1])
+            return result
+        except:
+            return {'message':False}
+
+
 api.add_resource(user, '/user')
 api.add_resource(services, '/service')
 api.add_resource(api_manger, '/apimanager')
 api.add_resource(test_case, '/testcase')
 api.add_resource(ApiUpload, '/apiupload')
 api.add_resource(TestCaseUpload, '/testcaseupload')
-api.add_resource(set_project_url,'/seturl')
+api.add_resource(set_project_url, '/seturl')
 api.add_resource(execute_case, '/executecase')
 api.add_resource(get_modellist, '/modelist')
 api.add_resource(get_reportdata, '/report')
@@ -486,3 +517,4 @@ api.add_resource(files_manager, '/filesmanager')
 api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
 api.add_resource(makedata, '/makedata')
+api.add_resource(jmeter, '/jmeter')

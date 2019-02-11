@@ -10,14 +10,21 @@ class FilesManager:
     def get_all(self):
         return files_manager.query.all()
 
+    def get_all_by_filepath(self,file_path):
+        return files_manager.query.filter_by(file_path=file_path)
+
     def get_file_name(self, id):
         result = files_manager.query.filter_by(id=id).first()
         return result.file_name
 
-    def get_list(self):
+    def get_file_path(self, id):
+        result = files_manager.query.filter_by(id=id).first()
+        return result.file_path
+
+    def get_list(self,file_path):
         data = []
         try:
-            result = self.get_all()
+            result = self.get_all_by_filepath(file_path)
             if result:
                 for item in result:
                     size = str(item.file_size / 1024).split('.')
@@ -31,6 +38,7 @@ class FilesManager:
                                  size + ' kb',
                                  item.create_time.strftime('%Y-%m-%d %H:%M:%S'),
                                  item.creater,
+                                 item.file_path,
                                  item.remark])
                 return data
         except Exception as e:
@@ -44,6 +52,7 @@ class FilesManager:
                     files_manager(file_name=data['file_name'],
                                   file_type=data['file_type'],
                                   file_size=data['file_size'],
+                                  file_path=data['file_path'],
                                   creater=data['user'],
                                   remark=data['remark'],
                                   create_time=datetime.now()
@@ -77,7 +86,7 @@ class FilesManager:
                 for data in item:
                     service = files_manager.query.filter_by(id=data[0]).first()
                     if service:
-                        service.remark = data[7]
+                        service.remark = data[8]
                     db.session.flush()
             db.session.commit()
             db.session.close()

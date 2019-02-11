@@ -44,6 +44,8 @@ def get_messagecode(name):
         return render_template('subtemplates/tools/makedata.html', name=name)
     elif name == 'aes':
         return render_template('subtemplates/tools/encryption.html', name=name)
+    elif name == 'jmeter':
+        return render_template('subtemplates/tools/jmeter.html',name=name)
     elif name == 'callback':
         if request.method == 'GET':
             return render_template('subtemplates/tools/callback/credit.html')
