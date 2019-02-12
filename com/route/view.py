@@ -13,7 +13,7 @@ from config.extendlink import get_titles
 view = Blueprint('view', __name__)
 
 conf = configparser.ConfigParser()
-conf.read(Path().get_current_path() + '/config/config.ini',encoding='utf-8')
+conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
 
 
 @view.route('/')
@@ -45,7 +45,7 @@ def get_messagecode(name):
     elif name == 'aes':
         return render_template('subtemplates/tools/encryption.html', name=name)
     elif name == 'jmeter':
-        return render_template('subtemplates/tools/jmeter.html',name=name)
+        return render_template('subtemplates/tools/jmeter.html', name=name)
     elif name == 'callback':
         if request.method == 'GET':
             return render_template('subtemplates/tools/callback/credit.html')
@@ -92,6 +92,8 @@ def task():
 def file_manager():
     return render_template('subtemplates/filesmanager/filesmanager.html')
 
-@view.route('/jmeter/report', methods=['GET'])
-def tool_jmeter():
-    return send_from_directory(Path().get_current_path(),'jmeter/report/秦农-导出_20190212095723/result/index.html')
+
+@view.route('/jmeter/report/<name>', methods=['GET'])
+def tool_jmeter(name):
+    file = 'jmeter/report/' + name + '/result/index.html'
+    return send_from_directory(Path().get_current_path(), file)
