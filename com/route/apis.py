@@ -366,6 +366,13 @@ class files_manager(Resource):
     def get(self):
         if self.ags['filepath'] == 'jmeter':
             path = 'jmeter/jmx'
+        elif self.ags['filepath'] == 'report':
+            path = 'jmeter/report'
+            result = FilesManager().get_report(path)
+            if result:
+                return {'message': True, 'data': result}
+            else:
+                return {'message': False, 'data': None}
         else:
             path = 'static/filesmanager'
         if self.ags['type'] == 'get':

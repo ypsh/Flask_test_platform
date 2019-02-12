@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 import logging
+import os
+import time
 from datetime import datetime
 
 from com.common.model import files_manager, db
@@ -10,7 +12,7 @@ class FilesManager:
     def get_all(self):
         return files_manager.query.all()
 
-    def get_all_by_filepath(self,file_path):
+    def get_all_by_filepath(self, file_path):
         return files_manager.query.filter_by(file_path=file_path)
 
     def get_file_name(self, id):
@@ -21,7 +23,7 @@ class FilesManager:
         result = files_manager.query.filter_by(id=id).first()
         return result.file_path
 
-    def get_list(self,file_path):
+    def get_list(self, file_path):
         data = []
         try:
             result = self.get_all_by_filepath(file_path)
@@ -95,3 +97,20 @@ class FilesManager:
         except Exception as e:
             db.session.close()
             return {"message": str(e)}
+
+    def get_report(self, file_path):
+        data = []
+        try:
+            dirs = os.listdir(file_path)
+            for dir in dirs:
+                create_time = os.path.getctime(os.path.join(file_path, dir))
+                timeStruct = time.localtime(create_time)
+                create_time = time.strftime('%Y-%m-%d %H:%M:%S', timeStruct)
+                size = os.path.getsize(os.path.join(file_path, dir))
+                report='result/index.html'
+                log='jmeter.log'
+                data.append([dir, create_time, report,log])
+            return data
+        except Exception as e:
+            logging.error(str(e))
+            return data

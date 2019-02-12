@@ -2,7 +2,7 @@
 import configparser
 import json
 
-from flask import Blueprint
+from flask import Blueprint, send_from_directory
 from flask import render_template
 from flask import request
 
@@ -91,3 +91,7 @@ def task():
 @view.route('/datum/filesmanager', methods=['GET'])
 def file_manager():
     return render_template('subtemplates/filesmanager/filesmanager.html')
+
+@view.route('/jmeter/report', methods=['GET'])
+def tool_jmeter():
+    return send_from_directory(Path().get_current_path(),'jmeter/report/秦农-导出_20190212095723/result/index.html')
