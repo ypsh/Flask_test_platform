@@ -40,7 +40,7 @@ class Jmeter:
         try:
             jmx = jmx.split('.')[0]
             dir_name = jmx + "_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-            path = os.path.join(self.globalpath, 'jmeter')
+            path = os.path.join(self.globalpath, 'static')
             report = os.path.join(path,'report')
             if os.path.exists(report):
                 pass

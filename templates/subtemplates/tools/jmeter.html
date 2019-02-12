@@ -87,7 +87,7 @@
 
               <div class="row clearfix">
                 <p style="text-align:right">.</p>
-                <table id="executecase" class="table table-striped table-bordered table-hover" style="width:100%;">
+                <table id="reporttable" class="table table-striped table-bordered table-hover" style="width:100%;">
                 </table>
               </div>
             </div>
@@ -181,10 +181,10 @@
   }
 
 
-  var execute_table;
+  var report_table;
   //测试用例执行页table初始化
-  function init_executecasetable() {
-    execute_table = $('#executecase').DataTable({
+  function init_reporttable() {
+    report_table = $('#reporttable').DataTable({
       language: {
         url: "/static/language/cn.json"
       },
@@ -206,61 +206,28 @@
       ],
       aoColumnDefs: [{
         "aTargets": [3], "mRender": function (data, type, full) {
-          return "<a href=\"#myModal-edit\" data-toggle=\"modal\" onclick=\"preUpdate('" + data + "')\"> <i class=\"fa fa-lg-2 fa-pencil\"> </i> </a>     <a href=\"javascript:void(0)\" data-toggle=\"modal\" class=\"smart-mod-eg1\" onclick=\"delPool('" + data + "',event)\"> <i class=\"fa fa-lg-2 fa-trash-o\"> </i> </a>    "
+          return "<a href=../" + data + " > jmeter.log</a >"
         }
       },
       {
         "aTargets": [2], "mRender": function (data, type, full) {
-          if (data == 'result/index.html') {
-            return "维护";
-          } else {
-            return "运行";
-          }
+          return "<a href=../" + data + ' target="_blank"> report</a >'
         }
       }
       ],
       dom: 'Bfrtip',
       buttons: [
         {
-          text: '上传文件',
-          action: function () {
-            $("#upload").modal();
-          },
-          class: "btn-default",
-        },
-        {
-          text: '选择下载',
-          attr: {
-            title: 'down',
-            id: 'download',
-            onclick: 'download()'
-          },
-          class: "btn-default",
-        },
-        {
           text: '删除',
           action: function () {
-            delete_items()
+            delete_reports()
           },
           class: "btn-default",
         },
         {
-          text: '执行',
+          text: '刷新',
           action: function () {
-            execute_select()
-          },
-          class: "btn-default",
-        },
-        {
-          text: '添加说明',
-          action: function () {
-            if (selected(table)) {
-              $('#myModal').modal();
-            } else {
-              toastr.info('选择数据')
-            }
-
-
+            report_table.ajax.reload()
           },
           class: "btn-default",
         },
@@ -280,6 +247,7 @@
       success: function (result) {
         if (result.message) {
           toastr.info('执行完成');
+          report_table.ajax.reload()
         } else {
           toastr.error('后台执行报错');
           alert(result.error)
@@ -289,7 +257,7 @@
   }
   //执行全部用例
   function execute_all() {
-    selected(execute_table);
+    selected(report_table);
     $.ajax({
       url: '/apis/executecase',
       type: 'post',
@@ -386,6 +354,43 @@
     })
   }
 
+  //批量删除报告
+  function delete_reports() {
+    selected(report_table);
+    $.ajax({
+      url: '/apis/filesmanager',
+      type: 'post',
+      contentType: "application/json; charset=utf-8",
+      dataType: 'json',
+      data: selectereport_jsondata(report_table),
+      success: function (result) {
+        if (result.message) {
+          report_table.ajax.reload();
+          toastr.info('执行完成');
+        } else {
+          toastr.error('后台执行报错');
+        }
+      }
+    })
+  }
+
+
+  function selectereport_jsondata(table) {
+    var result = new Array();
+    if (selected(table)) {
+      data = table.rows(['.selected']).data()
+      for (var i = 0, len = data.length; i < len; i++) {
+        result[i] = data[i]
+        result[i].push($('#header').val())
+      }
+      return JSON.stringify({
+        'type': 'deletereport', 'user': localStorage.user,
+        'data': JSON.stringify(result)
+      })
+    }
+    return []
+  }
+
   function selected_jsondata(table) {
     var result = new Array();
     if (selected(table)) {
@@ -460,7 +465,7 @@
     $("ul.submenu#tool").css("display", "block");
     $("a#jmeter").parent().addClass("active");
     load();
-    init_executecasetable();
+    init_reporttable();
     init_upload();
   };
 </script>

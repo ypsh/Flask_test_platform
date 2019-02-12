@@ -107,8 +107,8 @@ class FilesManager:
                 timeStruct = time.localtime(create_time)
                 create_time = time.strftime('%Y-%m-%d %H:%M:%S', timeStruct)
                 size = os.path.getsize(os.path.join(file_path, dir))
-                report='result/index.html'
-                log='jmeter.log'
+                report=os.path.join(file_path,dir,'result/index.html')
+                log=os.path.join(file_path,dir,'jmeter.log')
                 data.append([dir, create_time, report,log])
             return data
         except Exception as e:

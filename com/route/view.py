@@ -91,9 +91,3 @@ def task():
 @view.route('/datum/filesmanager', methods=['GET'])
 def file_manager():
     return render_template('subtemplates/filesmanager/filesmanager.html')
-
-
-@view.route('/jmeter/report/<name>', methods=['GET'])
-def tool_jmeter(name):
-    file = 'jmeter/report/' + name + '/result/index.html'
-    return send_from_directory(Path().get_current_path(), file)

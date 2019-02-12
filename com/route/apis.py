@@ -367,7 +367,7 @@ class files_manager(Resource):
         if self.ags['filepath'] == 'jmeter':
             path = 'jmeter/jmx'
         elif self.ags['filepath'] == 'report':
-            path = 'jmeter/report'
+            path = 'static/report'
             result = FilesManager().get_report(path)
             if result:
                 return {'message': True, 'data': result}
@@ -415,6 +415,9 @@ class files_manager(Resource):
             if FilesManager().del_items(json.loads(request.json['data'])):
                 data = FileUpload().delete_files(json.loads(request.json['data']))
                 return {'message': data}
+        elif request.json['type'] == 'deletereport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']))
+            return {'message': data}
         elif request.json['type'] == 'remark':
             data = FilesManager().batch_update(json.loads(request.json['data']))
             return {'message': data}
@@ -505,7 +508,7 @@ class jmeter(Resource):
             result = Jmeter().execute_jmx(json.loads(request.json['data'])[0][1])
             return result
         except:
-            return {'message':False}
+            return {'message': False}
 
 
 api.add_resource(user, '/user')

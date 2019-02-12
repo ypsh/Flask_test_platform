@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import logging
 import os
+import shutil
 
 from com.common.getPath import Path
 
@@ -19,7 +20,7 @@ class FileUpload:
             file.save(upload_path)
             file_size = os.path.getsize(upload_path)
             file_type = file.filename[file.filename.rfind('.') + 1:]
-            return {'file_size': file_size, 'file_type': file_type, 'file_name': file_name,'file_path':path}
+            return {'file_size': file_size, 'file_type': file_type, 'file_name': file_name, 'file_path': path}
         except Exception as e:
             logging.error(str(e))
             return None
@@ -44,3 +45,15 @@ class FileUpload:
             return self.exists_path(upload_path, path, file_name)
         else:
             return [upload_path, file_name]
+
+    def delete_reports(self, *args):
+        try:
+            for item in args:
+                for data in item:
+                    file_path = os.path.join(Path().get_current_path(), 'static/report',
+                                             data[0])
+                    shutil.rmtree(file_path)
+            return True
+        except Exception as e:
+            logging.error(str(e))
+            return False
