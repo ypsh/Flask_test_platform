@@ -16,7 +16,7 @@ class Path:
         for item in sys.path:
             if item.endswith(dir_name):
                 global_path = item
-        return global_path
+                return global_path
 
     def get_current_path(self):
         return self.path
