@@ -83,6 +83,7 @@
                 <li><a href="#"><i class="fa fa-suitcase"></i>工具 </a>
                     <ul class="submenu" id="tool">
                         <li><a id="makedata" href="/tools/makedata">生成数据</a></li>
+                        <li><a id="bankcode" href="/tools/bankcode">生成银行卡</a></li>
                         <li><a id="aes" href="/tools/aes">加解密</a></li>
                         <li><a id="jmeter" href="/tools/jmeter">Jmeter</a></li>
                     </ul>
@@ -151,53 +152,47 @@
             $(this).addClass("active");
         })
     })
-
-
 </script>
 <script type="text/javascript">
-        (function ($) {
-            $.expr[":"].Contains = function (a, i, m) {
-                return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
-            };
-            function filterList(header, list) {
-                //@header 头部元素
-                //@list 无需列表
-                //创建一个搜素表单
-                var form = $("<form>").attr({
+    (function ($) {
+        $.expr[":"].Contains = function (a, i, m) {
+            return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        };
+
+        function filterList(header, list) {
+            //@header 头部元素
+            //@list 无需列表
+            //创建一个搜素表单
+            var form = $("<form>").attr({
                     "class": "filterform",
                     action: "#"
-                }), input = $("<input>").attr({
+                }),
+                input = $("<input>").attr({
                     "class": "filterinput",
                     type: "text"
                 });
-                $(form).append(input).appendTo(header);
-                $(input).change(function () {
-                    var filter = $(this).val();
-                    if (filter) {
-                        $matches = $(list).find("a:Contains(" + filter + ")").parent();
-                        $("li", list).not($matches).slideUp();
-                        $matches.slideDown();
-                    } else {
-                        $(list).find("li").slideDown();
-                    }
-                    return false;
-                }).keyup(function () {
-                    $(this).change();
-                });
-            }
-            $(function () {
-                filterList($("#form"), $("#route"));
+            $(form).append(input).appendTo(header);
+            $(input).change(function () {
+                var filter = $(this).val();
+                if (filter) {
+                    $matches = $(list).find("a:Contains(" + filter + ")").parent();
+                    $("li", list).not($matches).slideUp();
+                    $matches.slideDown();
+                } else {
+                    $(list).find("li").slideDown();
+                }
+                return false;
+            }).keyup(function () {
+                $(this).change();
             });
-        })(jQuery);
-
-
+        }
+        $(function () {
+            filterList($("#form"), $("#route"));
+        });
+    })(jQuery);
 </script>
 <script type="text/javascript">
-
     jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
-
-
-
 </script>
 <script>
     // $(function () {
@@ -376,8 +371,6 @@
 <script src="/static/QRCode/qrcode.min.js"></script>
 <script type="text/javascript">
     toastr.options.positionClass = 'toast-top-center';
-
-
 </script>
 
 
