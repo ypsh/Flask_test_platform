@@ -1,17 +1,18 @@
 # -*- coding: UTF-8 -*-
 import configparser
 import json
+import os
 
 from flask import Blueprint, send_from_directory
 from flask import render_template
 from flask import request
-
+from flask import current_app
 from com.common.getPath import Path
 from com.service.moker import ServiceOperate
 from config.extendlink import get_titles
 
-view = Blueprint('view', __name__)
 
+view = Blueprint('view', __name__)
 conf = configparser.ConfigParser()
 conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
 
@@ -48,11 +49,25 @@ def get_messagecode(name):
         return render_template('subtemplates/tools/jmeter.html', name=name)
     elif name == 'bankcode':
         return render_template('subtemplates/tools/bankcode.html', name=name)
+    elif name=='runjob':
+        return render_template('subtemplates/tools/runjob.html', name=name)
     elif name == 'callback':
         if request.method == 'GET':
             return render_template('subtemplates/tools/callback/credit.html')
     else:
         return "building......."
+
+
+@view.route('/runjob/log')
+def job_log(job_id):
+    body = []
+    if True:
+        report_folder = Path().get_current_path()
+        log_file = os.path.join(report_folder, 'myapp.log')
+        if os.path.exists(log_file):
+            body = open(log_file, 'r').readlines()
+    html_body = '\n'.join('<p>%s</p>' % line for line in body)
+    return render_template('subtemplates/tools/runjob.html', body=html_body, job_id=job_id)
 
 
 @view.route('/moker', methods=['GET'])
@@ -93,3 +108,4 @@ def task():
 @view.route('/datum/filesmanager', methods=['GET'])
 def file_manager():
     return render_template('subtemplates/filesmanager/filesmanager.html')
+

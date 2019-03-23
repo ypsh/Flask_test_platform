@@ -3,7 +3,7 @@ import configparser
 import logging.config
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_admin import Admin
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
