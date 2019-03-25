@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 
+import paramiko as paramiko
 import pymysql
 import logging
 
@@ -83,6 +84,7 @@ class Run_job:
                 while datesart < dateend:
                     datesart += datetime.timedelta(days=1)
                     self.run_batchjob(str(datesart).split(' ')[0])
+                    self.run_ssh()
                 return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
         except Exception as e:
             logging.error(str(e))
@@ -95,6 +97,55 @@ class Run_job:
         self.tear_down()
         return date
 
+    """
+    #放款统计任务
+    /usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/init
+    /usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update-status
+    #风控进件统计任务
+    /usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/init-verify
+    /usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/update-exception-verify
+    /usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/init-apply
+    /usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/update-exception-apply
+    #每日资产逾期更新
+    /usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update
+    #账龄MOB统计
+    /usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat-by-cycle/init
+    #催回率统计
+    /usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init
+    这些会每5分钟执行一次
+    """
+
+    def run_ssh(self):
+        try:
+            list = [
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/init',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update-status',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/init-verify',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/update-exception-verify',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/init-apply',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii v1/individual-verify/update-exception-apply',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat-by-cycle/init',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init'
+            ]
+            # 创建SSH对象
+            ssh = paramiko.SSHClient()
+            # 允许连接不在know_hosts文件中的主机
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # 连接服务器
+            ssh.connect(hostname='172.16.100.126', port=22, username='mng', password='Bsd4#df23$ffVq!md')
+            # 执行命令
+            for item in list:
+                stdin, stdout, stderr = ssh.exec_command(item)
+                # 获取命令结果
+                result = stdout.read()
+                logging.info(item)
+                logging.info(result)
+        except Exception as e:
+            logging.error(str(e))
+        finally:
+            ssh.close()
+
 
 if __name__ == '__main__':
-    enddate = '20171233'
+    Run_job().run_ssh()
