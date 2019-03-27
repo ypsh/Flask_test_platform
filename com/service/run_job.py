@@ -119,7 +119,6 @@ class Run_job:
         try:
             list = [
                 '/usr/bin/php /data/bank/jnpaydayloan/yii channel-statistics/gen-day-data >> /home/data/logs/ljpaydayloan/crontab/gen-day_data.log',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/verify-model-report/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/apply-risk-report/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/user-report/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/summary-report/gen-summary-data',
