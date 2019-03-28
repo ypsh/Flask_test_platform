@@ -32,9 +32,12 @@ class Run_job:
         try:
             run = requests.get(
                 'http://172.16.100.125:8088/batchjob/startDayendBatchJob?assetType=jnb_haoyidai&toDate=%s' % date)
+            logging.info(run.text)
             logging.info("跑批完成%s" % date)
             accrual = requests.get('http://172.16.100.125:8087/report/genDailyData?assetType=jnb_haoyidai')
+            logging.info(accrual.text)
             runreport = json.dumps(accrual.json())
+            logging.info(runreport)
             lastreport = json.loads(runreport)
             if lastreport.get('message') == 'success':
                 sql = "update core_sys_date set core_sys_date = '" + str(date) + "' where asset_type = 'jnb_haoyidai'"
