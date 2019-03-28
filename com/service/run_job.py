@@ -30,12 +30,13 @@ class Run_job:
 
     def run_batchjob(self, date):
         try:
+            logging.info("开始跑批：" + date)
             run = requests.get(
                 'http://172.16.100.125:8088/batchjob/startDayendBatchJob?assetType=jnb_haoyidai&toDate=%s' % date)
-            logging.info(run.text)
+            logging.info("跑批请求结果：" + run.status_code + run.text)
             logging.info("跑批完成%s" % date)
             accrual = requests.get('http://172.16.100.125:8087/report/genDailyData?assetType=jnb_haoyidai')
-            logging.info(accrual.text)
+            logging.info("报表请求结果：" + accrual.text)
             runreport = json.dumps(accrual.json())
             logging.info(runreport)
             lastreport = json.loads(runreport)
@@ -46,7 +47,7 @@ class Run_job:
                 logging.info("生成报表完成%s" % date)
             return True
         except Exception as e:
-            logging.error(str(e))
+            logging.error("跑批异常：" + str(e))
             return False
 
     def tear_down(self):
@@ -98,6 +99,7 @@ class Run_job:
         self.set_up()
         date = self.get_coredate()
         self.tear_down()
+        logging.info("当前核心时间：" + str(date))
         return date
 
     """
