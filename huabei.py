@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-
+import datetime
 import os
 import time
 
@@ -55,7 +55,7 @@ class huabei:
                     core_now = self.get_coredate_huabei()
                     # print('等待任务结束')
                     run_task = requests.get('http://172.16.100.125:8091/huabei-test/startjob')
-                self.updata_core_date(dates[i + 1])
+                # self.updata_core_date(dates[i + 1])
                 print(dates[i + 1])
         except Exception as e:
             print(str(e))
@@ -65,8 +65,15 @@ class huabei:
 
 if __name__ == '__main__':
     h = huabei()
+    dates=[]
     # dates = h.get_all_date('new')[1:]
-    dates = ['20180602', '20180603', '20180604', '20180605', '20180606', '20180607', '20180608', '20180609', '20180610']
+    datesart = datetime.datetime.strptime(str(20180615), '%Y%m%d')
+    dateend = datetime.datetime.strptime(str(20180703), '%Y%m%d')
+    while datesart<=dateend:
+        dates.append(str(datesart.__format__('%Y%m%d')))
+        datesart += datetime.timedelta(days=1)
+
+    # dates = ['20180602', '20180603', '20180604', '20180605', '20180606', '20180607', '20180608', '20180609', '20180610']
 
     print(dates)
     h.run(dates)
