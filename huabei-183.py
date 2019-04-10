@@ -69,6 +69,8 @@ if __name__ == '__main__':
     dates=[]
     start=sys.argv[1]
     end=sys.argv[2]
+    start='20180602'
+    # end='20180604'
     # dates = h.get_all_date('new')[1:]
     datesart = datetime.datetime.strptime(str(start), '%Y%m%d')
     dateend = datetime.datetime.strptime(str(end), '%Y%m%d')
@@ -78,4 +80,4 @@ if __name__ == '__main__':
 
     # dates = ['20180602', '20180603', '20180604', '20180605', '20180606', '20180607', '20180608', '20180609', '20180610']
     print(dates)
-    # h.run(dates)
+    h.run(dates)
