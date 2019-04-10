@@ -69,7 +69,7 @@ if __name__ == '__main__':
     dates=[]
     start=sys.argv[1]
     end=sys.argv[2]
-    start='20180602'
+    # start='20180602'
     # end='20180604'
     # dates = h.get_all_date('new')[1:]
     datesart = datetime.datetime.strptime(str(start), '%Y%m%d')
