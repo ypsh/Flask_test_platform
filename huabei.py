@@ -2,6 +2,7 @@
 import datetime
 import os
 import time
+import sys
 
 import requests
 
@@ -66,14 +67,15 @@ class huabei:
 if __name__ == '__main__':
     h = huabei()
     dates=[]
+    start=sys.argv[1]
+    end=sys.argv[2]
     # dates = h.get_all_date('new')[1:]
-    datesart = datetime.datetime.strptime(str(20180615), '%Y%m%d')
-    dateend = datetime.datetime.strptime(str(20180703), '%Y%m%d')
+    datesart = datetime.datetime.strptime(str(start), '%Y%m%d')
+    dateend = datetime.datetime.strptime(str(end), '%Y%m%d')
     while datesart<=dateend:
         dates.append(str(datesart.__format__('%Y%m%d')))
         datesart += datetime.timedelta(days=1)
 
     # dates = ['20180602', '20180603', '20180604', '20180605', '20180606', '20180607', '20180608', '20180609', '20180610']
-
     print(dates)
-    h.run(dates)
+    # h.run(dates)
