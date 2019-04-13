@@ -149,9 +149,7 @@ class Run_job:
                 '/usr/bin/php /data/bank/jnpaydayloan/yii /v1/report-summary/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat-by-cycle/init',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init'
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init'
             ]
             # 创建SSH对象
             ssh = paramiko.SSHClient()
@@ -167,6 +165,15 @@ class Run_job:
                 logging.info(item)
                 logging.info(result)
             self.set_date(date)
+            new = [ '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init']
+
+            for item in new:
+                stdin, stdout, stderr = ssh.exec_command(item)
+                # 获取命令结果
+                result = stdout.read()
+                logging.info(item)
+                logging.info(result)
         except Exception as e:
             logging.error(str(e))
         finally:
