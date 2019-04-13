@@ -88,7 +88,7 @@ class Run_job:
                 while datesart < dateend:
                     datesart += datetime.timedelta(days=1)
                     self.run_batchjob(str(datesart).split(' ')[0])
-                    self.run_ssh()
+                    self.run_ssh(datesart)
                 return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
         except Exception as e:
             logging.error(str(e))
@@ -118,9 +118,12 @@ class Run_job:
     #催回率统计
     /usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init
     这些会每5分钟执行一次
+    运营日报
+     '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
+    '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init'
     """
 
-    def run_ssh(self):
+    def run_ssh(self,date):
         try:
             list = [
                 '/usr/bin/php /data/bank/jnpaydayloan/yii channel-statistics/gen-day-data >> /home/data/logs/ljpaydayloan/crontab/gen-day_data.log',
@@ -146,7 +149,9 @@ class Run_job:
                 '/usr/bin/php /data/bank/jnpaydayloan/yii /v1/report-summary/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat/update',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/grant-stat-by-cycle/init',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init'
+                '/usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
+                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init'
             ]
             # 创建SSH对象
             ssh = paramiko.SSHClient()
@@ -161,11 +166,36 @@ class Run_job:
                 result = stdout.read()
                 logging.info(item)
                 logging.info(result)
+            self.set_date(date)
+        except Exception as e:
+            logging.error(str(e))
+        finally:
+            ssh.close()
+
+    def set_date(self,date):
+        try:
+            # 创建SSH对象
+            ssh = paramiko.SSHClient()
+            # 允许连接不在know_hosts文件中的主机
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # 连接服务器
+            ssh.connect(hostname='172.16.100.126', port=22, username='root', password='wangdai')
+            # 执行命令
+            item = 'date -s '+ str(date)
+            stdin, stdout, stderr = ssh.exec_command(item)
+            # 获取命令结果
+            result = stdout.read()
+            logging.info(item)
+            logging.info(result)
+            item = 'date -s ' +datetime.datetime.now().strftime("%H:%M:%S")
+            stdin, stdout, stderr = ssh.exec_command(item)
         except Exception as e:
             logging.error(str(e))
         finally:
             ssh.close()
 
 
+
+
 if __name__ == '__main__':
-    Run_job().run_ssh()
+    Run_job().set_date('4/16/2019')
