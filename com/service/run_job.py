@@ -88,7 +88,7 @@ class Run_job:
                 while datesart < dateend:
                     datesart += datetime.timedelta(days=1)
                     self.run_batchjob(str(datesart).split(' ')[0])
-                    self.run_ssh(datesart)
+                    self.run_ssh(datesart.strftime("%Y-%m-%d"))
                 return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
         except Exception as e:
             logging.error(str(e))
@@ -119,8 +119,8 @@ class Run_job:
     /usr/bin/php /data/bank/jnpaydayloan/yii statistics/repay-plan-by-cycle/init
     这些会每5分钟执行一次
     运营日报
-     '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
-    '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init'
+    /usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init
+    /usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init
     """
 
     def run_ssh(self,date):
