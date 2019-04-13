@@ -201,8 +201,5 @@ class Run_job:
         finally:
             ssh.close()
 
-
-
-
 if __name__ == '__main__':
     Run_job().set_date('4/16/2019')
