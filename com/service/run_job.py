@@ -164,7 +164,7 @@ class Run_job:
                 result = stdout.read()
                 logging.info(item)
                 logging.info(result)
-            self.set_date(date)
+            # self.set_date(date)
             new = [ '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
                 '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init']
 
