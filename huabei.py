@@ -56,7 +56,7 @@ class huabei:
                     core_now = self.get_coredate_huabei()
                     # print('等待任务结束')
                     run_task = requests.get('http://172.16.100.125:8091/huabei-test/startjob')
-                # self.updata_core_date(dates[i + 1])
+                self.updata_core_date(dates[i + 1])
                 print(dates[i + 1])
         except Exception as e:
             print(str(e))
