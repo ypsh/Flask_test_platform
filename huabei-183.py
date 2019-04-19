@@ -43,8 +43,10 @@ class huabei:
             for i in range(0, len(dates)):
                 date = dates[i]
                 core_date = self.get_coredate_huabei()
+                startdate=datetime.datetime.now()
                 task = requests.get(
                     'http://172.16.100.187:8091/huabei-test/start/huabei')
+                print(task.text)
                 if task.text.__contains__('OK'):
                     pass
                 else:
@@ -57,6 +59,7 @@ class huabei:
                     # print('等待任务结束')
                     run_task = requests.get('http://172.16.100.187:8091/huabei-test/startjob')
                 # self.updata_core_date(dates[i + 1])
+                print(datetime.datetime.now()-startdate)
                 print(dates[i + 1])
         except Exception as e:
             print(str(e))
