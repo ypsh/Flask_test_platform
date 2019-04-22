@@ -20,7 +20,8 @@
                             <option value="all">济时雨</option>
                             <option value="huabei">花呗</option>
                         </datalist> -->
-                        <input id="date" type="button" class="btn btn-default" onclick="get_coredate()" value="获取当前核心时间" />
+                        <input id="date" type="button" class="btn btn-default" onclick="get_coredate()"
+                            value="获取当前核心时间" />
                         <input id="submit" type="button" class="btn btn-default" onclick="run_job()" value="提交" />
 
                     </div>
@@ -92,9 +93,9 @@
                 $("#submit").attr("disabled", false);
                 get_coredate()
             }
-        }).error(function () {
-            toastr.info('失败')
-            window.setTimeout(stop_clearInterval(), 10000)
+        }).error(function (date) {
+            toastr.info(date)
+            // window.setTimeout(stop_clearInterval(), 10000)
             $("#submit").attr("disabled", false);
         });
     }
