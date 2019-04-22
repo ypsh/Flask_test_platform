@@ -11,7 +11,6 @@ from com.common.getPath import Path
 from com.service.moker import ServiceOperate
 from config.extendlink import get_titles
 
-
 view = Blueprint('view', __name__)
 conf = configparser.ConfigParser()
 conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
@@ -49,7 +48,7 @@ def get_messagecode(name):
         return render_template('subtemplates/tools/jmeter.html', name=name)
     elif name == 'bankcode':
         return render_template('subtemplates/tools/bankcode.html', name=name)
-    elif name=='runjob':
+    elif name == 'runjob':
         return render_template('subtemplates/tools/runjob.html', name=name)
     elif name == 'callback':
         if request.method == 'GET':
@@ -82,7 +81,8 @@ def moker_service(service):
         if request.method == result['type'] and result['status'] != 'stop':
             return result['data']
         else:
-            return json.dumps({'message': '请求方式不匹配'})
+            r = '请求类型' + result['type'] + '状态' + result['status']
+            return json.dumps({'message': r})
 
 
 @view.route('/autotest/apimanager', methods=['GET'])
@@ -108,4 +108,3 @@ def task():
 @view.route('/datum/filesmanager', methods=['GET'])
 def file_manager():
     return render_template('subtemplates/filesmanager/filesmanager.html')
-
