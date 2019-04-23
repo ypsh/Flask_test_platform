@@ -87,7 +87,10 @@ class Run_job:
             else:
                 while datesart < dateend:
                     datesart += datetime.timedelta(days=1)
-                    self.run_batchjob(str(datesart).split(' ')[0])
+                    result=self.run_batchjob(str(datesart).split(' ')[0])
+                    if result:
+                        logging.info("跑批异常，终止跑批")
+                        break
                     self.run_ssh(datesart.strftime("%Y-%m-%d"))
                 return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
         except Exception as e:
