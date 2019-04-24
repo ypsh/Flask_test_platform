@@ -33,7 +33,7 @@ class Run_job:
             logging.info("开始跑批：" + date)
             run = requests.get(
                 'http://172.16.100.125:8088/batchjob/startDayendBatchJob?assetType=jnb_haoyidai&toDate=%s' % date)
-            logging.info("跑批请求结果：" +  str(run.text))
+            logging.info("跑批请求结果：" + str(run.text))
             logging.info("跑批完成%s" % date)
             accrual = requests.get('http://172.16.100.125:8087/report/genDailyData?assetType=jnb_haoyidai')
             logging.info("报表请求结果：" + str(accrual.text))
@@ -85,14 +85,18 @@ class Run_job:
             if dateend <= datesart:
                 return {'message': '结束时间小于开始时间', 'date': str(datesart)}
             else:
+                result = True
                 while datesart < dateend:
                     datesart += datetime.timedelta(days=1)
-                    result=self.run_batchjob(str(datesart).split(' ')[0])
+                    result = self.run_batchjob(str(datesart).split(' ')[0])
                     if result is not True:
                         logging.info("跑批异常，终止跑批")
                         break
                     self.run_ssh(datesart.strftime("%Y-%m-%d"))
-                return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
+                if result:
+                    return {'message': '跑批结束，当前日期%s' % str(datesart), 'date': str(datesart)}
+                else:
+                    return {'message': '跑批失败'}
         except Exception as e:
             logging.error(str(e))
         finally:
@@ -126,7 +130,7 @@ class Run_job:
     /usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init
     """
 
-    def run_ssh(self,date):
+    def run_ssh(self, date):
         try:
             list = [
                 '/usr/bin/php /data/bank/jnpaydayloan/yii channel-statistics/gen-day-data >> /home/data/logs/ljpaydayloan/crontab/gen-day_data.log',
@@ -168,8 +172,8 @@ class Run_job:
                 logging.info(item)
                 logging.info(result)
             # self.set_date(date)
-            new = [ '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
-                '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init']
+            new = ['/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/daily-data-entire/init',
+                   '/usr/bin/php /data/bank/jnpaydayloan/yii operate-report/full-data-channel/init']
 
             for item in new:
                 stdin, stdout, stderr = ssh.exec_command(item)
@@ -182,7 +186,7 @@ class Run_job:
         finally:
             ssh.close()
 
-    def set_date(self,date):
+    def set_date(self, date):
         try:
             # 创建SSH对象
             ssh = paramiko.SSHClient()
@@ -191,18 +195,19 @@ class Run_job:
             # 连接服务器
             ssh.connect(hostname='172.16.100.126', port=22, username='root', password='wangdai')
             # 执行命令
-            item = 'date -s '+ str(date)
+            item = 'date -s ' + str(date)
             stdin, stdout, stderr = ssh.exec_command(item)
             # 获取命令结果
             result = stdout.read()
             logging.info(item)
             logging.info(result)
-            item = 'date -s ' +datetime.datetime.now().strftime("%H:%M:%S")
+            item = 'date -s ' + datetime.datetime.now().strftime("%H:%M:%S")
             stdin, stdout, stderr = ssh.exec_command(item)
         except Exception as e:
             logging.error(str(e))
         finally:
             ssh.close()
+
 
 if __name__ == '__main__':
     Run_job().set_date('4/16/2019')
