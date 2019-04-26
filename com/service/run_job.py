@@ -53,8 +53,10 @@ class Run_job:
                 n += 1
                 codedate = self.get_coredate()
                 if str(datetime.datetime.strptime(str(codedate), '%Y-%m-%d')).split(' ')[0]==date:
+                    logging.info("跑批到下一天")
                     return True
                 time.sleep(4)
+                logging.info("等待跑批结束")
             return True
         except Exception as e:
             logging.error("跑批异常：" + str(e))
