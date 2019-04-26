@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import time
 
 import paramiko as paramiko
 import pymysql
@@ -34,6 +35,8 @@ class Run_job:
             run = requests.get(
                 'http://172.16.100.125:8088/batchjob/startDayendBatchJob?assetType=jnb_haoyidai&toDate=%s' % date)
             logging.info("跑批请求结果：" + str(run.text))
+            if run.text.__contains__("success") is not True:
+                return False
             logging.info("跑批完成%s" % date)
             accrual = requests.get('http://172.16.100.125:8087/report/genDailyData?assetType=jnb_haoyidai')
             logging.info("报表请求结果：" + str(accrual.text))
@@ -41,10 +44,17 @@ class Run_job:
             logging.info(runreport)
             lastreport = json.loads(runreport)
             if lastreport.get('message') == 'success':
-                sql = "update core_sys_date set core_sys_date = '" + str(date) + "' where asset_type = 'jnb_haoyidai'"
-                self.cursor.execute(sql)
-                self.db.commit()
+                # sql = "update core_sys_date set core_sys_date = '" + str(date) + "' where asset_type = 'jnb_haoyidai'"
+                # self.cursor.execute(sql)
+                # self.db.commit()
                 logging.info("生成报表完成%s" % date)
+            n = 0
+            while n < 100:
+                n += 1
+                codedate = self.get_coredate()
+                if str(datetime.datetime.strptime(str(codedate), '%Y-%m-%d')).split(' ')[0]==date:
+                    return True
+                time.sleep(4)
             return True
         except Exception as e:
             logging.error("跑批异常：" + str(e))
