@@ -18,6 +18,7 @@ conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
 
 @view.route('/')
 def start():
+    print(request.headers)
     return render_template('index.html')
 
 
