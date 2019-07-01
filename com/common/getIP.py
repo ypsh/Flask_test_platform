@@ -10,8 +10,14 @@ class SaveIP(object):
     def __init__(self):
         self.path = Path().get_current_path()
 
-    def save(self, ip='', page=''):
+    def save(self, *args, page=''):
         try:
+            if args[0].get('X-Real-Ip') is not None:
+                ip = args[0]['X-Real-Ip']
+            elif args[0].get('host') is not None:
+                ip = args[0]['host']
+            else:
+                ip = ""
             data = [ip, page, datetime.datetime.now().__format__("%Y-%m-%d %H:%M:%S")]
             file = os.path.join(self.path, "request_ip_info.csv")
             out = open(file, 'a', newline='')
@@ -43,7 +49,7 @@ class SaveIP(object):
             new_data = []
             for item in file:
                 temp = item
-                if item[0] not in ip_address:
+                if item[0] not in ip_address and item[0] != "":
                     address = self.get_ip_address(item[0])
                     temp.append(address)
                     new_data.append(temp)
@@ -56,6 +62,20 @@ class SaveIP(object):
                     csv_write.writerow(temp)
             return new_data
         except:
+            pass
+
+    def read_accesslog(self):
+        try:
+            result = []
+            file = csv.reader(open(os.path.join(self.path, "request_ip_info_address.csv"), 'r'))
+            i = 1
+            for item in file:
+                temp = item
+                temp.insert(0, i)
+                result.append(temp)
+                i += 1
+            return result
+        except Exception as e:
             pass
 
 

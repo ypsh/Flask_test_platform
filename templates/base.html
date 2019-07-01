@@ -30,33 +30,41 @@
                     <img alt="" class="img-circle" src="/static/login_images/avtar.png" width="30px" height="30px" />
                     <span class="username" style="color: #FFFFFF;font-size: 15px;">
                         <i></i> username</span> </a>
-                <div class="dropdown-menu pull-right" style="background: #FFFFFF;width: 320px;overflow: hidden;margin-top: 20px;">
+                <div class="dropdown-menu pull-right"
+                    style="background: #FFFFFF;width: 320px;overflow: hidden;margin-top: 20px;">
                     <div style="margin-top: 5px;border-bottom: 1px solid #eeeeee">
                         <div style="text-align: center"><img class="img-circle" src="/static/login_images/avtar.png"
                                 style="width: 38px;height: 38px;" />
                         </div>
-                        <div style="color: #323534;text-align: center;line-height: 36px;font-size: 15px"><span class="username">username</span>
+                        <div style="color: #323534;text-align: center;line-height: 36px;font-size: 15px"><span
+                                class="username">username</span>
                         </div>
                     </div>
                     <div class="row" style="margin-left: 15px;margin-right: 15px;margin-top: 10px">
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-user" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-user"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 个人中心</p>
                         </div>
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-gear" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-gear"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 账号管理</p>
                         </div>
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-key" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-key"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 密码修改</p>
                         </div>
                     </div>
                     <div class="row" style="margin-left: 15px;margin-right: 15px;margin-top: 10px">
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-heart-o" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-heart-o"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 修改头像</p>
                         </div>
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-comments" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-comments"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 消息</p>
                         </div>
-                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-heart-o" style="font-size: 25px;line-height: 45px;"></i>
+                        <div type="hover" class="col-md-4 text-center grid"><i class="fa fa-heart-o"
+                                style="font-size: 25px;line-height: 45px;"></i>
                             <p style="padding: 0px;margin-top: 6px;margin-bottom: 10px;font-size: 12px"> 帮助中心</p>
                         </div>
                     </div>
@@ -86,6 +94,7 @@
                         <li><a id="bankcode" href="/tools/bankcode">生成银行卡</a></li>
                         <li><a id="aes" href="/tools/aes">加解密</a></li>
                         <li><a id="jmeter" href="/tools/jmeter">Jmeter</a></li>
+                        <li><a id="accesslog" href="/tools/accesslog">访问日志</a></li>
                     </ul>
                 </li>
                 <li><a href="#"><i class="fa fa-folder"></i>资料管理 </a>
@@ -116,7 +125,8 @@
     <div class="col-md-9 column" id="right">
         <div id="body">
             {% block page_content %}{% endblock %}
-            <div class="modal fade bs-example-modal-lg" id="upload" tabindex=" -1" role="dialog" aria-labelledby="myModalupload">
+            <div class="modal fade bs-example-modal-lg" id="upload" tabindex=" -1" role="dialog"
+                aria-labelledby="myModalupload">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -127,7 +137,8 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form">
                                 <div class="">
-                                    <input id="uploadfile" name="files" type="file" multiple data-overwrite-initial="false">
+                                    <input id="uploadfile" name="files" type="file" multiple
+                                        data-overwrite-initial="false">
                                 </div>
                             </form>
                             <div class="modal-footer">
@@ -199,8 +210,6 @@
     //checkup();
     $('[class=username]').text(localStorage.user)
     // });
-
-
 </script>
 <style type="text/css">
     * {
@@ -332,13 +341,9 @@
         font-size: 10px !important
     }
 
-    body{
+    body {
         font-size: 10px !important
     }
-
-
-
-
 </style>
 {% endblock %}
 {% block scripts %}

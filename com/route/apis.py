@@ -24,6 +24,7 @@ from com.service.test_report import TestReportOperate
 from com.service.timeTask import TaskOperate
 from com.service.user import UserOperate
 from com.service.makedata import MakdeData
+from com.common.getIP import SaveIP
 
 apis = Blueprint('apis', __name__)
 api = Api(apis)
@@ -511,6 +512,22 @@ class jmeter(Resource):
             return {'message': False}
 
 
+class accesslog(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        return {'data':SaveIP().read_accesslog()}
+
+    def post(self):
+        try:
+            SaveIP().analysis()
+            return {'message': True}
+        except:
+            return {'message': False}
+
+
 api.add_resource(user, '/user')
 api.add_resource(services, '/service')
 api.add_resource(api_manger, '/apimanager')
@@ -528,3 +545,4 @@ api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
 api.add_resource(makedata, '/makedata')
 api.add_resource(jmeter, '/jmeter')
+api.add_resource(accesslog, '/accesslog')
