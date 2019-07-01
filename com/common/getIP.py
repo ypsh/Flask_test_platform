@@ -54,7 +54,6 @@ class SaveIP(object):
                     temp.append(address)
                     new_data.append(temp)
                     csv_write.writerow(temp)
-
             return new_data
         except:
             pass
