@@ -47,8 +47,10 @@ class SaveIP(object):
             out_address = open(file_address, 'w', newline='')
             csv_write = csv.writer(out_address, dialect='excel')
             new_data = []
+            i = 1
             for item in file:
                 temp = item
+                temp.insert(0, i)
                 if item[0] not in ip_address and item[0] != "":
                     address = self.get_ip_address(item[0])
                     temp.append(address)
@@ -60,6 +62,7 @@ class SaveIP(object):
                     temp.append(address)
                     new_data.append(temp)
                     csv_write.writerow(temp)
+                i += 1
             return new_data
         except:
             pass
