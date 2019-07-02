@@ -51,14 +51,14 @@ class SaveIP(object):
             for item in file:
                 temp = item
                 temp.insert(0, i)
-                if item[0] not in ip_address and item[0] != "":
-                    address = self.get_ip_address(item[0])
+                if item[1] not in ip_address and item[1] != "":
+                    address = self.get_ip_address(item[1])
                     temp.append(address)
                     new_data.append(temp)
-                    ip_address[item[0]] = address
+                    ip_address[item[1]] = address
                     csv_write.writerow(temp)
                 else:
-                    address = ip_address.get(item[0])
+                    address = ip_address.get(item[1])
                     temp.append(address)
                     new_data.append(temp)
                     csv_write.writerow(temp)
@@ -71,12 +71,12 @@ class SaveIP(object):
         try:
             result = []
             file = csv.reader(open(os.path.join(self.path, "request_ip_info_address.csv"), 'r'))
-            i = 1
+            # i = 1
             for item in file:
                 temp = item
-                temp.insert(0, i)
+                # temp.insert(0, i)
                 result.append(temp)
-                i += 1
+                # i += 1
             return result
         except Exception as e:
             pass
