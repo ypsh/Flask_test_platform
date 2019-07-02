@@ -109,10 +109,13 @@
     }
 </style>
 <script type="text/javascript">
+    var tabledata;
+
     function updae_data() {
         $.post("/apis/accesslog", {}, function (data, status) {
             if (data.message == true) {
-                getdata
+                tabledata = data.data
+                reloadData(tabledata)
                 toastr.info('更新成功')
             } else {
                 toastr.error('更新失败')
@@ -122,7 +125,6 @@
         })
     }
 
-    var tabledata;
 
     function getdata() {
         $.get("/apis/accesslog", {}, function (data, status) {
@@ -187,7 +189,6 @@
                     text: '更新',
                     action: function () {
                         updae_data()
-                        getdata()
                     },
                     class: "btn-default",
                 },

@@ -522,8 +522,8 @@ class accesslog(Resource):
 
     def post(self):
         try:
-            SaveIP().analysis()
-            return {'message': True}
+            data=SaveIP().analysis()
+            return {'message': True,'data':data}
         except:
             return {'message': False}
 
