@@ -67,13 +67,12 @@ class SaveIP(object):
                     new_data.append(temp)
                     ip_address[item[1]] = address
                     csv_write.writerow(temp)
+                    recode_write.writerow([temp[1], address])
                 else:
                     address = ip_address.get(item[1])
                     temp.append(address)
                     new_data.append(temp)
                     csv_write.writerow(temp)
-                    if temp[1]!='':
-                        recode_write.writerow([temp[1], address])
                 i += 1
             return new_data
         except Exception as e:
