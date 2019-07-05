@@ -53,7 +53,7 @@ class SaveIP(object):
             file_address = os.path.join(self.path, "request_ip_info_address.csv")
             out_address = open(file_address, 'w', newline='')
             csv_write = csv.writer(out_address, dialect='excel')
-            recode = open(recode_path, 'w', newline='')
+            recode = open(recode_path, 'a', newline='')
             recode_write = csv.writer(recode, dialect='excel')
 
             new_data = []
