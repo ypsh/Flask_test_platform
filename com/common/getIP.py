@@ -42,10 +42,20 @@ class SaveIP(object):
     def analysis(self):
         try:
             ip_address = {}
+            recode_path=os.path.join(self.path, "ip_record.csv")
+            if os.path.exists(recode_path):
+                ip_recode_file=csv.reader(open(os.path.join(self.path, "ip_record.csv"), 'r'))
+                for item in ip_recode_file:
+                    ip_address[item[0]] = item[1]
+
+
             file = csv.reader(open(os.path.join(self.path, "request_ip_info.csv"), 'r'))
             file_address = os.path.join(self.path, "request_ip_info_address.csv")
             out_address = open(file_address, 'w', newline='')
             csv_write = csv.writer(out_address, dialect='excel')
+            recode = open(recode_path, 'w', newline='')
+            recode_write = csv.writer(recode, dialect='excel')
+
             new_data = []
             i = 1
             for item in file:
@@ -62,9 +72,11 @@ class SaveIP(object):
                     temp.append(address)
                     new_data.append(temp)
                     csv_write.writerow(temp)
+                    if temp[1]!='':
+                        recode_write.writerow([temp[1], address])
                 i += 1
             return new_data
-        except:
+        except Exception as e:
             pass
 
     def read_accesslog(self):
