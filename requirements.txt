@@ -12,7 +12,7 @@ cryptography==2.3.1
 docopt==0.6.2
 dominate==2.3.1
 Flask==1.0.2
-Flask-Admin==1.5.2
+Flask-Admin==1.5.3
 Flask-APScheduler==1.10.1
 Flask-Bootstrap==3.3.7.1
 Flask-Login==0.4.1
