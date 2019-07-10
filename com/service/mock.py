@@ -59,7 +59,7 @@ class ServiceOperate:
         except Exception as e:
             return {"message": str(e)}
 
-    def get_moker_list(self):
+    def get_mock_list(self):
         result = []
         data = self.get_all()
         if data is not None:
