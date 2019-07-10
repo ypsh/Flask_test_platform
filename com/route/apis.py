@@ -16,7 +16,7 @@ from com.service.dashboard import ContCase
 from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
 from com.service.jmeter import Jmeter
-from com.service.moker import ServiceOperate
+from com.service.mock import ServiceOperate
 from com.service.set_url import Set_url
 from com.service.task_schedul import TaskSchedul
 from com.service.test_case import TestCaseOperate
@@ -82,7 +82,7 @@ class services(Resource):
         self.ags = self.parser.parse_args()
 
     def get(self):
-        data = ServiceOperate().get_moker_list()
+        data = ServiceOperate().get_mock_list()
         result = {"data": data}
         return result
 
@@ -95,13 +95,13 @@ class services(Resource):
             elif (self.ags['operate'] == 'add'):
                 result = ServiceOperate().add_service(
                     {'service_name': self.ags['service_name'], 'type': self.ags['service_type'],
-                     'data': self.ags['data'], 'path': '/moker/apis/' + self.ags['service_name'],
+                     'data': self.ags['data'], 'path': '/mock/apis/' + self.ags['service_name'],
                      'status': self.ags['status'], 'user': self.ags['user']})
                 return result
             elif (self.ags['operate'] == 'update'):
                 result = ServiceOperate().update_service(
                     {'service_name': self.ags['service_name'], 'type': self.ags['service_type'],
-                     'data': self.ags['data'], 'path': '/moker/apis/' + self.ags['service_name'],
+                     'data': self.ags['data'], 'path': '/mock/apis/' + self.ags['service_name'],
                      'status': self.ags['status'], 'user': self.ags['user']})
                 return result
         return result

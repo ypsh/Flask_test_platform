@@ -7,7 +7,7 @@ from flask import render_template
 from flask import request
 
 from com.common.getPath import Path
-from com.service.moker import ServiceOperate
+from com.service.mock import ServiceOperate
 from config.extendlink import get_titles
 from com.common.getIP import SaveIP
 
@@ -62,14 +62,14 @@ def get_messagecode(name):
         return "building......."
 
 
-@view.route('/moker', methods=['GET'])
-def moker():
-    SaveIP().save(request.headers, page='moker')
-    return render_template('subtemplates/moker/moker.html')
+@view.route('/mock', methods=['GET'])
+def mock():
+    SaveIP().save(request.headers, page='mock')
+    return render_template('subtemplates/mock/mock.html')
 
 
-@view.route('/moker/apis/<service>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def moker_service(service):
+@view.route('/mock/apis/<service>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def mock_service(service):
     result = ServiceOperate().get_service(service)
     if result is not None:
         if request.method == result['type'] and result['status'] != 'stop':

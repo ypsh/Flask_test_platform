@@ -137,7 +137,7 @@
                     text: '新增',
                     action: function () {
                         $("#myModal").modal();
-                        add_moker();
+                        add_mock();
                     },
                     class: "btn-default",
                 },
@@ -145,14 +145,14 @@
                     text: '编辑',
                     action: function () {
                         $("#myModal").modal();
-                        update_moker();
+                        update_mock();
                     },
                     class: "btn-default",
                 },
                 {
                     text: '删除',
                     action: function () {
-                        delete_moker();
+                        delete_mock();
                     },
                     class: "btn-default",
                 },
@@ -186,7 +186,7 @@
 
         });
     }
-    function delete_moker() {
+    function delete_mock() {
         $.post("/apis/service", {
             service_name: table.rows(['.selected']).data()[0][1],
             operate: 'delete'
@@ -199,7 +199,7 @@
             toastr.info('删除失败')
         })
     }
-    function update_moker() {
+    function update_mock() {
         $('#myModalLabel').text("更新");
         $('#submit').text("更新");
         $("#service_name").attr("disabled", "disabled");
@@ -208,7 +208,7 @@
         $('#service_type').val(table.rows(['.selected']).data()[0][2]);
         $('#data').val(table.rows(['.selected']).data()[0][4]);
     }
-    function add_moker() {
+    function add_mock() {
         $('#myModalLabel').text("新增");
         $('#submit').text("新增");
         operate = 'add';
@@ -237,7 +237,7 @@
 </script>
 <script type="text/javascript">
     window.onload = function () {
-        $("a#moker").parent().addClass("active");
+        $("a#mock").parent().addClass("active");
         load();
         init_upload()
     };
