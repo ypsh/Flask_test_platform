@@ -68,7 +68,7 @@ def mock():
     return render_template('subtemplates/mock/mock.html')
 
 
-@view.route('/mock/apis/<service>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@view.route('/mock/apis/<path:service>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def mock_service(service):
     result = ServiceOperate().get_service(service)
     if result is not None:
