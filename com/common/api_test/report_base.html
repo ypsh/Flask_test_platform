@@ -1,0 +1,460 @@
+<div class="content" id="container">
+
+    <div class="col-md-9 column" id="right">
+        <div id="body">
+            <div class="col-md-12 column">
+                <div class="page-header">
+                    <h1>
+                        测试报告 ~ <span id="headername"></span>
+                    </h1>
+
+
+                </div>
+
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                    <h2 style="margin-top:0px">
+                        概述
+                    </h2>
+                    <p id='testtime'>
+                        测试时间：
+                    </p>
+                    <p id="usetime">
+                        耗时：
+                    </p>
+                    <p id="passratep">
+                        通过率：
+                    </p>
+                    <p id="pass">
+                        通过：
+                    </p>
+                    <p id="fail">
+                        失败：
+                    </p>
+                    <p id="total">
+                        总计：
+                    </p>
+                </div>
+                <div class="col-md-3 column">
+                    <div id='passrate' style="widows: 200px; height:250px;">
+                    </div>
+
+                </div>
+                <div class="col-md-6 column">
+                    <div id='performance' style="widows: 100%; height:300px;">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel" style="text-align:center;">用例详情</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div style="padding-left:10%;padding-right: 10%">
+                                <p><b><span>用例名称</span></b><span>：</span>
+                                    <span id='span_case_name'></span></p>
+                                <p><b><span>接口名称</span></b><span>：</span>
+                                    <span id='span_api_name'></span></p>
+                                <p><b><span>项目名称</span></b><span>：</span>
+                                    <span id='span_model_name'></span></p>
+                                <p><b><span>请求地址</span></b><span>：</span>
+                                    <span id='span_request_path' style="word-wrap: break-word"></span></p>
+                                <p><b><span>请求类型</span></b><span>：</span>
+                                    <span id='span_request_type' style="word-wrap: break-word"></span></p>
+                                <p><b><span>响应状态</span></b><span>：</span>
+                                    <span id='span_status'></span></p>
+                                <p><b><span>耗时</span></b><span>：</span>
+                                    <span id='span_use_time'></span><span> ms</span></p>
+                                <p><b><span>执行结果</span></b><span>：</span>
+                                    <span id='span_result'></span></p>
+                                <hr />
+                                <p><b><span>请求参数</span></b><span>：</span></p>
+
+                                <p><span id="span_input"></span></p>
+                                <hr />
+                                <p><b><span>响应参数</span></b><span>：</span></p>
+
+                                <p><span id="span_headers"></span></p>
+                                <hr />
+                                <p><b><span>期望结果</span></b><span>：</span></p>
+
+                                <p><span id="span_excpt"></span></p>
+                                <hr />
+                                <p><b><span>实际结果</span></b><span>：</span></p>
+                                <p><span id="span_real"></span></p>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <script type="text/javascript">
+                window.onload = function () {
+                    $("ul.submenu#autotest").css("display", "block");
+                    $("a#report").parent().addClass("active");
+                    load();
+                    rate_pass();
+                    table_click();
+                    set_summary();
+                };
+                window.onresize = function () {
+                    myChart.resize();
+                    myChart1.resize();
+                }
+            </script>
+            <style>
+                #table {
+                    table-layout: fixed;
+                }
+
+                .wordwrap {
+                    text-overflow: ellipsis;
+                    /*超长部分以...代替*/
+                    white-space: nowrap;
+                    /*文本不换行*/
+                    max-width: 200px;
+                    /*最大宽度*/
+                    overflow: hidden;
+                    /*超长部分隐藏掉*/
+                }
+
+                /* 超长文字单元格省略号显示 */
+                td:hover {
+                    text-overflow: ellipsis;
+                    /*超长部分以...代替*/
+                    white-space: unset;
+                    /*文本不换行*/
+                    max-width: 200px;
+                    /*最大宽度*/
+                    overflow: hidden;
+                    /*超长部分隐藏掉*/
+                }
+            </style>
+            <script type="text/javascript">
+                var performancedata = []
+                var tabledata = []
+                var pass = 0
+                var fail = 0
+                var myChart1 = ''
+
+                function rate_pass() {
+                    var dom = document.getElementById("passrate");
+                    myChart1 = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    option = {
+                        title: {
+                            text: '通过率',
+                            x: 'left'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        series: [{
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: '60%',
+                            center: ['50%', '60%'],
+                            data: [{
+                                    value: pass,
+                                    name: '通过'
+                                },
+                                {
+                                    value: fail,
+                                    name: '失败'
+                                },
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }]
+                    };;
+                    if (option && typeof option === "object") {
+                        myChart1.setOption(option, true);
+                    }
+                }
+
+                //获取测试报告数据
+                var details = ''
+
+                function table_click() {
+                    $('#table tbody').on('click', 'tr', function () {
+                        var id = $('td', this).eq(1).text();
+                        $("#detail").modal();
+                        var result = search_info(details, id)
+                        if (result) {
+                            $("#span_case_name").text(result[1])
+                            $("#span_api_name").text(result[2])
+                            $("#span_model_name").text(result[3])
+                            $("#span_request_path").text(result[4])
+                            $("#span_request_type").text(result[5])
+                            $("#span_status").text(result[6])
+                            $("#span_use_time").text(result[7])
+                            $("#span_result").text(result[8])
+                            $("#span_input").text(result[9])
+                            $("#span_headers").text(result[10])
+                            $("#span_excpt").text(result[11])
+                            $("#span_real").text(result[12])
+
+                        }
+
+                    });
+                }
+
+                function search_info(details, id) {
+                    for (var i = 0; i < details.length; i++) {
+                        if (details[i][0] == id) {
+                            return details[i]
+                        }
+                    }
+                }
+                var table;
+
+                function load() {
+                    table = $('#table').DataTable({
+                        language: {
+                            url: "/static/language/cn.json"
+                        },
+                        lengthChange: true,
+                        data: tabledata,
+                        // select: true,
+                        columns: [{
+                                title: "序号",
+                                width: '6%'
+                            },
+                            {
+                                title: "ID",
+                                width: '6%'
+                            },
+                            {
+                                title: "模块",
+                                width: '10%'
+                            },
+
+                            {
+                                title: "用例名",
+                                width: '10%'
+                            },
+                            {
+                                title: "接口名",
+                                width: '15%'
+                            },
+                            {
+                                title: "响应状态"
+                            },
+                            {
+                                title: "验证结果"
+                            },
+                            {
+                                title: "耗时（ms）"
+                            }
+                        ],
+                        aLengthMenu: [
+                            [-1, 30, 50, 100],
+                            ["All", "30条", "50条", "100条"]
+                        ]
+
+                    });
+                }
+                //动态刷新表格
+                function initDetailTableData(dataArr) { //dataArr是表格数据数组，和初始化配置需一样的结构
+                    var table = $('#table').dataTable();
+                    var oSettings = table.fnSettings(); //这里获取表格的配置
+                    table.fnClearTable(this); //动态刷新关键部分语句，先清空数据
+                    for (var i = 0, l = dataArr.length; i < l; i++) {
+                        table.oApi._fnAddData(oSettings, dataArr[i]); //这里添加一行数据
+                    }
+                    oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+                    table.fnDraw(); //绘制表格
+                }
+
+                function set_summary() {
+                    $('#headername').text('2019-08-04-15')
+                    $('#testtime').text('测试时间：' + '2019-08-04-15');
+                    $('#usetime').text('耗时：' + 50 + '秒');
+                    $('#passratep').text('通过率：' + (pass / (pass + fail)) + '%');
+                    $('#pass').text('通过：' + pass + '条');
+                    $('#fail').text('失败：' + fail + '条');
+                    $('#total').text('总计：' + (pass + fail) + '条');
+                }
+
+                tabledata = {{tabledata}}
+                details = {{details}}
+                pass = {{pass}}
+                fail = {{fail}}
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    /* body {
+        background: #f0f0f0;
+    } */
+
+    /* .content {
+        width: 260px;
+        margin: 20px auto;
+    } */
+    #container {
+        padding-top: 10px;
+        display: flex;
+        min-height: 100vh;
+        /* border: 2px solid black; */
+    }
+
+    #left {
+        padding-top: 1%;
+        position: static;
+        border-right: 2px solid #080808;
+        width: 14%;
+        min-width: 10px;
+        max-width: 200px;
+        resize: both;
+        overflow: hidden;
+        background-color: #080808;
+        /*必须设置overflow属性，才能使resize生效*/
+    }
+
+    #right {
+        padding-top: 0%;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+    }
+
+    #right>div {
+        padding-left: 5%;
+        width: calc(100vw - 300px);
+        min-width: 300px;
+    }
+
+    .filterinput {
+        background-color: rgba(249, 244, 244, 0);
+        border-radius: 15px;
+        width: 90%;
+        height: 30px;
+        border: thin solid #FFF;
+        text-indent: 0.5em;
+        font-weight: bold;
+        color: #FFF;
+    }
+
+    #route a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+</style>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    /* body {
+        background: #f0f0f0;
+    } */
+
+    /* .content {
+        width: 260px;
+        margin: 20px auto;
+    } */
+
+    .filterinput {
+        background-color: rgba(249, 244, 244, 0);
+        border-radius: 15px;
+        width: 90%;
+        height: 30px;
+        border: thin solid #FFF;
+        text-indent: 0.5em;
+        font-weight: bold;
+        color: #FFF;
+    }
+
+    #route a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+</style>
+<style>
+    *[type="hover"]:hover {
+        background: #ff2775;
+        border-bottom-left-radius: 15px;
+        -webkit-border-bottom-left-radius: 15px;
+        -moz-border-bottom-left-radius: 15px;
+        -o-border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        -webkit-border-bottom-right-radius: 15px;
+        -moz-border-bottom-right-radius: 15px;
+        -o-border-bottom-right-radius: 15px;
+        transition: 1s all;
+        -webkit-transition: 1s all;
+        -moz-transition: 1s all;
+        -o-transition: 1s all;
+    }
+
+    div[id='body'],
+    td {
+        font-size: 10px !important
+    }
+
+    div[id='body'],
+    th {
+        font-size: 10px !important
+    }
+
+    body {
+        font-size: 10px !important
+    }
+</style>
+
+<!-- <script src="/static/js/jquery.min.js" type=" text/javascript"></script> -->
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.19/js/dataTables.bootstrap.js"></script>
+
+<link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/datatables/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
