@@ -370,11 +370,14 @@ class APITest:
         detail_data = []
         pass_case = 0
         fail_case = 0
+        use_time = report['use_time']
+        create_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         i = 1
-        for model in report:
+        for model in report['reports']:
             for api in model['apis']:
                 for case in api['test_cases']:
-                    table_data.append([i, i, model['model_name'], case[0], api['api_name'], case[2], str(case[5]['result']),case[6]])
+                    table_data.append(
+                        [i, i, model['model_name'], case[0], api['api_name'], case[2], str(case[5]['result']), case[6]])
                     detail_data.append(
                         [i, case[0], api['api_name'], model['model_name'], case[1], 'post', case[2], case[6],
                          str(case[5]['result']), str(case[3]), str(case[7]), case[5]['expect'], case[5]['actual']])
@@ -383,22 +386,24 @@ class APITest:
                     else:
                         fail_case += 1
                     i += 1
-        lines = self.read_file('report_base.html')
+        lines = self.read_file('./api_test/report_base.html')
         for i in range(0, len(lines)):
             lines[i] = str(lines[i]).replace('{{tabledata}}', str(table_data)).replace('{{details}}',
                                                                                        str(detail_data)).replace(
-                '{{pass}}', str(pass_case)).replace('{{fail}}', str(fail_case))
+                '{{pass}}', str(pass_case)).replace('{{fail}}', str(fail_case)).replace('{{use_time}}',
+                                                                                        str(use_time)).replace(
+                '{{create_time}}', str(create_time))
 
-        with open('report_'+datetime.now().strftime('%Y%m%d%H%M%S')+'.html','w',encoding='utf-8') as f:
+        with open('./api_test/report_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.html', 'w', encoding='utf-8') as f:
             for line in lines:
                 f.write(line)
-
 
     """主入口串联所有功能"""
 
     def run(self, path):
-        reports = []
+        reports = {'use_time': '', 'reports': []}
         files = self.get_all_case_files(path)
+        b = datetime.now()
         for file in files:
             file_lines = self.read_file(file)
             testcases = self.analysis_file(file_lines)
@@ -407,12 +412,15 @@ class APITest:
                 if len(report['apis']) != 0:
                     report['file_path'] = file
                     report['time'] = datetime.now().__format__('%Y-%m-%d %H:%M:%S')
-                    reports.append(report)
+                    reports['reports'].append(report)
+        a = datetime.now()
+        use_time = (a - b).seconds
+        reports['use_time'] = str(use_time)
         self.output_report(reports)
 
 
 if __name__ == '__main__':
-    file_path = 'C:\\private\\code\\Flask_test_platform\\com\\common'
+    file_path = 'report_base.html'
     # file_lines = APITest().read_file(file_path)
     # testcase = APITest().analysis_file(file_lines)
     # APITest().do_request(testcase)
