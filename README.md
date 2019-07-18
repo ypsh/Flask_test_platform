@@ -86,10 +86,11 @@ deactivate命令取消已激活的虚拟环境
 
 运行后本地访问：localhost：5001
 如果运行包包缺失，请手动安装缺失的包
+## 最近更新
+* 集成jmeter，可管理jmx模板，执行jmeter脚本，在线查看jmeter测试报告
+* 新增独立模板，从md文件获取接口测试用例执行并生成测试报告（后台写了逻辑处理脚本、用例测试用例设计规则、离线测试报告模板，暂未集成到页面），暂只写了post 类型接口（按模块指定不同host路径需要单独修改脚本）
 ## 已开发完成功能
 ![avatar](/static/images/测试平台.png)
 
-## 联系
-各位看官，有好的建议或疑问，请联系：qianmengtmc@163.com、ypsh@live.com
 
 后续在这里更新教程（掘金）：https://juejin.im/user/5bd0f4826fb9a05ce46a0ac5/posts
