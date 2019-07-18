@@ -424,6 +424,7 @@ class APITest:
         use_time = (a - b).seconds
         reports['use_time'] = str(use_time)
         self.output_report(reports)
+        return True
 
 
 if __name__ == '__main__':

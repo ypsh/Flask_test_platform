@@ -537,7 +537,10 @@ class apitest(Resource):
     def post(self):
         try:
             result = APITest().run(json.loads(request.json['data'])[0][6])
-            return result
+            if result:
+                return {'message':True}
+            else:
+                return {'message': False}
         except:
             return {'message': False}
 
