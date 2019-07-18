@@ -102,14 +102,35 @@ class FilesManager:
         data = []
         try:
             dirs = os.listdir(file_path)
+            i = 1
             for dir in dirs:
                 create_time = os.path.getctime(os.path.join(file_path, dir))
                 timeStruct = time.localtime(create_time)
                 create_time = time.strftime('%Y-%m-%d %H:%M:%S', timeStruct)
                 size = os.path.getsize(os.path.join(file_path, dir))
-                report=os.path.join(file_path,dir,'result/index.html')
-                log=os.path.join(file_path,dir,'jmeter.log')
-                data.append([dir, create_time, report,log])
+                report = os.path.join(file_path, dir, 'result/index.html')
+                log = os.path.join(file_path, dir, 'jmeter.log')
+                data.append([i, dir, create_time, report, log])
+                i += 1
+            return data
+        except Exception as e:
+            logging.error(str(e))
+            return data
+
+    def get_api_report(self, file_path):
+        data = []
+        try:
+            dirs = os.listdir(file_path)
+            i = 1
+            for file in dirs:
+                file_name = file.split('.')
+                create_time = os.path.getctime(os.path.join(file_path, file))
+                timeStruct = time.localtime(create_time)
+                create_time = time.strftime('%Y-%m-%d %H:%M:%S', timeStruct)
+                size = os.path.getsize(os.path.join(file_path, file)) / 1000
+                report_path = file_path + '/' + file
+                data.append([i, file, size, create_time, report_path])
+                i += 1
             return data
         except Exception as e:
             logging.error(str(e))

@@ -22,7 +22,8 @@
                 </table>
               </div>
             </div>
-            <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog"
+              aria-labelledby="myModalLabel">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -67,7 +68,8 @@
                         <div class="form-group">
                           <label for="model" class=" col-sm-2 control-label">选择项目</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="model" list="modellist" ondblclick="clearval(this)" />
+                            <input type="text" class="form-control" id="model" list="modellist"
+                              ondblclick="clearval(this)" />
                             <datalist id="modellist">
                             </datalist>
                           </div>
@@ -101,6 +103,7 @@
 
 <script>
   var table;
+
   function load() {
     table = $('#table').DataTable({
       language: {
@@ -116,23 +119,42 @@
         },
       },
       select: true,
-      columnDefs: [
-        { className: "wordwrap ellipsis-hover", targets: [5] },
-        { className: "wordwrap ellipsis-hover", targets: [6] }
+      columnDefs: [{
+          className: "wordwrap ellipsis-hover",
+          targets: [5]
+        },
+        {
+          className: "wordwrap ellipsis-hover",
+          targets: [6]
+        }
       ],
-      columns: [
-        { title: "文件ID" },
-        { title: "文件名" },
-        { title: "类型" },
-        { title: "大小" },
-        { title: "上传时间" },
-        { title: "上传人" },
-        { title: '文件路径' },
-        { title: "备注" }
+      columns: [{
+          title: "文件ID"
+        },
+        {
+          title: "文件名"
+        },
+        {
+          title: "类型"
+        },
+        {
+          title: "大小"
+        },
+        {
+          title: "上传时间"
+        },
+        {
+          title: "上传人"
+        },
+        {
+          title: '文件路径'
+        },
+        {
+          title: "备注"
+        }
       ],
       dom: 'Bfrtip',
-      buttons: [
-        {
+      buttons: [{
           text: '上传文件',
           action: function () {
             $("#upload").modal();
@@ -198,26 +220,37 @@
         },
       },
       select: true,
-      columns: [
-        { title: "报告" },
-        { title: "创建时间" },
-        { title: "执行报告" },
-        { title: "日志" }
+      columns: [{
+          title: "序号"
+        },
+        {
+          title: "报告"
+        },
+        {
+          title: "创建时间"
+        },
+        {
+          title: "执行报告"
+        },
+        {
+          title: "日志"
+        }
       ],
       aoColumnDefs: [{
-        "aTargets": [3], "mRender": function (data, type, full) {
-          return "<a href=../" + data + " > jmeter.log</a >"
+          "aTargets": [4],
+          "mRender": function (data, type, full) {
+            return "<a href=../" + data + " > jmeter.log</a >"
+          }
+        },
+        {
+          "aTargets": [3],
+          "mRender": function (data, type, full) {
+            return "<a href=../" + data + ' target="_blank"> report</a >'
+          }
         }
-      },
-      {
-        "aTargets": [2], "mRender": function (data, type, full) {
-          return "<a href=../" + data + ' target="_blank"> report</a >'
-        }
-      }
       ],
       dom: 'Bfrtip',
-      buttons: [
-        {
+      buttons: [{
           text: '删除',
           action: function () {
             delete_reports()
@@ -263,7 +296,11 @@
       type: 'post',
       contentType: "application/json; charset=utf-8",
       dataType: 'json',
-      data: JSON.stringify({ "type": "all", 'user': localStorage.user, 'environment': localStorage.environment }),
+      data: JSON.stringify({
+        "type": "all",
+        'user': localStorage.user,
+        'environment': localStorage.environment
+      }),
       success: function (result) {
         if (result.message) {
           toastr.info('执行完成');
@@ -283,7 +320,8 @@
         result[i] = data[i]
       }
       return JSON.stringify({
-        'type': 'select', 'user': localStorage.user,
+        'type': 'select',
+        'user': localStorage.user,
         'data': JSON.stringify(result)
       })
     }
@@ -384,7 +422,8 @@
         result[i].push($('#header').val())
       }
       return JSON.stringify({
-        'type': 'deletereport', 'user': localStorage.user,
+        'type': 'deletereport',
+        'user': localStorage.user,
         'data': JSON.stringify(result)
       })
     }
@@ -400,7 +439,8 @@
         result[i].push($('#header').val())
       }
       return JSON.stringify({
-        'type': 'delete', 'user': localStorage.user,
+        'type': 'delete',
+        'user': localStorage.user,
         'data': JSON.stringify(result)
       })
     }
@@ -416,7 +456,8 @@
         result[i].push($('#header').val())
       }
       return JSON.stringify({
-        'type': 'remark', 'user': localStorage.user,
+        'type': 'remark',
+        'user': localStorage.user,
         'data': JSON.stringify(result)
       })
     }
@@ -435,12 +476,12 @@
         };
         return data;
       },
-      allowedFileExtensions: ['jmx'],//限制文件上传的类型
+      allowedFileExtensions: ['jmx'], //限制文件上传的类型
       uploadAsync: true,
       showCaption: true,
       showPreview: true, //是否显示预览
       overwriteInitial: false,
-      maxFileSize: 10000000,//限制文件上传的大小
+      maxFileSize: 10000000, //限制文件上传的大小
       maxFilesNum: 10
     });
     //异步上传返回错误结果处理
@@ -456,9 +497,6 @@
 
     });
   }
-
-
-
 </script>
 <script type="text/javascript">
   window.onload = function () {

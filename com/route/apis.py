@@ -25,6 +25,7 @@ from com.service.timeTask import TaskOperate
 from com.service.user import UserOperate
 from com.service.makedata import MakdeData
 from com.common.getIP import SaveIP
+from com.common.api_test.apitest import APITest
 
 apis = Blueprint('apis', __name__)
 api = Api(apis)
@@ -374,6 +375,15 @@ class files_manager(Resource):
                 return {'message': True, 'data': result}
             else:
                 return {'message': False, 'data': None}
+        elif self.ags['filepath'] == 'apitest':
+            path = 'com/common/api_test/testcases'
+        elif self.ags['filepath'] == 'api_report':
+            path = 'static/api_report'
+            result = FilesManager().get_api_report(path)
+            if result:
+                return {'message': True, 'data': result}
+            else:
+                return {'message': False, 'data': None}
         else:
             path = 'static/filesmanager'
         if self.ags['type'] == 'get':
@@ -389,9 +399,6 @@ class files_manager(Resource):
             dir_path = os.path.join(Path().get_current_path(), path)
             if os.path.exists(file_path):
                 response = make_response(send_from_directory(dir_path, basename, as_attachment=True))
-                # response.headers["Content-Disposition"] = "; filename=%s;" % (str(self.ags['filename']))
-                # response.headers["Content-Disposition"] = "attachment;filename*=UTF-8''{}"\
-                #     .format(utf_filename=quote(self.ags['filename'].ecode('utf-8')))
                 response.headers["Content-Disposition"] = \
                     "attachment;" \
                     "filename*=UTF-8''{utf_filename}".format(
@@ -405,6 +412,8 @@ class files_manager(Resource):
         if self.ags['type'] == 'upload':
             if self.ags['filepath'] == 'jmeter':
                 result = FileUpload().save_file(request.files['files'], 'jmeter/jmx')
+            elif self.ags['filepath'] == 'testcase':
+                result = FileUpload().save_file(request.files['files'], 'com/common/api_test/testcases')
             else:
                 result = FileUpload().save_file(request.files['files'], 'static/filesmanager')
             if result:
@@ -417,7 +426,10 @@ class files_manager(Resource):
                 data = FileUpload().delete_files(json.loads(request.json['data']))
                 return {'message': data}
         elif request.json['type'] == 'deletereport':
-            data = FileUpload().delete_reports(json.loads(request.json['data']))
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/report')
+            return {'message': data}
+        elif request.json['type'] == 'apireport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/api_report')
             return {'message': data}
         elif request.json['type'] == 'remark':
             data = FilesManager().batch_update(json.loads(request.json['data']))
@@ -512,18 +524,36 @@ class jmeter(Resource):
             return {'message': False}
 
 
+class apitest(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('md', type=str)
+        self.parser.add_argument('path', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        pass
+
+    def post(self):
+        try:
+            result = APITest().run(json.loads(request.json['data'])[0][6])
+            return result
+        except:
+            return {'message': False}
+
+
 class accesslog(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.ags = self.parser.parse_args()
 
     def get(self):
-        return {'data':SaveIP().read_accesslog()}
+        return {'data': SaveIP().read_accesslog}
 
     def post(self):
         try:
-            data=SaveIP().analysis()
-            return {'message': True,'data':data}
+            data = SaveIP().analysis()
+            return {'message': True, 'data': data}
         except:
             return {'message': False}
 
@@ -545,4 +575,5 @@ api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
 api.add_resource(makedata, '/makedata')
 api.add_resource(jmeter, '/jmeter')
+api.add_resource(apitest, '/apitest')
 api.add_resource(accesslog, '/accesslog')

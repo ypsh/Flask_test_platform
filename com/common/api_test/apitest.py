@@ -6,10 +6,14 @@ import os
 
 import requests
 from datetime import datetime
-from faker import Faker, Factory
+from faker import Faker
+from com.common.getPath import Path
 
 
 class APITest:
+    def __init__(self):
+        self.path = Path().get_current_path()
+
     def read_file(self, path):
         try:
             with open(path, 'r', encoding='utf-8') as file:
@@ -316,7 +320,7 @@ class APITest:
     """执行用例"""
 
     def do_request(self, test_cases):
-        global normal
+        # global normal
         report = {'apis': []}
         try:
             for item in test_cases['apis']:
@@ -325,14 +329,14 @@ class APITest:
                 base_url = 'http://119.27.173.43/mock/apis/'
                 model_name = test_cases['model_name']
                 service_path = item['service_path']
-                request_type = item['request_type']
+                # request_type = item['request_type']
                 request_parameters = item['request_parameters']
                 test_result['api_name'] = item['api_name']
                 # 转换服务参数列表到字典，便于后续获取参数类型
                 parameters = {}
                 for p in request_parameters:
                     parameters[p[0]] = p[2]
-                return_parameters = item['return_parameters']
+                # return_parameters = item['return_parameters']
                 cases = item['cases']
                 cases.extend(self.generat_case(request_parameters))
                 # 考虑参数替换，返回值校验
@@ -361,7 +365,7 @@ class APITest:
                 report['apis'].append(test_result)
             return report
         except Exception as e:
-            logging.info('用例执行异常')
+            logging.info('用例执行异常' + repr(e))
 
     """输出测试报告到md文件"""
 
@@ -372,6 +376,8 @@ class APITest:
         fail_case = 0
         use_time = report['use_time']
         create_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        report_bass_path = self.path + '/com/common/api_test/report_base.html'
+        report_path = self.path + ('/static/api_report/report_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.html')
         i = 1
         for model in report['reports']:
             for api in model['apis']:
@@ -386,7 +392,7 @@ class APITest:
                     else:
                         fail_case += 1
                     i += 1
-        lines = self.read_file('./api_test/report_base.html')
+        lines = self.read_file(report_bass_path)
         for i in range(0, len(lines)):
             lines[i] = str(lines[i]).replace('{{tabledata}}', str(table_data)).replace('{{details}}',
                                                                                        str(detail_data)).replace(
@@ -394,9 +400,10 @@ class APITest:
                                                                                         str(use_time)).replace(
                 '{{create_time}}', str(create_time))
 
-        with open('./api_test/report_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.html', 'w', encoding='utf-8') as f:
+        with open(report_path, 'w', encoding='utf-8') as f:
             for line in lines:
                 f.write(line)
+        logging.info('测试报告生成路径：' + report_path)
 
     """主入口串联所有功能"""
 
@@ -421,7 +428,4 @@ class APITest:
 
 if __name__ == '__main__':
     file_path = 'report_base.html'
-    # file_lines = APITest().read_file(file_path)
-    # testcase = APITest().analysis_file(file_lines)
-    # APITest().do_request(testcase)
     APITest().run('../..')

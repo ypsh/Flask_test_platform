@@ -33,7 +33,7 @@ class Main():
 
         logging.config.fileConfig(self.globalspath + '/config/logger.conf')
         conf = configparser.ConfigParser()
-        conf.read(self.globalspath + '/config/config.ini',encoding='utf-8')
+        conf.read(self.globalspath + '/config/config.ini', encoding='utf-8')
 
         # 注册admin管理模块
         self.db = SQLAlchemy(self.app)

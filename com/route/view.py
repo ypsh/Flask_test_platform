@@ -16,21 +16,22 @@ view = Blueprint('view', __name__)
 conf = configparser.ConfigParser()
 conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
 
+
 @view.route('/')
 def start():
-    SaveIP().save(request.headers,page='home')
+    SaveIP().save(request.headers, page='home')
     return render_template('index.html')
 
 
 @view.route('/dashboard')
 def dashboard():
-    SaveIP().save(request.headers,page='dashboard')
+    SaveIP().save(request.headers, page='dashboard')
     return render_template('subtemplates/dashboard/dashboard.html')
 
 
 @view.route('/extendlink')
 def extendlink():
-    SaveIP().save(request.headers,page='extendlink')
+    SaveIP().save(request.headers, page='extendlink')
     titles = get_titles()
     return render_template('subtemplates/extendlink/extendlink.html', titles=titles)
 
@@ -43,7 +44,7 @@ def login():
 
 
 @view.route('/tools/<name>', methods=['GET'])
-def get_messagecode(name):
+def tools(name):
     SaveIP().save(request.headers, page='tool')
     if name == "makedata":
         return render_template('subtemplates/tools/makedata.html', name=name)
@@ -51,6 +52,8 @@ def get_messagecode(name):
         return render_template('subtemplates/tools/encryption.html', name=name)
     elif name == 'jmeter':
         return render_template('subtemplates/tools/jmeter.html', name=name)
+    elif name == 'apitest':
+        return render_template('subtemplates/tools/apitest.html', name=name)
     elif name == 'bankcode':
         return render_template('subtemplates/tools/bankcode.html', name=name)
     elif name == 'accesslog':

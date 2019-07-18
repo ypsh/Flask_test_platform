@@ -46,13 +46,16 @@ class FileUpload:
         else:
             return [upload_path, file_name]
 
-    def delete_reports(self, *args):
+    def delete_reports(self, *args, path):
         try:
             for item in args:
                 for data in item:
-                    file_path = os.path.join(Path().get_current_path(), 'static/report',
-                                             data[0])
-                    shutil.rmtree(file_path)
+                    file_path = os.path.join(Path().get_current_path(), path,
+                                             str(data[1]))
+                    if os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                    else:
+                        os.remove(file_path)
             return True
         except Exception as e:
             logging.error(str(e))
