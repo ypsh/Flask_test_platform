@@ -538,7 +538,7 @@ class apitest(Resource):
         try:
             result = APITest().run(json.loads(request.json['data'])[0][6])
             if result:
-                return {'message':True}
+                return {'message': True}
             else:
                 return {'message': False}
         except:
@@ -551,7 +551,8 @@ class accesslog(Resource):
         self.ags = self.parser.parse_args()
 
     def get(self):
-        return {'data': SaveIP().read_accesslog}
+        data = SaveIP().read_accesslog()
+        return {'data': data}
 
     def post(self):
         try:
