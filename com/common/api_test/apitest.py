@@ -236,7 +236,7 @@ class APITest:
                             elif str(parameter_type.get(temp[0])).lower() == 'date':
                                 normal_json['data'][temp[0]] = datetime.strptime(temp[1], '%Y-%m-%d')
                         except Exception as e:
-                            logging.info('尝试数据格式转换报错')
+                            logging.info('尝试数据格式转换报错'+repr(e))
                             normal_json['data'][temp[0]] = temp[1]
             return normal_json
         except Exception as e:
@@ -247,7 +247,8 @@ class APITest:
     def output_handle(self, output, response):
         try:
             try:
-                response = eval(response)
+                if type(response)==type(str(12)):
+                    response = eval(response)
             except Exception as e:
                 logging.info('请求返回结果非json' + response + repr(e))
                 response = {'temp': response}
@@ -260,7 +261,7 @@ class APITest:
                     actual_result = self.collect(response, temp[0])
                     result['expect'].append(item)
                     result['actual'].append(temp[0] + '==' + str(actual_result))
-                    if actual_result == temp[1]:
+                    if str(actual_result) == temp[1]:
                         verification_results.append(True)
                     else:
                         verification_results.append(False)
@@ -269,7 +270,7 @@ class APITest:
                     actual_result = self.collect(response, temp[0])
                     result['expect'].append(item)
                     result['actual'].append(temp[0] + '!=' + str(actual_result))
-                    if actual_result != temp[1]:
+                    if str(actual_result) != temp[1]:
                         verification_results.append(True)
                     else:
                         verification_results.append(False)
@@ -326,7 +327,7 @@ class APITest:
             for item in test_cases['apis']:
                 test_result = {'api_name': '', 'test_cases': []}
                 # 根据模块名称获取host、ip
-                base_url = 'http://119.27.173.43/mock/apis/'
+                base_url = 'http://172.16.0.13:8012/'
                 model_name = test_cases['model_name']
                 service_path = item['service_path']
                 # request_type = item['request_type']
@@ -352,11 +353,13 @@ class APITest:
                     request_json = self.input_handle(case['input'], request_json, parameters)
                     b = datetime.now()
                     r = requests.post(url=url, json=request_json)
+                    logging.info(request_json)
+                    logging.info(r.json())
                     a = datetime.now()
                     use_time = (a - b).microseconds / 1000
                     logging.info('执行用例：' + item['api_name'] + '>>>>' + case['name'] + '\n')
                     print('执行用例：' + item['api_name'] + '>>>>' + case['name'])
-                    verification_reqult = self.output_handle(case['expect'], r.text)
+                    verification_reqult = self.output_handle(case['expect'], r.json())
                     test_result['test_cases'].append(
                         [case['name'], url, r.status_code, request_json, r.text, verification_reqult, str(use_time),
                          r.text])
@@ -386,7 +389,7 @@ class APITest:
                         [i, i, model['model_name'], case[0], api['api_name'], case[2], str(case[5]['result']), case[6]])
                     detail_data.append(
                         [i, case[0], api['api_name'], model['model_name'], case[1], 'post', case[2], case[6],
-                         str(case[5]['result']), str(case[3]), str(case[7]), case[5]['expect'], case[5]['actual']])
+                         str(case[5]['result']), str(case[3]), str(case[7]), case[5]['expect'], str(case[5]['actual'])])
                     if case[5]['result']:
                         pass_case += 1
                     else:
