@@ -4,6 +4,8 @@ import logging
 from datetime import date, timedelta
 from imp import reload
 
+from faker import Faker
+
 from com.common.getPath import Path
 
 class Generate():
@@ -163,6 +165,25 @@ class Generate():
             return email_start+random.choice(email_end)
         except:
             pass
+
+    """传入bin、卡长度生成银行卡"""
+    def generate_bankcard(cn=19, bin=622844):
+        f = Faker('zh_cn')
+        temp = ''
+        for n in range(0, cn - len(str(bin)) - 1):
+            temp = temp + str(f.pyint(0, 9))
+        cardNoTmp = str(bin) + temp
+        sum = 0
+        for j in range(0, len(cardNoTmp)):
+            if j % 2 == 0:
+                a = int(cardNoTmp[j]) * 2
+                if a > 10:
+                    a = 1 + a % 10
+                else:
+                    a = int(cardNoTmp[j])
+                sum += a
+        cardNo = cardNoTmp + '' + str((10 - (sum % 10)))
+        return cardNo
 
 
 
