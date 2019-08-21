@@ -1,0 +1,239 @@
+2019-08-21 13:58:47 base.py 162 INFO-->Scheduler started
+2019-08-21 13:58:47 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 13:58:47 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 13:58:47 _internal.py 122 INFO--> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2019-08-21 13:59:09 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 13:59:09] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:21 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:21] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:26 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:26] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:27 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:27] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:32 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:32] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET / HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/css/buttons.bootstrap.min.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/css/dataTables.bootstrap.min.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/css/editor.bootstrap.min.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/css/select.bootstrap.min.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/css/jquery-accordion-menu.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datapicker/daterangepicker.css HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/js/jquery.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/main.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/js/jquery-accordion-menu.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/js/bootstrap.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/js/dataTables.bootstrap.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/js/dataTables.buttons.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:51] "GET /static/datatables/js/buttons.bootstrap.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/datatables/js/dataTables.select.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/datatables/Buttons-1.5.4/js/buttons.html5.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/fileinput/js/locales/zh.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/datapicker/daterangepicker.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/QRCode/qrcode.min.js HTTP/1.1" 200 -
+2019-08-21 14:05:52 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:52] "GET /static/login_images/avtar.png HTTP/1.1" 200 -
+2019-08-21 14:05:55 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:05:55] "GET /favicon.ico HTTP/1.1" 404 -
+2019-08-21 14:06:37 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:06:37] "GET /tools/makedata HTTP/1.1" 200 -
+2019-08-21 14:06:38 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:06:38] "GET /static/language/cn.json HTTP/1.1" 200 -
+2019-08-21 14:06:38 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:06:38] "GET /apis/makedata?city=&age=&sex=随机 HTTP/1.1" 200 -
+2019-08-21 14:06:56 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:06:56] "GET /tools/makedata HTTP/1.1" 200 -
+2019-08-21 14:06:57 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:06:57] "GET /apis/makedata?city=&age=&sex=随机 HTTP/1.1" 200 -
+2019-08-21 14:07:47 base.py 162 INFO-->Scheduler started
+2019-08-21 14:07:47 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:07:47 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:07:47 _internal.py 122 INFO--> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2019-08-21 14:07:50 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:07:50] "GET /tools/makedata HTTP/1.1" 200 -
+2019-08-21 14:07:51 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:07:51] "GET /apis/makedata?city=&age=&sex=随机 HTTP/1.1" 200 -
+2019-08-21 14:07:53 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:07:53] "GET /tools/runjob HTTP/1.1" 200 -
+2019-08-21 14:08:12 base.py 162 INFO-->Scheduler started
+2019-08-21 14:08:12 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:08:12 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:08:12 _internal.py 122 INFO--> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2019-08-21 14:08:52 base.py 162 INFO-->Scheduler started
+2019-08-21 14:08:52 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:08:52 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:08:52 _internal.py 122 INFO--> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2019-08-21 14:11:37 _internal.py 122 INFO-->127.0.0.1 - - [21/Aug/2019 14:11:37] "GET /tools/runjob HTTP/1.1" 200 -
+2019-08-21 14:14:41 base.py 162 INFO-->Scheduler started
+2019-08-21 14:14:41 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:14:41 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:14:42 base.py 162 INFO-->Scheduler started
+2019-08-21 14:14:42 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:14:42 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:21:04 base.py 162 INFO-->Scheduler started
+2019-08-21 14:21:04 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:21:04 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:24:28 base.py 162 INFO-->Scheduler started
+2019-08-21 14:24:28 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:24:28 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:27:41 base.py 162 INFO-->Scheduler started
+2019-08-21 14:27:41 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:27:41 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:30:37 base.py 162 INFO-->Scheduler started
+2019-08-21 14:30:37 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:30:37 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:31:02 runjob.py 85 ERROR-->'Run_job' object has no attribute 'set_up'
+2019-08-21 14:31:41 base.py 162 INFO-->Scheduler started
+2019-08-21 14:31:41 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:31:41 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:32:48 base.py 162 INFO-->Scheduler started
+2019-08-21 14:32:48 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:32:48 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:33:27 base.py 162 INFO-->Scheduler started
+2019-08-21 14:33:27 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:33:27 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:34:12 base.py 162 INFO-->Scheduler started
+2019-08-21 14:34:12 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:34:12 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:40:02 base.py 162 INFO-->Scheduler started
+2019-08-21 14:40:02 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:40:02 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:40:55 base.py 162 INFO-->Scheduler started
+2019-08-21 14:40:55 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:40:55 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:43:15 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:17 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:19 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:22 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:24 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:26 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:28 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:30 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:32 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:34 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:36 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:39 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:41 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:43 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:45 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:47 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:49 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:51 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:51 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:53 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:54 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:55 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:56 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:57 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:58 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:43:59 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:00 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:01 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:02 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:03 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:04 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:06 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:06 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:08 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:08 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:10 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:11 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:12 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:13 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:14 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:15 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:16 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:17 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:19 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:19 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:21 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:23 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:25 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:27 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:28 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:29 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:30 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:31 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:32 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:34 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:34 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:36 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:36 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:38 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:38 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:40 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:40 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:42 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:42 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:44 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:45 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:46 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:47 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:49 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:49 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:51 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:51 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:53 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:53 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:55 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:55 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:57 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:44:59 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:45:02 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 normal
+2019-08-21 14:45:04 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 running
+2019-08-21 14:45:06 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 running
+2019-08-21 14:45:06 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 running
+2019-08-21 14:45:08 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 running
+2019-08-21 14:45:08 runjob.py 79 INFO-->查询批处理状态 2018-03-08 00:00:00 running
+2019-08-21 14:45:10 runjob.py 79 INFO-->查询批处理状态 2018-03-09 00:00:00 running
+2019-08-21 14:45:11 runjob.py 79 INFO-->查询批处理状态 2018-03-09 00:00:00 running
+2019-08-21 14:47:26 base.py 162 INFO-->Scheduler started
+2019-08-21 14:47:26 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:47:26 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:47:59 base.py 162 INFO-->Scheduler started
+2019-08-21 14:47:59 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:47:59 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:49:52 base.py 162 INFO-->Scheduler started
+2019-08-21 14:49:52 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:49:52 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:49:53 base.py 162 INFO-->Scheduler started
+2019-08-21 14:49:53 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:49:53 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:51:34 runjob.py 85 ERROR-->time data '2' does not match format '%Y-%m-%d'
+2019-08-21 14:53:38 base.py 162 INFO-->Scheduler started
+2019-08-21 14:53:38 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:53:38 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:53:39 base.py 162 INFO-->Scheduler started
+2019-08-21 14:53:39 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:53:39 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:56:19 runjob.py 85 ERROR-->unsupported type for timedelta days component: str
+2019-08-21 14:56:25 base.py 162 INFO-->Scheduler started
+2019-08-21 14:56:25 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:56:25 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:56:47 runjob.py 79 INFO-->查询批处理状态 2018-03-09 00:00:00 running
+2019-08-21 14:56:49 runjob.py 79 INFO-->查询批处理状态 2018-03-10 00:00:00 running
+2019-08-21 14:56:52 runjob.py 79 INFO-->查询批处理状态 2018-03-10 00:00:00 normal
+2019-08-21 14:56:54 runjob.py 79 INFO-->查询批处理状态 2018-03-10 00:00:00 running
+2019-08-21 14:56:56 runjob.py 79 INFO-->查询批处理状态 2018-03-11 00:00:00 running
+2019-08-21 14:58:51 base.py 162 INFO-->Scheduler started
+2019-08-21 14:58:51 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:58:51 base.py 162 INFO-->Scheduler started
+2019-08-21 14:58:51 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 14:58:51 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:58:51 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 14:59:04 runjob.py 71 INFO-->批处理日期：2018-03-11
+2019-08-21 14:59:06 runjob.py 79 INFO-->查询批处理状态 2018-03-11 00:00:00 running
+2019-08-21 14:59:08 runjob.py 79 INFO-->查询批处理状态 2018-03-12 00:00:00 running
+2019-08-21 14:59:11 runjob.py 79 INFO-->查询批处理状态 2018-03-12 00:00:00 normal
+2019-08-21 14:59:11 runjob.py 71 INFO-->批处理日期：2018-03-12
+2019-08-21 14:59:13 runjob.py 79 INFO-->查询批处理状态 2018-03-12 00:00:00 running
+2019-08-21 14:59:15 runjob.py 79 INFO-->查询批处理状态 2018-03-13 00:00:00 running
+2019-08-21 15:00:43 base.py 162 INFO-->Scheduler started
+2019-08-21 15:00:43 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:00:43 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:00:56 runjob.py 71 INFO-->批处理日期：2018-03-13
+2019-08-21 15:00:58 runjob.py 79 INFO-->查询批处理状态 2018-03-13 00:00:00 running
+2019-08-21 15:01:00 runjob.py 79 INFO-->查询批处理状态 2018-03-14 00:00:00 running
+2019-08-21 15:01:00 runjob.py 83 INFO-->跑批结束
+2019-08-21 15:01:11 base.py 162 INFO-->Scheduler started
+2019-08-21 15:01:11 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:01:11 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:01:12 base.py 162 INFO-->Scheduler started
+2019-08-21 15:01:12 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:01:12 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:01:21 runjob.py 71 INFO-->批处理日期：2018-03-14
+2019-08-21 15:01:23 runjob.py 79 INFO-->查询批处理状态 2018-03-14 00:00:00 running
+2019-08-21 15:01:26 runjob.py 79 INFO-->查询批处理状态 2018-03-15 00:00:00 running
+2019-08-21 15:01:26 runjob.py 83 INFO-->跑批结束
+2019-08-21 15:02:11 base.py 162 INFO-->Scheduler started
+2019-08-21 15:02:11 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:02:11 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:02:22 runjob.py 71 INFO-->批处理日期：2018-03-15
+2019-08-21 15:02:24 runjob.py 79 INFO-->查询批处理状态 2018-03-15 00:00:00 running
+2019-08-21 15:02:26 runjob.py 79 INFO-->查询批处理状态 2018-03-16 00:00:00 running
+2019-08-21 15:02:26 runjob.py 83 INFO-->跑批结束

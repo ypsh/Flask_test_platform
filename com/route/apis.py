@@ -17,6 +17,7 @@ from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
 from com.service.jmeter import Jmeter
 from com.service.mock import ServiceOperate
+from com.service.runjob import Run_job
 from com.service.set_url import Set_url
 from com.service.task_schedul import TaskSchedul
 from com.service.test_case import TestCaseOperate
@@ -561,6 +562,28 @@ class accesslog(Resource):
         except:
             return {'message': False}
 
+class runjob(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('date', type=str)
+        self.parser.add_argument('type', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        return Run_job().loadDataSet(10)
+
+    def post(self):
+        try:
+            if self.ags.type == 'getdate':
+                date = Run_job().get_date()
+                return {'date':str(date)}
+            else:
+                result = Run_job().run(self.ags.date)
+            return result
+        except:
+            return {'message': False}
+
+
 
 api.add_resource(user, '/user')
 api.add_resource(services, '/service')
@@ -581,3 +604,4 @@ api.add_resource(makedata, '/makedata')
 api.add_resource(jmeter, '/jmeter')
 api.add_resource(apitest, '/apitest')
 api.add_resource(accesslog, '/accesslog')
+api.add_resource(runjob, '/runjob')
