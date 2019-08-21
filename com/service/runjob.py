@@ -46,7 +46,7 @@ class Run_job:
         描述：从文件读入数据集
         """
         fileName = 'schedule_times.txt'
-        file = os.path.join(Path().get_current_path(), 'logs/myapp.log')
+        file = os.path.join(Path().get_current_path()+"/logs", 'myapp.log')
         dataSet = []
         with open(file) as fr:
             for line in fr.readlines()[-200:]:
