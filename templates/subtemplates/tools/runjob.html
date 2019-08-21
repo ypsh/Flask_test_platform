@@ -89,7 +89,7 @@
         }, function (data, status) {
             if (data) {
                 toastr.info(data.message)
-                window.setTimeout(stop_clearInterval(), 10000)
+                window.setTimeout(stop_clearInterval(), 1000)
                 $("#submit").attr("disabled", false);
                 get_coredate()
             }
