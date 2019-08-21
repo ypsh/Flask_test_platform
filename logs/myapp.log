@@ -292,3 +292,31 @@ pymysql.err.OperationalError: (2006, "MySQL server has gone away (ConnectionRese
 2019-08-21 15:35:02 base.py 162 INFO-->Scheduler started
 2019-08-21 15:35:02 base.py 937 DEBUG-->Looking for jobs to run
 2019-08-21 15:35:02 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:00:55 base.py 162 INFO-->Scheduler started
+2019-08-21 16:00:55 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:00:55 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:00:55 base.py 162 INFO-->Scheduler started
+2019-08-21 16:00:55 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:00:55 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:01:17 base.py 162 INFO-->Scheduler started
+2019-08-21 16:01:17 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:01:17 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:01:26 base.py 162 INFO-->Scheduler started
+2019-08-21 16:01:26 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:01:26 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:01:27 base.py 162 INFO-->Scheduler started
+2019-08-21 16:01:27 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:01:27 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:01:36 runjob.py 71 INFO-->批处理日期：2018-03-23
+2019-08-21 16:01:38 runjob.py 79 INFO-->查询批处理状态 2018-03-23 00:00:00 running
+2019-08-21 16:01:40 runjob.py 79 INFO-->查询批处理状态 2018-03-23 00:00:00 running
+2019-08-21 16:01:42 runjob.py 79 INFO-->查询批处理状态 2018-03-24 00:00:00 running
+2019-08-21 16:01:42 runjob.py 83 INFO-->跑批结束
+2019-08-21 16:02:43 base.py 162 INFO-->Scheduler started
+2019-08-21 16:02:43 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 16:02:43 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 16:02:52 runjob.py 71 INFO-->批处理日期：2018-03-24
+2019-08-21 16:02:54 runjob.py 79 INFO-->查询批处理状态 2018-03-24 00:00:00 running
+2019-08-21 16:02:56 runjob.py 79 INFO-->查询批处理状态 2018-03-24 00:00:00 running
+2019-08-21 16:02:58 runjob.py 79 INFO-->查询批处理状态 2018-03-25 00:00:00 running
+2019-08-21 16:02:58 runjob.py 83 INFO-->跑批结束
