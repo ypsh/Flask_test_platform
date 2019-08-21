@@ -83,5 +83,5 @@ main.add_admin_view()
 
 if __name__ == '__main__':
     # app.run(debug=False, host='0.0.0.0', threaded=True, ssl_context=(main.get_crt(), main.get_key()))
-    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=5001, threaded=True)
     # app.run()

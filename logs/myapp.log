@@ -237,3 +237,58 @@
 2019-08-21 15:02:24 runjob.py 79 INFO-->查询批处理状态 2018-03-15 00:00:00 running
 2019-08-21 15:02:26 runjob.py 79 INFO-->查询批处理状态 2018-03-16 00:00:00 running
 2019-08-21 15:02:26 runjob.py 83 INFO-->跑批结束
+2019-08-21 15:03:33 base.py 162 INFO-->Scheduler started
+2019-08-21 15:03:33 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:03:33 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:03:34 base.py 162 INFO-->Scheduler started
+2019-08-21 15:03:34 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:03:34 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:10:28 base.py 680 ERROR-->Exception during reset or similar
+Traceback (most recent call last):
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\pymysql\connections.py", line 708, in _write_bytes
+    self._sock.sendall(data)
+ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\sqlalchemy\pool\base.py", line 671, in _finalize_fairy
+    fairy._reset(pool)
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\sqlalchemy\pool\base.py", line 858, in _reset
+    pool._dialect.do_rollback(self)
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\sqlalchemy\dialects\mysql\base.py", line 2227, in do_rollback
+    dbapi_connection.rollback()
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\pymysql\connections.py", line 431, in rollback
+    self._execute_command(COMMAND.COM_QUERY, "ROLLBACK")
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\pymysql\connections.py", line 766, in _execute_command
+    self._write_bytes(packet)
+  File "C:\private\code\Flask_test_platform\venv\lib\site-packages\pymysql\connections.py", line 713, in _write_bytes
+    "MySQL server has gone away (%r)" % (e,))
+pymysql.err.OperationalError: (2006, "MySQL server has gone away (ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))")
+2019-08-21 15:10:50 base.py 162 INFO-->Scheduler started
+2019-08-21 15:10:50 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:10:50 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:10:51 base.py 162 INFO-->Scheduler started
+2019-08-21 15:10:51 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:10:51 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:11:17 base.py 162 INFO-->Scheduler started
+2019-08-21 15:11:17 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:11:17 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:11:18 base.py 162 INFO-->Scheduler started
+2019-08-21 15:11:18 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:11:18 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:11:32 base.py 162 INFO-->Scheduler started
+2019-08-21 15:11:32 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:11:32 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:11:33 base.py 162 INFO-->Scheduler started
+2019-08-21 15:11:33 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:11:33 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:13:56 base.py 162 INFO-->Scheduler started
+2019-08-21 15:13:56 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:13:56 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:13:57 base.py 162 INFO-->Scheduler started
+2019-08-21 15:13:57 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:13:57 base.py 1013 DEBUG-->No jobs; waiting until a job is added
+2019-08-21 15:35:02 base.py 162 INFO-->Scheduler started
+2019-08-21 15:35:02 base.py 937 DEBUG-->Looking for jobs to run
+2019-08-21 15:35:02 base.py 1013 DEBUG-->No jobs; waiting until a job is added

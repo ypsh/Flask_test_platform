@@ -48,7 +48,7 @@ class Run_job:
         fileName = 'schedule_times.txt'
         file = os.path.join(Path().get_current_path(), 'logs/myapp.log')
         dataSet = []
-        with open(file) as fr:
+        with open(file,encoding='utf-8') as fr:
             for line in fr.readlines()[-200:]:
                 if str(line).find('runjob') != -1:
                     dataSet.append(line)
