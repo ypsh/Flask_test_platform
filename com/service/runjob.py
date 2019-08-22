@@ -7,14 +7,16 @@ import datetime
 import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from com.common.redisUtil import Redis
 from com.common.getPath import Path
 from com.service.model import CoreSysDate
 import logging
 
+
 class Run_job:
 
     def __init__(self):
+        self.r = Redis().get_r()
         self.engine = create_engine("mysql+pymysql://tobuser:ts@123@172.16.0.13/xy_standard_asset?charset=utf8")
         self.session = sessionmaker(self.engine)
         self.mySession = self.session()
@@ -45,17 +47,22 @@ class Run_job:
         输出：数据集
         描述：从文件读入数据集
         """
-        fileName = 'schedule_times.txt'
-        file = os.path.join(Path().get_current_path()+"/logs", 'myapp.log')
-        dataSet = []
-        with open(file) as fr:
-            for line in fr.readlines()[-200:]:
-                if str(line).find('runjob') != -1:
-                    dataSet.append(line)
+        # fileName = 'schedule_times.txt'
+        # file = os.path.join(Path().get_current_path() + "/logs", 'myapp.log')
+        # dataSet = []
+        # with open(file) as fr:
+        #     for line in fr.readlines()[-200:]:
+        #         if str(line).find('runjob') != -1:
+        #             dataSet.append(line)
+        dataSet=self.r.lrange("logs",0,1000)
         return dataSet[-14:]
 
     def run(self, to_date):
         try:
+            if self.r.get("run_status") is not None:
+                return {"message": "正在跑批，请待会重试"}
+            else:
+                self.r.set("run_status", "running")
             cur_day = self.get_core_sys_date()
             try:
                 end_day = datetime.datetime.strptime(to_date, "%Y-%m-%d")
@@ -63,28 +70,35 @@ class Run_job:
                 end_day = cur_day + datetime.timedelta(days=int(to_date))
             i = 0
             temp = ''
+            log = "跑批至："+str(end_day)
+            self.r.lpush("logs", log)
+            logging.info(log)
             while cur_day < end_day:
-                if end_day > cur_day:
-                    cur_status = self.get_status()
-                    if cur_status == 'normal' and temp != cur_day:
-                        r = requests.post('http://172.16.0.13:8013/start')
-                        logging.info("批处理日期：%s", str(cur_day.strftime("%Y-%m-%d")))
-                        temp = cur_day
-                        i = 0
-                else:
-                    logging.info('跑批日期小于当期日期')
-                time.sleep(3)
                 cur_day = self.get_core_sys_date()
                 cur_status = self.get_status()
-                logging.info("查询批处理状态 %s %s",cur_day,cur_status)
+                log = "查询批处理状态:"+ str(cur_day)+cur_status
+                self.r.lpush("logs", log)
+                logging.info(log)
+                if cur_status == 'normal' and temp != cur_day:
+                    request = requests.post('http://172.16.0.13:8013/start')
+                    log = "批处理日期："+ str(cur_day.strftime("%Y-%m-%d"))
+                    self.r.lpush("logs", log)
+                    logging.info(log)
+                    temp = cur_day
+                    i = 0
+                time.sleep(3)
                 i += 1
                 if i > 80:
                     break
-            logging.info("跑批结束")
-            return {'message': True}
+            log =  "跑批结束"
+            self.r.lpush("logs", log)
+            logging.info(log)
+            self.r.delete("run_status")
+            self.r.delete("logs")
+            return {'message': "跑批完成"}
         except Exception as e:
             logging.error(str(e))
-            return {'message': False}
+            return {'message': "跑批异常"}
         finally:
             self.tear_down()
 
