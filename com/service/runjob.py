@@ -55,7 +55,7 @@ class Run_job:
         #         if str(line).find('runjob') != -1:
         #             dataSet.append(line)
         dataSet=self.r.lrange("logs",0,1000)
-        return dataSet[-14:]
+        return dataSet[0:14]
 
     def run(self, to_date):
         try:
