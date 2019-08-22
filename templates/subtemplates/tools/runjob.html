@@ -88,10 +88,10 @@
                 data: {"date": $('#daterange').val(), "type": $('#datasource').val()},
                 success: function (data) {
                     if (data) {
-                        toastr.info(data.message)
-                        window.setTimeout(stop_clearInterval(), 1000)
+                        toastr.info(data.message);
+                        stop_clearInterval();
                         $("#submit").attr("disabled", false);
-                        get_coredate()
+                        get_coredate();
                     }
                 }
         })
