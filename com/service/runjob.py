@@ -73,12 +73,12 @@ class Run_job:
                         i = 0
                 else:
                     logging.info('跑批日期小于当期日期')
-                time.sleep(2)
+                time.sleep(3)
                 cur_day = self.get_core_sys_date()
                 cur_status = self.get_status()
                 logging.info("查询批处理状态 %s %s",cur_day,cur_status)
                 i += 1
-                if i > 30:
+                if i > 80:
                     break
             logging.info("跑批结束")
             return {'message': True}
