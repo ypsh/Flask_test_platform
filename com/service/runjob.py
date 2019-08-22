@@ -97,6 +97,7 @@ class Run_job:
             self.r.delete("logs")
             return {'message': "跑批完成"}
         except Exception as e:
+            self.r.delete("run_status")
             logging.error(str(e))
             return {'message': "跑批异常"}
         finally:
