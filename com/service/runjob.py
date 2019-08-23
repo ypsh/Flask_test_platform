@@ -76,9 +76,6 @@ class Run_job:
             while cur_day < end_day:
                 cur_day = self.get_core_sys_date()
                 cur_status = self.get_status()
-                log = "查询批处理状态:"+ str(cur_day)+cur_status
-                self.r.lpush("logs", log)
-                logging.info(log)
                 if cur_status == "normal" and temp != cur_day:
                     request = requests.post("http://172.16.0.13:8013/start")
                     log = "批处理日期："+ str(cur_day.strftime("%Y-%m-%d"))
@@ -87,6 +84,12 @@ class Run_job:
                     temp = cur_day
                     i = 0
                 time.sleep(3)
+                cur_day = self.get_core_sys_date()
+                cur_status = self.get_status()
+                log = "查询批处理状态:"+ str(cur_day)+cur_status
+                self.r.lpush("logs", log)
+                logging.info(log)
+
                 i += 1
                 if i > 80:
                     break
