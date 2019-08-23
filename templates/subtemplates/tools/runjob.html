@@ -81,41 +81,18 @@
         // }
         function run_job() {
             get_log();
+            toastr.info("已提交");
+            $("#submit").attr("disabled", true);
             $.ajax({
                 url: "/apis/runjob",
                 type: "post",
-                timeout:10000000,
+                timeout: 1000,
                 data: {"date": $('#daterange').val(), "type": $('#datasource').val()},
                 success: function (data) {
-                    if (data) {
-                        toastr.info(data.message);
-                        stop_clearInterval();
-                        $("#submit").attr("disabled", false);
-                        get_coredate();
-                    }
-                }
-        })
-        }
 
-        {#function run_job() {#}
-        {#    get_log();#}
-        {#    $("#submit").attr("disabled", true);#}
-        {#    $.post("/apis/runjob", {#}
-        {#        date: $('#daterange').val(),#}
-        {#        type: $('#datasource').val()#}
-        {#    }, function (data, status) {#}
-        {#        if (data) {#}
-        {#            toastr.info(data.message)#}
-        {#            window.setTimeout(stop_clearInterval(), 1000)#}
-        {#            $("#submit").attr("disabled", false);#}
-        {#            get_coredate()#}
-        {#        }#}
-        {#    }).error(function (date) {#}
-        {#        toastr.info(date)#}
-        {#        // window.setTimeout(stop_clearInterval(), 10000)#}
-        {#        $("#submit").attr("disabled", false);#}
-        {#    });#}
-        {#}#}
+                }
+            })
+        }
 
         function get_coredate() {
             $("#date").attr("disabled", true)
@@ -140,13 +117,20 @@
                 $.get("/apis/runjob", function (data) {
                     for (var i = 0; i < 15; i++) {
                         item = '#' + (i + 1)
-                        if (data[i]) {
+                        if (data["logs"][i]) {
                             $(item).text('')
                         }
-                        $(item).text(data[i])
+                        $(item).text(data["logs"][i])
                     }
+                    if (data["run_status"] === "finish") {
+                        toastr.info("执行完成");
+                        stop_clearInterval();
+                        $("#submit").attr("disabled", false);
+                        get_coredate();
+                    }
+
                 })
-            }, 3000);
+            }, 1000);
         }
 
         function stop_clearInterval() {

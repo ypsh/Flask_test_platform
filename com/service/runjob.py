@@ -24,11 +24,11 @@ class Run_job:
 
     def get_core_sys_date(self):
         return datetime.datetime.strptime(
-            str(self.result.filter(CoreSysDate.project_code == 'xy').first().core_sys_date),
+            str(self.result.filter(CoreSysDate.project_code == "xy").first().core_sys_date),
             "%Y-%m-%d")
 
     def get_status(self):
-        self.status = self.result.filter(CoreSysDate.project_code == 'xy').first().core_sys_status
+        self.status = self.result.filter(CoreSysDate.project_code == "xy").first().core_sys_status
         return self.status
 
     def tear_down(self):
@@ -36,30 +36,30 @@ class Run_job:
 
     def write_line(self, line):
         try:
-            fp = open('schedule_times.txt', 'a+')
-            fp.write(line + '\n')
+            fp = open("schedule_times.txt", "a+")
+            fp.write(line + "\n")
         except:
             pass
 
-    def loadDataSet(self, line, splitChar='\t'):
+    def loadDataSet(self, line, splitChar="\t"):
         """
         输入：文件名
         输出：数据集
         描述：从文件读入数据集
         """
-        # fileName = 'schedule_times.txt'
-        # file = os.path.join(Path().get_current_path() + "/logs", 'myapp.log')
+        # fileName = "schedule_times.txt"
+        # file = os.path.join(Path().get_current_path() + "/logs", "myapp.log")
         # dataSet = []
         # with open(file) as fr:
         #     for line in fr.readlines()[-200:]:
-        #         if str(line).find('runjob') != -1:
+        #         if str(line).find("runjob") != -1:
         #             dataSet.append(line)
         dataSet=self.r.lrange("logs",0,1000)
-        return dataSet[0:14]
+        return {"logs":dataSet[0:14][::-1],"run_status":self.r.get("run_status")}
 
     def run(self, to_date):
         try:
-            if self.r.get("run_status") is not None:
+            if self.r.get("run_status") is  None or self.r.get("run_status")=="running":
                 return {"message": "正在跑批，请待会重试"}
             else:
                 self.r.set("run_status", "running")
@@ -69,7 +69,7 @@ class Run_job:
             except:
                 end_day = cur_day + datetime.timedelta(days=int(to_date))
             i = 0
-            temp = ''
+            temp = ""
             log = "跑批至："+str(end_day)
             self.r.lpush("logs", log)
             logging.info(log)
@@ -79,8 +79,8 @@ class Run_job:
                 log = "查询批处理状态:"+ str(cur_day)+cur_status
                 self.r.lpush("logs", log)
                 logging.info(log)
-                if cur_status == 'normal' and temp != cur_day:
-                    request = requests.post('http://172.16.0.13:8013/start')
+                if cur_status == "normal" and temp != cur_day:
+                    request = requests.post("http://172.16.0.13:8013/start")
                     log = "批处理日期："+ str(cur_day.strftime("%Y-%m-%d"))
                     self.r.lpush("logs", log)
                     logging.info(log)
@@ -93,13 +93,13 @@ class Run_job:
             log =  "跑批结束"
             self.r.lpush("logs", log)
             logging.info(log)
-            self.r.delete("run_status")
+            self.r.set("run_status","finish")
             self.r.delete("logs")
-            return {'message': "跑批完成"}
+            return {"message": "跑批完成"}
         except Exception as e:
-            self.r.delete("run_status")
+            self.r.set("run_status","finish")
             logging.error(str(e))
-            return {'message': "跑批异常"}
+            return {"message": "跑批异常"}
         finally:
             self.tear_down()
 
@@ -109,5 +109,5 @@ class Run_job:
         return str(date)
 
 
-if __name__ == '__main__':
-    enddate = '20171233'
+if __name__ == "__main__":
+    enddate = "20171233"
