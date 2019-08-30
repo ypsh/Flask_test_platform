@@ -26,7 +26,7 @@ from com.service.timeTask import TaskOperate
 from com.service.user import UserOperate
 from com.service.makedata import MakdeData
 from com.common.getIP import SaveIP
-from com.common.api_test.apitest import APITest
+from com.testcommon.api_test.apitest import APITest
 
 apis = Blueprint('apis', __name__)
 api = Api(apis)
@@ -552,7 +552,7 @@ class accesslog(Resource):
         self.ags = self.parser.parse_args()
 
     def get(self):
-        data = SaveIP().read_accesslog()
+        data = SaveIP().read_access_log()
         return {'data': data}
 
     def post(self):

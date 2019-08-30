@@ -59,7 +59,5 @@ class CoreSysDate(Base):
     project_code = Column(String(32), nullable=False, comment='项目编号')
     core_sys_date = Column(Date, nullable=False, comment='核心时间')
     core_sys_status = Column(String(32), nullable=False, comment='核心状态 normal:正常 running:跑批中')
-    create_by = Column(String(32), nullable=False, comment='创建人')
-    update_by = Column(String(32), nullable=False, comment='更新人')
     create_time = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), comment='创建时间')
     update_time = Column(DateTime, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"), comment='更新时间')

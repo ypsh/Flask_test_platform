@@ -2,13 +2,12 @@
 import random
 import logging
 from datetime import date, timedelta
-from imp import reload
-
+from com.common.redisUtil import Redis
 from faker import Faker
 
 from com.common.getPath import Path
 
-class Generate():
+class Generate:
     def __init__(self):
         self.global_path = Path().get_current_path()
         self.district_code = self.get_district_code()
@@ -21,6 +20,9 @@ class Generate():
         获取身份证头信息地址码
         :return:地址码字典
         """
+        code_list=Redis().get_key("code_list")
+        if code_list is not None:
+            return eval(code_list)
         district_code_path = self.global_path + "/config/districtcode.txt"
         with open(district_code_path,'r', encoding='UTF-8') as file:
             data = file.read()
@@ -35,6 +37,8 @@ class Generate():
                 district = node[14:].strip()
                 code = node[0:6]
                 code_list.append({"state": state, "city": city, "district": district, "code": code})
+
+        Redis().set_key("code_list",code_list)
         return code_list
 
     def set_city(self, cityname):
@@ -167,11 +171,10 @@ class Generate():
             pass
 
     """传入bin、卡长度生成银行卡"""
-    def generate_bankcard(cn=19, bin=622844):
-        f = Faker('zh_cn')
+    def generate_bankcard(self,cn=19, bin=622844):
         temp = ''
         for n in range(0, cn - len(str(bin)) - 1):
-            temp = temp + str(f.pyint(0, 9))
+            temp = temp + str(random.randint(0, 9))
         cardNoTmp = str(bin) + temp
         sum = 0
         for j in range(0, len(cardNoTmp)):
@@ -189,14 +192,5 @@ class Generate():
 
 if __name__ == '__main__':
     g = Generate()
-    g.set_city("西安")
-    g.set_age(25, 25)
-    list = []
-    # g.set_sex(1)
-    print(g.generating_ID_card_batch(2))
-    print(g.generating_ID_card())
-    # for i in range(0, 10):
-    #     list.append(g.generating_ID_card())
-    print(g.generating_email())
-
-    print("ok")
+    g.get_district_code()
+    pass

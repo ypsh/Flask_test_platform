@@ -23,7 +23,7 @@ class SaveIP(object):
             out = open(file, 'a', newline='')
             csv_write = csv.writer(out, dialect='excel')
             csv_write.writerow(data)
-        except:
+        except BaseException:
             pass
 
     def get_ip_address(self, ip: str):
@@ -77,7 +77,7 @@ class SaveIP(object):
         except Exception as e:
             pass
 
-    def read_accesslog(self):
+    def read_access_log(self):
         try:
             result = []
             file = csv.reader(open(os.path.join(self.path, "request_ip_info_address.csv"), 'r', encoding='utf-8'))

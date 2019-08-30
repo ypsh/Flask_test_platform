@@ -52,6 +52,9 @@ class Redis:
     def get_key(self, key):
         return self.r.get(key)
 
+    def get_key_map(self, key):
+        return eval(self.r.get(key))
+
     def set_key(self, key, value):
         try:
             return self.r.set(key, value)
@@ -60,6 +63,12 @@ class Redis:
 
     def delete_key(self, key):
         return self.r.delete(key)
+
+    def add_list_item(self, key, valus):
+        self.r.lpush(key, valus)
+
+    def get_list(self, key):
+        self.r.getrange(key, 0, self.r.llen(key))
 
     def get_r(self):
         return self.r

@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from com.common.generatedata import Generate
+from com.common.generateData import Generate
 
 class MakdeData():
     def __init__(self):

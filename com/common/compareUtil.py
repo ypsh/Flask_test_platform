@@ -83,6 +83,15 @@ class Compare:
                 else:
                     return result
 
+    def equal(self, exp, actual):
+        return exp == actual
+
+    def not_equal(self, exp, actual):
+        return exp != actual
+
+    def str_contains(self,dic,string):
+        return str(dic).__contains__(string)
+
 
 if __name__ == '__main__':
     s1 = {"code": "200", "message": "OK", "result": "OK"}
