@@ -8,11 +8,11 @@ class GetAccountInfo(BaseApi):
     data = {}
     param = data
 
-    def set_param(self, certNo):
+    def set_filter(self, certNo):
         self.data["certNo"] = certNo
 
 
 if __name__ == '__main__':
     t = GetAccountInfo()
-    t.set_param("522731196408032123")
+    t.set_filter("522731196408032123")
     print(t.post())

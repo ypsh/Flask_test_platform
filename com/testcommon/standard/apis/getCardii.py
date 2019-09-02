@@ -15,5 +15,5 @@ class GetCardii(BaseApi):
 
 if __name__ == '__main__':
     t = GetCardii()
-    t.set_filter(certNo="522731196408032123")
+    t.set_filter(certNo="632626197807251319")
     print(t.post())

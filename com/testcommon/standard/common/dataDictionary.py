@@ -25,11 +25,11 @@ class _const:
 
 const = _const()
 # 计息方式
-const.int_calc_type = ['eq_prin_int', 'eq_prin_amt']
+const.intCalcType = ['eq_prin_int', 'eq_prin_amt']
 # 性别
 const.gender = ['F', 'M']
 # 附件类型
-const.attachments_type = [
+const.attachmentsType = [
     "bank_idcard_front",
     "bank_idcard_front",
     "bank_idcard_front_crop",
@@ -61,7 +61,7 @@ const.marriage = [
     "married"
 ]
 # 额度循环类型
-const.cycel_type = [
+const.cycelType = [
     "nocycle",
     "clear",
     "term",
@@ -70,7 +70,7 @@ const.cycel_type = [
 # 联系方式
 # const.contact_info
 # 联系方式类型
-const.contact_type = [
+const.contactType = [
     "wechat",
     "alipay",
     "qq",
@@ -79,23 +79,23 @@ const.contact_type = [
     "email"
 ]
 # 还款类型
-const.repay_type = [
+const.repayType = [
     "clear",
     "term"
 ]
 # 卡类型
 const.type = ['debit', 'credit']
 # 还款方式
-const.repay_way = [
+const.repayWay = [
     "cardi",
     "cardii",
     "wxpay",
     "compensate"
 ]
 # 银联标识
-const.union_mark = [0, 1]
+const.unionMark = [0, 1]
 # 关系类型
-const.relate_type = [
+const.relateType = [
     "spouse",
     "parents",
     "children",
@@ -109,7 +109,7 @@ const.relate_type = [
 # 联系方式
 # const.contact_info
 # 联系类型
-const.contact_type = [
+const.contactType = [
     "wechat",
     "alipay",
     "qq",
@@ -118,7 +118,7 @@ const.contact_type = [
     "email"
 ]
 # 月收入区间
-const.month_income = [
+const.monthIncome = [
     "unknown",
     "0_3000",
     "3001_6000",
@@ -127,7 +127,7 @@ const.month_income = [
     "20001_above"
 ]
 # 工作年限
-const.work_year = [
+const.workYear = [
     "unknown",
     "one_year",
     "three_year",
@@ -135,7 +135,7 @@ const.work_year = [
     "five_above"
 ]
 # 单位性质
-const.corp_type = [
+const.corpType = [
     "unknown",
     "state_owned_comp",
     "wholly_foreign_owned_enterprise",
@@ -145,7 +145,7 @@ const.corp_type = [
     "governmental_agencies"
 ]
 # 工作状态
-const.work_status = [
+const.workStatus = [
     "unknown",
     "full_time",
     "part_time",

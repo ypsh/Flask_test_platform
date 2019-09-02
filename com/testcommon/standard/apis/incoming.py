@@ -25,82 +25,79 @@ class Incoming(BaseApi):
     birth = datetime.strptime(cert_no[6:14], "%Y%m%d").strftime("%Y-%m-%d")
     gender = {0: "M", 1: "F"}[int(cert_no[16]) % 2]
     attachments = [{"hash": "oio283123898d182399dkfv",
-                    "name": const.__getrandomvalue__("attachments_type"),
-                    "type": const.__getrandomvalue__("attachments_type"),
+                    "name": const.__getrandomvalue__("attachmentsType"),
+                    "type": const.__getrandomvalue__("attachmentsType"),
                     "url": "http://test.com"
                     }, {"hash": "oio283123898d182399dkfv",
-                        "name": const.__getrandomvalue__("attachments_type"),
-                        "type": const.__getrandomvalue__("attachments_type"),
+                        "name": const.__getrandomvalue__("attachmentsType"),
+                        "type": const.__getrandomvalue__("attachmentsType"),
                         "url": "http://test.com"
                         }]
     borrower = {"name": name,
-                "cert_no": cert_no,
+                "certNo": cert_no,
                 "mobile": mobile,
-                "channel_code": "xy-auto_test",
-                "sub_channel_code": "xy-channel-sub",
-                "ref_code": "ti122",
+                "channelCode": "xy-auto_test",
+                "subChannelCode": "xy-channel-sub",
+                "refCode": "ti122",
                 "lbs": lbs,
                 "gender": gender,
                 "nation": const.__getrandomvalue__("nation"),
                 "birth": birth,
                 "addr": addr,
                 "authority": "四川省天府三街公安局",
-                "valid_from": "1999-08-06",
-                "valid_to": "2999-08-06",
+                "validFrom": "1999-08-06",
+                "validTo": "2999-08-06",
                 "education": const.__getrandomvalue__("education"),
                 "marriage": const.__getrandomvalue__("marriage"),
-                "addr_info": {},
+                "addrInfo": {},
                 "contact": [
                     {
                         "addr": addr,
                         "mobile": "18675523992",
                         "name": name + "测试一",
-                        "relate_type": const.__getrandomvalue__("relate_type")
+                        "relateType": const.__getrandomvalue__("relateType")
                     },
                     {
                         "addr": addr,
                         "mobile": "18675523992",
                         "name": name + "测试二",
-                        "relate_type": const.__getrandomvalue__("relate_type")
+                        "relateType": const.__getrandomvalue__("relateType")
                     }
                 ],
                 "contact_info": [
                     {
                         "info": "kkkkkk",
-                        "type": const.__getrandomvalue__("contact_type")
+                        "type": const.__getrandomvalue__("contactType")
                     }
                 ],
-                "third_info": {"third_party": "third_party", "open_id": "open_id"},
-                "work_info": {
-                    "corp_name": "公司名称",
-                    "corp_tel": "07551883162",
-                    "corp_type": const.__getrandomvalue__("corp_type"),
+                "thirdInfo": {"third_party": "third_party", "open_id": "open_id"},
+                "workInfo": {
+                    "corpName": "公司名称",
+                    "corpTel": "07551883162",
+                    "corpType": const.__getrandomvalue__("corpType"),
                     "duty": const.__getrandomvalue__("duty"),
                     "industry": const.__getrandomvalue__("industry"),
-                    "month_income": const.__getrandomvalue__("month_income"),
-                    "work_place": "四川省天府三街",
-                    "work_status": const.__getrandomvalue__("work_status"),
-                    "work_year": const.__getrandomvalue__("work_year")
+                    "monthIncome": const.__getrandomvalue__("monthIncome"),
+                    "workPlace": "四川省天府三街",
+                    "workStatus": const.__getrandomvalue__("workStatus"),
+                    "workYear": const.__getrandomvalue__("workYear")
                 }
                 }
-    receive_card = {"bank_code": "28283123",
-                    "bank_name": "中国银行",
-                    "card_no": card_no,
+    receive_card = {"bankCode": "28283123",
+                    "bankName": "中国银行",
+                    "cardNo": card_no,
                     "mobile": mobile,
                     "name": name,
                     "type": const.__getrandomvalue__("type"),
-                    "union_mark": const.__getrandomvalue__("union_mark")}
+                    "unionMark": const.__getrandomvalue__("unionMark")}
     repay_card = receive_card
     repayer = borrower
-    data = {"channel_code": "xy channel",
-            "sub_channel_code": "sub-xy-channel",
-            "loan_order_no": loan_order_no,
-            "product_no": "xy_1",
-            "int_calc_type": "eq_prin_int",
-            "total_term": 12,
-            "loan_usage": "购物",
-            "year_rate": 0.18,
-            "apply_amt": 500000,
+    data = {"channelCode": "xy channel",
+            "subChannelCode": "sub-xy-channel",
+            "productNo": "xy_1",
+            "IntCalcType": const.__getrandomvalue__("intCalcType"),
+            "loanUsage": "购物",
+            "yearRate": 0.18,
             "callback": "http://119.27.173.43/mock/apis/callback"
             }
     data["applyAmt"] = apply_amt
@@ -121,14 +118,16 @@ class Incoming(BaseApi):
         :return: {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,"url": self.r.url}
         """
         try:
+            self.set_base()
             self.set_data()
             self.r = requests.post(url=self.base_url + self.url, json=self.base_param)
             key = self.r.json().get("data")
             if key is not None:
                 key = key.get("asset_no")
-                if key is None:
+                if key is not None:
                     Redis().set_key(key, self.base_param)
                     Redis().get_r().lpush("assets", key)
+            logging.info("请求参数：%s\n响应参数：%s",self.base_param,self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
                     "url": self.r.url}
         except Exception as e:
