@@ -160,13 +160,14 @@ class TestCases:
                                    result=self.compare.equal(self.applyAmt, response.get("assets")[0].get("totalAmt"))
                                    )
             i = 0
-            while i < 100:
+            while i < 50:
                 asset_status = response.get("assets")[0].get("assetStatus")
                 if asset_status == "repay":
                     break
                 time.sleep(10)
                 result = get_asset.post()
                 response = result.get("response")["data"]
+                i += 1
         except Exception as e:
             logging.error("资产查询：%s", repr(e))
             self.report.add_result(name="资产查询",
