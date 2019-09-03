@@ -40,7 +40,7 @@ class BaseApi:
             self.r = requests.post(url=self.base_url + self.url, json=self.base_param)
             a = datetime.now()
             self.use_time = (a - b).microseconds / 1000
-            logging.info("请求参数：%s\n响应参数：%s", self.base_param, self.r.json())
+            logging.info("请求地址：%s\n请求参数：%s\n响应参数：%s", self.url,self.base_param, self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
                     "url": self.r.url, "use_time": self.use_time}
         except Exception as e:

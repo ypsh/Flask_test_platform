@@ -130,7 +130,7 @@ class Incoming(BaseApi):
                 if key is not None:
                     Redis().set_key(key, self.base_param)
                     Redis().get_r().lpush("assets", key)
-            logging.info("请求参数：%s\n响应参数：%s", self.base_param, self.r.json())
+            logging.info("请求地址：%s\n请求参数：%s\n响应参数：%s", self.url, self.base_param, self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
                     "url": self.r.url, "use_time": self.use_time}
         except Exception as e:
