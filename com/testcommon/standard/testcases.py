@@ -57,7 +57,8 @@ class TestCases:
             use_time = "10"
             create_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             report_bass_path = self.path + '/com/testcommon/standard/common/report_base.html'
-            report_path = self.path + ('/static/standard/report_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.html')
+            report_path = self.path + ('/static/standard/report_' + self.project_code + "_" + datetime.now().strftime(
+                '%Y%m%d%H%M%S') + '.html')
             i = 1
             for case in report:
                 case = eval(case)
