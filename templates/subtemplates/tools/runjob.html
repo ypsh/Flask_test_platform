@@ -1,150 +1,154 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-    <div class="col-md-12 column">
+<div class="col-md-12 column">
 
-        <div class="row clearfix" style="height: 100px;">
-            <div class="col-md-12 column">
-                <div class="log-container">
-                    <form class="form-inline" role="form">
-                        <div class="form-group">
-                            <label for="daterange">跑批截止日期：</label>
-                            <input type="text" class="form-control" id="daterange" name="aes" style="width:300px"
-                                   placeholder="选择日期" ondblclick="clearval(this)">
-                            <label for="submit" style="padding-right:30px;"></label>
-                            <!-- <label for="createrselect">数据源</label>
-                            <input type="text" class="form-control" id="datasource" list="datasourcelist" onchange="setbuttondisplay()"
-                                ondblclick="clearval(this)" />
+    <div class="row clearfix" style="height: 100px;">
+        <div class="col-md-12 column">
+            <div class="log-container">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <label for="daterange">跑批截止日期：</label>
+                        <input type="text" class="form-control" id="daterange" name="aes" style="width:300px"
+                            placeholder="选择日期" ondblclick="clearval(this)">
+                        <label for="submit" style="padding-right:30px;"></label>
+                        <label for="createrselect">数据源</label>
+                        <input type="text" class="form-control" id="datasource" list="datasourcelist"
+                            onchange="setbuttondisplay()" ondblclick="clearval(this)" />
 
-                            <datalist id="datasourcelist">
-                                <option value="all">济时雨</option>
-                                <option value="huabei">花呗</option>
-                            </datalist> -->
-                            <input id="date" type="button" class="btn btn-default" onclick="get_coredate()"
-                                   value="获取当前核心时间"/>
-                            <input id="submit" type="button" class="btn btn-default" onclick="run_job()" value="提交"/>
+                        <datalist id="datasourcelist">
+                            <option value="xy">自营</option>
+                            <option value="360">360</option>
+                        </datalist>
+                        <input id="date" type="button" class="btn btn-default" onclick="get_coredate()"
+                            value="获取当前核心时间" />
+                        <input id="submit" type="button" class="btn btn-default" onclick="run_job()" value="提交" />
 
-                        </div>
-                    </form>
+                    </div>
+                </form>
 
-                </div>
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-12 column">
-                <div class="log-container" id='logs'>
-                    <p id='1'></p>
-                    <p id='2'></p>
-                    <p id='3'></p>
-                    <p id='4'></p>
-                    <p id='5'></p>
-                    <p id='6'></p>
-                    <p id='7'></p>
-                    <p id='9'></p>
-                    <p id='9'></p>
-                    <p id='10'></p>
-                    <p id='11'></p>
-                    <p id='12'></p>
-                    <p id='13'></p>
-                    <p id='14'></p>
-                    <p id='15'></p>
-
-                </div>
             </div>
         </div>
     </div>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="log-container" id='logs'>
+                <p id='1'></p>
+                <p id='2'></p>
+                <p id='3'></p>
+                <p id='4'></p>
+                <p id='5'></p>
+                <p id='6'></p>
+                <p id='7'></p>
+                <p id='9'></p>
+                <p id='9'></p>
+                <p id='10'></p>
+                <p id='11'></p>
+                <p id='12'></p>
+                <p id='13'></p>
+                <p id='14'></p>
+                <p id='15'></p>
 
-    <script>
-        // function datarange() {
-        //     $('#daterange').daterangepicker({
-        //         "singleDatePicker": true, //单日历
+            </div>
+        </div>
+    </div>
+</div>
 
-        //         "showISOWeekNumbers": false,
-        //         "timePicker": false,
-        //         "showDropdowns": true,
-        //         "timePicker24Hour": true,
-        //         "timePickerSeconds": false,
-        //         "linkedCalendars": true,
-        //         "parentEl": "daterange",
-        //         "locale": {
-        //             format: 'YYYY-MM-DD',
-        //             applyLabel: "应用",
-        //             cancelLabel: "取消",
-        //             resetLabel: "重置",
-        //         }
-        //         // "startDate": starttime(),
-        //         // "endDate": starttime
-        //     }, function (start, end, label) {
+<script>
+    // function datarange() {
+    //     $('#daterange').daterangepicker({
+    //         "singleDatePicker": true, //单日历
 
-        //     });
-        //     $('#daterange').val('');
-        // }
-        function run_job() {
-            get_log();
-            toastr.info("已提交");
-            $("#submit").attr("disabled", true);
-            $.ajax({
-                url: "/apis/runjob",
-                type: "post",
-                timeout: 1000,
-                data: {"date": $('#daterange').val(), "type": $('#datasource').val()},
-                success: function (data) {
+    //         "showISOWeekNumbers": false,
+    //         "timePicker": false,
+    //         "showDropdowns": true,
+    //         "timePicker24Hour": true,
+    //         "timePickerSeconds": false,
+    //         "linkedCalendars": true,
+    //         "parentEl": "daterange",
+    //         "locale": {
+    //             format: 'YYYY-MM-DD',
+    //             applyLabel: "应用",
+    //             cancelLabel: "取消",
+    //             resetLabel: "重置",
+    //         }
+    //         // "startDate": starttime(),
+    //         // "endDate": starttime
+    //     }, function (start, end, label) {
 
-                }
-            })
-        }
+    //     });
+    //     $('#daterange').val('');
+    // }
+    function run_job() {
+        get_log();
+        toastr.info("已提交");
+        $("#submit").attr("disabled", true);
+        $.ajax({
+            url: "/apis/runjob",
+            type: "post",
+            timeout: 1000,
+            data: {
+                "date": $('#daterange').val(),
+                "project_code": $('#datasource').val()
+            },
+            success: function (data) {
 
-        function get_coredate() {
-            $("#date").attr("disabled", true)
-            $.post("/apis/runjob", {
-                type: 'getdate'
-            }, function (data) {
-                if (data) {
-                    $('#daterange').val(data.date)
-                    $("#date").attr("disabled", false)
-
-                } else {
-                    toastr.error("获取核心时间失败")
-                    $("#date").attr("disabled", false)
-                }
-            })
-        }
-
-        var timeid;
-
-        function get_log() {
-            timeid = window.setInterval(function () {
-                $.get("/apis/runjob", function (data) {
-                    for (var i = 0; i < 15; i++) {
-                        item = '#' + (i + 1)
-                        if (data["logs"][i]) {
-                            $(item).text('')
-                        }
-                        $(item).text(data["logs"][i])
-                    }
-                    if (data["run_status"] === "finish") {
-                        toastr.info("执行完成");
-                        stop_clearInterval();
-                        $("#submit").attr("disabled", false);
-                        get_coredate();
-                    }
-
-                })
-            }, 1000);
-        }
-
-        function stop_clearInterval() {
-            if (timeid) {
-                window.clearInterval(timeid)
             }
-        }
-    </script>
+        })
+    }
 
-    <script type="text/javascript">
-        window.onload = function () {
-            $("ul.submenu#tool").css("display", "block");
-            $("a#runjob").parent().addClass("active");
-            // datarange();
-        };
-    </script>
+    function get_coredate() {
+        $("#date").attr("disabled", true)
+        $.post("/apis/runjob", {
+            type: 'getdate',
+            project_code: $('#datasource').val()
+        }, function (data) {
+            if (data) {
+                $('#daterange').val(data.date)
+                $("#date").attr("disabled", false)
+
+            } else {
+                toastr.error("获取核心时间失败")
+                $("#date").attr("disabled", false)
+            }
+        })
+    }
+
+    var timeid;
+
+    function get_log() {
+        timeid = window.setInterval(function () {
+            $.get("/apis/runjob", function (data) {
+                for (var i = 0; i < 15; i++) {
+                    item = '#' + (i + 1)
+                    if (data["logs"][i]) {
+                        $(item).text('')
+                    }
+                    $(item).text(data["logs"][i])
+                }
+                if (data["run_status"] === "finish") {
+                    toastr.info("执行完成");
+                    stop_clearInterval();
+                    $("#submit").attr("disabled", false);
+                    get_coredate();
+                }
+
+            })
+        }, 1000);
+    }
+
+    function stop_clearInterval() {
+        if (timeid) {
+            window.clearInterval(timeid)
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        $("ul.submenu#tool").css("display", "block");
+        $("a#runjob").parent().addClass("active");
+        // datarange();
+    };
+</script>
 {% endblock %}

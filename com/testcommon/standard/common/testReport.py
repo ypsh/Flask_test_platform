@@ -28,6 +28,7 @@ class TestReport:
         result["result"] = kwargs.get("result")
         result["param"] = kwargs.get("param")
         result["response"] = kwargs.get("response")
+        result["use_time"] = kwargs.get("use_time")
         Redis().add_list_item("test_result", result)
 
     def get_result(self):

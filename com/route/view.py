@@ -58,6 +58,8 @@ def tools(name):
         return render_template('subtemplates/tools/bankcode.html', name=name)
     elif name == 'accesslog':
         return render_template('subtemplates/tools/accesslog.html', name=name)
+    elif name == 'smokingtest':
+        return render_template('subtemplates/tools/smokingtest.html', name=name)
     elif name == 'runjob':
         return render_template('subtemplates/tools/runjob.html', name=name)
     elif name == 'callback':

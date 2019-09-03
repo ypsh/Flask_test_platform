@@ -1,0 +1,425 @@
+<div class="content" id="container">
+
+    <div class="col-md-9 column" id="right">
+        <div id="body">
+            <div class="col-md-12 column">
+                <div class="page-header">
+                    <h1>
+                        测试报告 ~ <span id="headername"></span>
+                    </h1>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-5 column">
+                    <h2 style="margin-top:0px">
+                        概述
+                    </h2>
+                    <p id='testtime'>
+                        测试时间：
+                    </p>
+                    <p id="usetime">
+                        耗时：
+                    </p>
+                    <p id="passratep">
+                        通过率：
+                    </p>
+                    <p id="pass">
+                        通过：
+                    </p>
+                    <p id="fail">
+                        失败：
+                    </p>
+                    <p id="total">
+                        总计：
+                    </p>
+                </div>
+                <div class="col-md-5 column">
+                    <div id='passrate' style="widows: 200px; height:250px;">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel" style="text-align:center;">用例详情</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div style="padding-left:10%;padding-right: 10%">
+                                 <p><b><span>接口名</span></b><span>：</span>
+                                    <span id='span_api_name'></span></p>
+                                <p><b><span>用例名称</span></b><span>：</span>
+                                    <span id='span_case_name'></span></p>
+                                <p><b><span>请求地址</span></b><span>：</span>
+                                    <span id='span_request_path' style="word-wrap: break-word"></span></p>
+                                <p><b><span>耗时</span></b><span>：</span>
+                                    <span id='span_use_time'></span><span> ms</span></p>
+                                <p><b><span>执行结果</span></b><span>：</span>
+                                    <span id='span_result'></span></p>
+                                <hr />
+                                <p><b><span>请求参数</span></b><span>：</span></p>
+                                <p><span id="span_input"></span></p>
+                                <hr />
+                                <p><b><span>响应参数</span></b><span>：</span></p>
+                                <p><span id="span_headers"></span></p>
+                                <hr />
+                                <p><b><span>期望结果</span></b><span>：</span></p>
+                                <p><span id="span_excpt"></span></p>
+                                <hr />
+                                <p><b><span>实际结果</span></b><span>：</span></p>
+                                <p><span id="span_real"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                window.onload = function () {
+                    $("ul.submenu#autotest").css("display", "block");
+                    $("a#report").parent().addClass("active");
+                    load();
+                    rate_pass();
+                    table_click();
+                    set_summary();
+                };
+                window.onresize = function () {
+                    myChart1.resize();
+                }
+            </script>
+            <style>
+                #table {
+                    table-layout: fixed;
+                }
+
+                .wordwrap {
+                    text-overflow: ellipsis;
+                    /*超长部分以...代替*/
+                    white-space: nowrap;
+                    /*文本不换行*/
+                    max-width: 200px;
+                    /*最大宽度*/
+                    overflow: hidden;
+                    /*超长部分隐藏掉*/
+                }
+
+                /* 超长文字单元格省略号显示 */
+                td:hover {
+                    text-overflow: ellipsis;
+                    /*超长部分以...代替*/
+                    white-space: unset;
+                    /*文本不换行*/
+                    max-width: 200px;
+                    /*最大宽度*/
+                    overflow: hidden;
+                    /*超长部分隐藏掉*/
+                }
+            </style>
+            <script type="text/javascript">
+                var performancedata = []
+                var tabledata = []
+                var pass = 0
+                var fail = 0
+                var myChart1 = ''
+
+                function rate_pass() {
+                    var dom = document.getElementById("passrate");
+                    myChart1 = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    option = {
+                        title: {
+                            text: '通过率',
+                            x: 'left'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        series: [{
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: '80%',
+                            center: ['40%', '50%'],
+                            data: [{
+                                    value: pass,
+                                    name: '通过'
+                                },
+                                {
+                                    value: fail,
+                                    name: '失败'
+                                },
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }]
+                    };;
+                    if (option && typeof option === "object") {
+                        myChart1.setOption(option, true);
+                    }
+                }
+
+                //获取测试报告数据
+                var details = ''
+
+                function table_click() {
+                    $('#table tbody').on('click', 'tr', function () {
+                        var id = $('td', this).eq(0).text();
+                        $("#detail").modal();
+                        var result = search_info(details, id)
+                        if (result) {
+                            $("#span_api_name").text(result[1])
+                            $("#span_case_name").text(result[2])
+                            $("#span_request_path").text(result[8])
+                            $("#span_use_time").text(result[5])
+                            $("#span_headers").text(result[7])
+                            $("#span_result").text(result[4])
+                            $("#span_input").text(result[6])
+                            $("#span_excpt").text(result[2])
+                            $("#span_real").text(result[7])
+
+                        }
+
+                    });
+                }
+
+                function search_info(details, id) {
+                    for (var i = 0; i < details.length; i++) {
+                        if (details[i][0] == id) {
+                            return details[i]
+                        }
+                    }
+                }
+                var table;
+
+                function load() {
+                    table = $('#table').DataTable({
+                        lengthChange: true,
+                        data: tabledata,
+                        select: true,
+                        columns: [{
+                                title: "序号",
+                                width: '5%'
+                            },
+                            {
+                                title: "用例名",
+                                width: '20%'
+                            },
+                            {
+                                title: "期望值",
+                                width: '20%'
+                            },
+                            {
+                                title: "实际值"
+                            },
+                            {
+                                title: "验证结果",
+                                width: '6%'
+                            },
+                            {
+                                title: "耗时（ms）",
+                                width: '8%'
+                            }
+                        ],
+                        aLengthMenu: [
+                            [-1, 30, 50, 100],
+                            ["All", "30条", "50条", "100条"]
+                        ]
+
+                    });
+                }
+                //动态刷新表格
+                function initDetailTableData(dataArr) { //dataArr是表格数据数组，和初始化配置需一样的结构
+                    var table = $('#table').dataTable();
+                    var oSettings = table.fnSettings(); //这里获取表格的配置
+                    table.fnClearTable(this); //动态刷新关键部分语句，先清空数据
+                    for (var i = 0, l = dataArr.length; i < l; i++) {
+                        table.oApi._fnAddData(oSettings, dataArr[i]); //这里添加一行数据
+                    }
+                    oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+                    table.fnDraw(); //绘制表格
+                }
+
+                function set_summary() {
+                    $('#headername').text('2019-09-03 16:17:03')
+                    $('#testtime').text('测试时间：' + '2019-09-03 16:17:03');
+                    $('#usetime').text('耗时：' + use_time + ' 秒');
+                    $('#passratep').text('通过率：' + ((pass / (pass + fail)) * 100).toFixed(2) + '%');
+                    $('#pass').text('通过：' + pass + ' 条');
+                    $('#fail').text('失败：' + fail + ' 条');
+                    $('#total').text('总计：' + (pass + fail) + ' 条');
+                }
+
+                tabledata = [[1, '查询合同', '合同已生成', "[{'contract_name': 'xy-PDF-8-I201909031616100823120.pdf', 'contract_no': 'H201909031616100852209', 'evidence_id': '', 'file_name': 'xy-PDF-8-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_electronic_loan_receipt', 'template_name': '电子借款借据', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/omcgmevsir7itvion0o1eiepsibfefccjskpfue8.pdf'}, {'contract_name': 'xy-PDF-7-I201909031616100823120.pdf', 'contract_no': 'H201909031616100859933', 'evidence_id': '', 'file_name': 'xy-PDF-7-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_loan_contract', 'template_name': '个人消费类借款合同', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/2iyex9j6avzbbqeab4qhbahwdftad3pcqiz5kmy7.pdf'}]", 'False', '245.87'], [2, '查询结清金额', '结清金额正确', "{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'cleanup_amt': 2422420, 'grace_int_amt': 0, 'int_amt': 2420, 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 2420000}", 'True', '247.338'], [3, '查询拖欠金额', '拖欠金额利息正确2420.0', "{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_int_int_amt': 0, 'repay_ovd_prin_int_amt': 0, 'repay_plans': [{'end_date': 1520611200000, 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_pirn_int_amt': 0, 'repay_prin_amt': 806667, 'term_no': 1}], 'repay_prin_amt': 806667}", 'True', '247.339'], [4, '查询还款计划', '还款计划应还总金额正确', "{'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 2422420, 'repay_plans': [{'end_date': 1520611200000, 'grace_due_date': 1520870400000, 'grace_int_amt': 0, 'int_amt': 2420, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0001', 'start_date': 1518192000000, 'term_no': 1, 'term_status': 'unclear', 'total_amt': 809087, 'total_int_amt': 36300}, {'end_date': 1523289600000, 'grace_due_date': 1523548800000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0002', 'start_date': 1520611200000, 'term_no': 2, 'term_status': 'unclear', 'total_amt': 806667, 'total_int_amt': 24200}, {'end_date': 1525881600000, 'grace_due_date': 1525968000000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806666, 'repay_plan_no': 'A201909031615594727066-0003', 'start_date': 1523289600000, 'term_no': 3, 'term_status': 'unclear', 'total_amt': 806666, 'total_int_amt': 12100}]}", 'True', '249.701'], [5, '跑批测试', '批处理成功', '2018-02-12 00:00:00', 'True', 'None'], [6, '查询二类户', '二类户账号正确', '6228443155798950145', 'True', '273.317'], [7, '查询二类户', '绑定银行卡正确', '6228443155798950145', 'True', '273.317'], [8, '资产查询', '申请金额正确', '2420000', 'True', '267.52'], [9, '资产查询', '日利率正确', '0.0005', 'True', '267.52'], [10, '资产查询', '期数正确', '3', 'True', '267.52'], [11, '进件测试', '资产编号非空', "{'code': 0, 'data': {'asset_no': 'A201909031615594727066'}, 'msg': 'success', 'success': True, 'timestamp': 1567498559404}", 'True', '337.098']]
+                details = [[1, '查询合同', '合同已生成', "[{'contract_name': 'xy-PDF-8-I201909031616100823120.pdf', 'contract_no': 'H201909031616100852209', 'evidence_id': '', 'file_name': 'xy-PDF-8-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_electronic_loan_receipt', 'template_name': '电子借款借据', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/omcgmevsir7itvion0o1eiepsibfefccjskpfue8.pdf'}, {'contract_name': 'xy-PDF-7-I201909031616100823120.pdf', 'contract_no': 'H201909031616100859933', 'evidence_id': '', 'file_name': 'xy-PDF-7-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_loan_contract', 'template_name': '个人消费类借款合同', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/2iyex9j6avzbbqeab4qhbahwdftad3pcqiz5kmy7.pdf'}]", 'False', '245.87', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161702552076', 'timestamp': 1567498622.14199, 'data': {'busiKey': 'A201909031615594727066'}}", "{'busi_key': 'A201909031615594727066', 'contracts': [{'contract_name': 'xy-PDF-8-I201909031616100823120.pdf', 'contract_no': 'H201909031616100852209', 'evidence_id': '', 'file_name': 'xy-PDF-8-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_electronic_loan_receipt', 'template_name': '电子借款借据', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/omcgmevsir7itvion0o1eiepsibfefccjskpfue8.pdf'}, {'contract_name': 'xy-PDF-7-I201909031616100823120.pdf', 'contract_no': 'H201909031616100859933', 'evidence_id': '', 'file_name': 'xy-PDF-7-I201909031616100823120.pdf', 'sign_at': '2019-09-03 16:16:20', 'status': 'success', 'template_code': 'bank_loan_contract', 'template_name': '个人消费类借款合同', 'template_version': 0, 'url': 'http://172.16.0.13:8019/download/2iyex9j6avzbbqeab4qhbahwdftad3pcqiz5kmy7.pdf'}], 'finish_time': 1567498580000, 'flow_code': 'bank_loan', 'status': 'success'}", 'http://172.16.0.13:8015/contract/get'], [2, '查询结清金额', '结清金额正确', "{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'cleanup_amt': 2422420, 'grace_int_amt': 0, 'int_amt': 2420, 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 2420000}", 'True', '247.338', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161700404141', 'timestamp': 1567498620.891318, 'data': {'assetStatus': 'A201909031615594727066', 'certNo': '632722195212132573'}}", "{'assets': [{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'cleanup_amt': 2422420, 'grace_int_amt': 0, 'int_amt': 2420, 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 2420000}], 'core_sys_date': 1518364800000}", 'http://172.16.0.13:8012/repay/get-cleanup-amt'], [3, '查询拖欠金额', '拖欠金额利息正确2420.0', "{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_int_int_amt': 0, 'repay_ovd_prin_int_amt': 0, 'repay_plans': [{'end_date': 1520611200000, 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_pirn_int_amt': 0, 'repay_prin_amt': 806667, 'term_no': 1}], 'repay_prin_amt': 806667}", 'True', '247.339', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161659325010', 'timestamp': 1567498619.640202, 'data': {'assetStatus': 'A201909031615594727066', 'certNo': '632722195212132573'}}", "{'assets': [{'actual_loan_date': 1567498600000, 'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_int_int_amt': 0, 'repay_ovd_prin_int_amt': 0, 'repay_plans': [{'end_date': 1520611200000, 'repay_amt': 809087, 'repay_grace_int_amt': 0, 'repay_int_amt': 2420, 'repay_ovd_pirn_int_amt': 0, 'repay_prin_amt': 806667, 'term_no': 1}], 'repay_prin_amt': 806667}], 'core_sys_date': 1518364800000, 'total_repay_amt': 809087}", 'http://172.16.0.13:8012/repay/get-overdue-amt'], [4, '查询还款计划', '还款计划应还总金额正确', "{'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 2422420, 'repay_plans': [{'end_date': 1520611200000, 'grace_due_date': 1520870400000, 'grace_int_amt': 0, 'int_amt': 2420, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0001', 'start_date': 1518192000000, 'term_no': 1, 'term_status': 'unclear', 'total_amt': 809087, 'total_int_amt': 36300}, {'end_date': 1523289600000, 'grace_due_date': 1523548800000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0002', 'start_date': 1520611200000, 'term_no': 2, 'term_status': 'unclear', 'total_amt': 806667, 'total_int_amt': 24200}, {'end_date': 1525881600000, 'grace_due_date': 1525968000000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806666, 'repay_plan_no': 'A201909031615594727066-0003', 'start_date': 1523289600000, 'term_no': 3, 'term_status': 'unclear', 'total_amt': 806666, 'total_int_amt': 12100}]}", 'True', '249.701', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161658765210', 'timestamp': 1567498618.385772, 'data': {'certNo': '632722195212132573', 'assetNo': 'A201909031615594727066'}}", "{'assets': [{'asset_no': 'A201909031615594727066', 'loan_order_no': '201909031615371334', 'ovd_day': 0, 'ovd_status': 'normal', 'repay_amt': 2422420, 'repay_plans': [{'end_date': 1520611200000, 'grace_due_date': 1520870400000, 'grace_int_amt': 0, 'int_amt': 2420, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0001', 'start_date': 1518192000000, 'term_no': 1, 'term_status': 'unclear', 'total_amt': 809087, 'total_int_amt': 36300}, {'end_date': 1523289600000, 'grace_due_date': 1523548800000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806667, 'repay_plan_no': 'A201909031615594727066-0002', 'start_date': 1520611200000, 'term_no': 2, 'term_status': 'unclear', 'total_amt': 806667, 'total_int_amt': 24200}, {'end_date': 1525881600000, 'grace_due_date': 1525968000000, 'grace_int_amt': 0, 'int_amt': 0, 'ovd_day': 0, 'ovd_prin_int_amt': 0, 'ovd_status': 'normal', 'prin_amt': 806666, 'repay_plan_no': 'A201909031615594727066-0003', 'start_date': 1523289600000, 'term_no': 3, 'term_status': 'unclear', 'total_amt': 806666, 'total_int_amt': 12100}]}], 'core_sys_date': 1518364800000, 'total_repay_amt': 2422420}", 'http://172.16.0.13:8012/repay/get-repay-plan'], [5, '跑批测试', '批处理成功', '2018-02-12 00:00:00', 'True', 'None', '2018-02-10 00:00:00', "{'message': '跑批完成', 'success': True}", ''], [6, '查询二类户', '二类户账号正确', '6228443155798950145', 'True', '273.317', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161646193113', 'timestamp': 1567498606.390446, 'data': {'certNo': '632722195212132573'}}", "{'bind_card': [{'bank_code': '28283123', 'bank_name': '中国银行', 'card_no': '6228443155798950145', 'card_type': 'debit', 'inner_bank': 0, 'union_mark': 1}], 'card_no': '62190903167236568', 'core_account_no': '9999', 'frozen_amt': 0, 'mobile': '13548997061', 'name': '养林', 'node_no': '测试开户机构', 'usable_amt': 2420000}", 'http://172.16.0.13:8012/cardii/get'], [7, '查询二类户', '绑定银行卡正确', '6228443155798950145', 'True', '273.317', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161646193113', 'timestamp': 1567498606.390446, 'data': {'certNo': '632722195212132573'}}", "{'bind_card': [{'bank_code': '28283123', 'bank_name': '中国银行', 'card_no': '6228443155798950145', 'card_type': 'debit', 'inner_bank': 0, 'union_mark': 1}], 'card_no': '62190903167236568', 'core_account_no': '9999', 'frozen_amt': 0, 'mobile': '13548997061', 'name': '养林', 'node_no': '测试开户机构', 'usable_amt': 2420000}", 'http://172.16.0.13:8012/cardii/get'], [8, '资产查询', '申请金额正确', '2420000', 'True', '267.52', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161602391782', 'timestamp': 1567498562.111956, 'data': {'certNo': '632722195212132573', 'assetNo': 'A201909031615594727066'}}", "{'assets': [{'accruedStatus': 'accrual', 'applyTime': 1567498559000, 'assetClass': '1', 'assetId': 24, 'assetNo': 'A201909031615594727066', 'assetStatus': 'grant', 'borrower': 'T201909031615594177828', 'callBackUrl': 'http://119.27.173.43/mock/apis/callback', 'contractNo': 'A201909031615594727066', 'createBy': 'system', 'createTime': 1567498559000, 'dayRate': 0.0005, 'endDate': 1525881600000, 'fromSystem': 'auto_test', 'graceDay': 3, 'graceIntAmt': 0, 'graceType': 'day', 'intAmt': 0, 'intCalcType': 'eq_prin_amt', 'loanOrderNo': '201909031615371334', 'loanUsage': '购物', 'monthRate': 0.015, 'ovdDay': 0, 'ovdDayRate': 0.00055, 'ovdMonthRate': 0.0165, 'ovdPrinIntAmt': 0, 'ovdStatus': 'normal', 'ovdYearRate': 0.198, 'paidGraceIntAmt': 0, 'paidIntAmt': 0, 'paidOvdPrinIntAmt': 0, 'paidPrinAmt': 0, 'prinAmt': 2420000, 'productNo': 'xy_1', 'projectCode': 'xy', 'repayer': 'T201909031615594177828', 'startDate': 1518192000000, 'totalAmt': 2420000, 'totalExemptAmt': 0, 'totalIntAmt': 72600, 'totalPaidAmt': 0, 'totalTerm': 3, 'updateTime': 1567498559000, 'yearRate': 0.18}]}", 'http://172.16.0.13:8012/asset/get'], [9, '资产查询', '日利率正确', '0.0005', 'True', '267.52', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161602391782', 'timestamp': 1567498562.111956, 'data': {'certNo': '632722195212132573', 'assetNo': 'A201909031615594727066'}}", "{'assets': [{'accruedStatus': 'accrual', 'applyTime': 1567498559000, 'assetClass': '1', 'assetId': 24, 'assetNo': 'A201909031615594727066', 'assetStatus': 'grant', 'borrower': 'T201909031615594177828', 'callBackUrl': 'http://119.27.173.43/mock/apis/callback', 'contractNo': 'A201909031615594727066', 'createBy': 'system', 'createTime': 1567498559000, 'dayRate': 0.0005, 'endDate': 1525881600000, 'fromSystem': 'auto_test', 'graceDay': 3, 'graceIntAmt': 0, 'graceType': 'day', 'intAmt': 0, 'intCalcType': 'eq_prin_amt', 'loanOrderNo': '201909031615371334', 'loanUsage': '购物', 'monthRate': 0.015, 'ovdDay': 0, 'ovdDayRate': 0.00055, 'ovdMonthRate': 0.0165, 'ovdPrinIntAmt': 0, 'ovdStatus': 'normal', 'ovdYearRate': 0.198, 'paidGraceIntAmt': 0, 'paidIntAmt': 0, 'paidOvdPrinIntAmt': 0, 'paidPrinAmt': 0, 'prinAmt': 2420000, 'productNo': 'xy_1', 'projectCode': 'xy', 'repayer': 'T201909031615594177828', 'startDate': 1518192000000, 'totalAmt': 2420000, 'totalExemptAmt': 0, 'totalIntAmt': 72600, 'totalPaidAmt': 0, 'totalTerm': 3, 'updateTime': 1567498559000, 'yearRate': 0.18}]}", 'http://172.16.0.13:8012/asset/get'], [10, '资产查询', '期数正确', '3', 'True', '267.52', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161602391782', 'timestamp': 1567498562.111956, 'data': {'certNo': '632722195212132573', 'assetNo': 'A201909031615594727066'}}", "{'assets': [{'accruedStatus': 'accrual', 'applyTime': 1567498559000, 'assetClass': '1', 'assetId': 24, 'assetNo': 'A201909031615594727066', 'assetStatus': 'grant', 'borrower': 'T201909031615594177828', 'callBackUrl': 'http://119.27.173.43/mock/apis/callback', 'contractNo': 'A201909031615594727066', 'createBy': 'system', 'createTime': 1567498559000, 'dayRate': 0.0005, 'endDate': 1525881600000, 'fromSystem': 'auto_test', 'graceDay': 3, 'graceIntAmt': 0, 'graceType': 'day', 'intAmt': 0, 'intCalcType': 'eq_prin_amt', 'loanOrderNo': '201909031615371334', 'loanUsage': '购物', 'monthRate': 0.015, 'ovdDay': 0, 'ovdDayRate': 0.00055, 'ovdMonthRate': 0.0165, 'ovdPrinIntAmt': 0, 'ovdStatus': 'normal', 'ovdYearRate': 0.198, 'paidGraceIntAmt': 0, 'paidIntAmt': 0, 'paidOvdPrinIntAmt': 0, 'paidPrinAmt': 0, 'prinAmt': 2420000, 'productNo': 'xy_1', 'projectCode': 'xy', 'repayer': 'T201909031615594177828', 'startDate': 1518192000000, 'totalAmt': 2420000, 'totalExemptAmt': 0, 'totalIntAmt': 72600, 'totalPaidAmt': 0, 'totalTerm': 3, 'updateTime': 1567498559000, 'yearRate': 0.18}]}", 'http://172.16.0.13:8012/asset/get'], [11, '进件测试', '资产编号非空', "{'code': 0, 'data': {'asset_no': 'A201909031615594727066'}, 'msg': 'success', 'success': True, 'timestamp': 1567498559404}", 'True', '337.098', "{'system': 'auto_test', 'projectCode': 'xy', 'reqId': '20190903161558310407', 'timestamp': 1567498558.764163, 'data': {'channelCode': 'xy channel', 'subChannelCode': 'sub-xy-channel', 'productNo': 'xy_1', 'IntCalcType': 'eq_prin_amt', 'loanUsage': '购物', 'yearRate': 0.18, 'callback': 'http://119.27.173.43/mock/apis/callback', 'applyAmt': 2420000, 'totalTerm': 3, 'loanOrderNo': '201909031615371334', 'attachments': [{'hash': 'oio283123898d182399dkfv', 'name': 'bank_account_service_protocol', 'type': 'bank_idcard_head_photo', 'url': 'http://test.com'}, {'hash': 'oio283123898d182399dkfv', 'name': 'bank_idcard_front_crop', 'type': 'bank_personal_info_authorize', 'url': 'http://test.com'}], 'borrower': {'name': '养林', 'certNo': '632722195212132573', 'mobile': '13548997061', 'channelCode': 'xy-auto_test', 'subChannelCode': 'xy-channel-sub', 'refCode': 'ti122', 'lbs': '四川省太平洋保险金融大厦', 'gender': 'F', 'nation': '乌孜别克族', 'birth': '1952-12-13', 'addr': '四川省成都市天府三街', 'authority': '四川省天府三街公安局', 'validFrom': '1999-08-06', 'validTo': '2999-08-06', 'education': 'junior_college', 'marriage': 'married', 'addrInfo': {}, 'contact': [{'addr': '四川省成都市天府三街', 'mobile': '18675523992', 'name': '养林测试一', 'relateType': 'parents'}, {'addr': '四川省成都市天府三街', 'mobile': '18675523992', 'name': '养林测试二', 'relateType': 'colleagues'}], 'contact_info': [{'info': 'kkkkkk', 'type': 'alipay'}], 'thirdInfo': {'third_party': 'third_party', 'open_id': 'open_id'}, 'workInfo': {'corpName': '公司名称', 'corpTel': '07551883162', 'corpType': 'unknown', 'duty': 0, 'industry': 10, 'monthIncome': '6001_12000', 'workPlace': '四川省天府三街', 'workStatus': 'unknown', 'workYear': 'unknown'}}, 'receiveCard': {'bankCode': '28283123', 'bankName': '中国银行', 'cardNo': '6228443155798950145', 'mobile': '13548997061', 'name': '养林', 'type': 'debit', 'unionMark': 1}, 'repayer': {'name': '养林', 'certNo': '632722195212132573', 'mobile': '13548997061', 'channelCode': 'xy-auto_test', 'subChannelCode': 'xy-channel-sub', 'refCode': 'ti122', 'lbs': '四川省太平洋保险金融大厦', 'gender': 'F', 'nation': '乌孜别克族', 'birth': '1952-12-13', 'addr': '四川省成都市天府三街', 'authority': '四川省天府三街公安局', 'validFrom': '1999-08-06', 'validTo': '2999-08-06', 'education': 'junior_college', 'marriage': 'married', 'addrInfo': {}, 'contact': [{'addr': '四川省成都市天府三街', 'mobile': '18675523992', 'name': '养林测试一', 'relateType': 'parents'}, {'addr': '四川省成都市天府三街', 'mobile': '18675523992', 'name': '养林测试二', 'relateType': 'colleagues'}], 'contact_info': [{'info': 'kkkkkk', 'type': 'alipay'}], 'thirdInfo': {'third_party': 'third_party', 'open_id': 'open_id'}, 'workInfo': {'corpName': '公司名称', 'corpTel': '07551883162', 'corpType': 'unknown', 'duty': 0, 'industry': 10, 'monthIncome': '6001_12000', 'workPlace': '四川省天府三街', 'workStatus': 'unknown', 'workYear': 'unknown'}}, 'repayCard': {'bankCode': '28283123', 'bankName': '中国银行', 'cardNo': '6228443155798950145', 'mobile': '13548997061', 'name': '养林', 'type': 'debit', 'unionMark': 1}}}", "{'code': 0, 'data': {'asset_no': 'A201909031615594727066'}, 'msg': 'success', 'success': True, 'timestamp': 1567498559404}", 'http://172.16.0.13:8012/grant/incoming']]
+                pass = 10
+                fail = 1
+                use_time = 10
+            </script>
+        </div>
+    </div>
+</div>
+
+
+
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    /* body {
+        background: #f0f0f0;
+    } */
+
+    /* .content {
+        width: 260px;
+        margin: 20px auto;
+    } */
+    #container {
+        padding-top: 10px;
+        display: flex;
+        min-height: 100vh;
+        /* border: 2px solid black; */
+    }
+
+    #left {
+        padding-top: 1%;
+        position: static;
+        border-right: 2px solid #080808;
+        width: 14%;
+        min-width: 10px;
+        max-width: 200px;
+        resize: both;
+        overflow: hidden;
+        background-color: #080808;
+        /*必须设置overflow属性，才能使resize生效*/
+    }
+
+    #right {
+        padding-top: 0%;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+    }
+
+    #right>div {
+        padding-left: 5%;
+        width: calc(100vw - 300px);
+        min-width: 300px;
+    }
+
+    .filterinput {
+        background-color: rgba(249, 244, 244, 0);
+        border-radius: 15px;
+        width: 90%;
+        height: 30px;
+        border: thin solid #FFF;
+        text-indent: 0.5em;
+        font-weight: bold;
+        color: #FFF;
+    }
+
+    #route a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+</style>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    /* body {
+        background: #f0f0f0;
+    } */
+
+    /* .content {
+        width: 260px;
+        margin: 20px auto;
+    } */
+
+    .filterinput {
+        background-color: rgba(249, 244, 244, 0);
+        border-radius: 15px;
+        width: 90%;
+        height: 30px;
+        border: thin solid #FFF;
+        text-indent: 0.5em;
+        font-weight: bold;
+        color: #FFF;
+    }
+
+    #route a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+    }
+</style>
+<style>
+    *[type="hover"]:hover {
+        background: #ff2775;
+        border-bottom-left-radius: 15px;
+        -webkit-border-bottom-left-radius: 15px;
+        -moz-border-bottom-left-radius: 15px;
+        -o-border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        -webkit-border-bottom-right-radius: 15px;
+        -moz-border-bottom-right-radius: 15px;
+        -o-border-bottom-right-radius: 15px;
+        transition: 1s all;
+        -webkit-transition: 1s all;
+        -moz-transition: 1s all;
+        -o-transition: 1s all;
+    }
+
+    div[id='body'],
+    td {
+        font-size: 10px !important
+    }
+
+    div[id='body'],
+    th {
+        font-size: 10px !important
+    }
+
+    body {
+        font-size: 10px !important
+    }
+</style>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.19/js/dataTables.bootstrap.js"></script>
+
+<link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/datatables/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">

@@ -68,7 +68,7 @@ class Redis:
         self.r.lpush(key, valus)
 
     def get_list(self, key):
-        self.r.getrange(key, 0, self.r.llen(key))
+        return self.r.lrange(key, 0, self.r.llen(key))
 
     def get_r(self):
         return self.r

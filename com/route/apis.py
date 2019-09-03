@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import json
 import os
+from concurrent.futures.thread import ThreadPoolExecutor
 from urllib.parse import quote
 
 from flask import Blueprint, request, make_response, send_from_directory
@@ -9,6 +10,7 @@ from werkzeug.utils import secure_filename
 
 from com.common.aesUtil import AesUtil
 from com.common.excelUtil import ExcelOperate
+from com.common.getIP import SaveIP
 from com.common.getPath import Path
 from com.common.uploadUtil import FileUpload
 from com.service.api_manger import ApiMangerOperate
@@ -16,6 +18,7 @@ from com.service.dashboard import ContCase
 from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
 from com.service.jmeter import Jmeter
+from com.service.makedata import MakdeData
 from com.service.mock import ServiceOperate
 from com.service.runjob import Run_job
 from com.service.set_url import Set_url
@@ -24,9 +27,10 @@ from com.service.test_case import TestCaseOperate
 from com.service.test_report import TestReportOperate
 from com.service.timeTask import TaskOperate
 from com.service.user import UserOperate
-from com.service.makedata import MakdeData
-from com.common.getIP import SaveIP
 from com.testcommon.api_test.apitest import APITest
+from com.testcommon.standard.testcases import TestCases
+
+executor = ThreadPoolExecutor(1)
 
 apis = Blueprint('apis', __name__)
 api = Api(apis)
@@ -385,6 +389,13 @@ class files_manager(Resource):
                 return {'message': True, 'data': result}
             else:
                 return {'message': False, 'data': None}
+        elif self.ags['filepath'] == 'standard':
+            path = 'static/standard'
+            result = FilesManager().get_api_report(path)
+            if result:
+                return {'message': True, 'data': result}
+            else:
+                return {'message': False, 'data': None}
         else:
             path = 'static/filesmanager'
         if self.ags['type'] == 'get':
@@ -431,6 +442,9 @@ class files_manager(Resource):
             return {'message': data}
         elif request.json['type'] == 'apireport':
             data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/api_report')
+            return {'message': data}
+        elif request.json['type'] == 'smokingreport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/standard')
             return {'message': data}
         elif request.json['type'] == 'remark':
             data = FilesManager().batch_update(json.loads(request.json['data']))
@@ -562,11 +576,13 @@ class accesslog(Resource):
         except:
             return {'message': False}
 
+
 class runjob(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('date', type=str)
         self.parser.add_argument('type', type=str)
+        self.parser.add_argument('project_code', type=str)
         self.ags = self.parser.parse_args()
 
     def get(self):
@@ -575,14 +591,30 @@ class runjob(Resource):
     def post(self):
         try:
             if self.ags.type == 'getdate':
-                date = Run_job().get_date()
-                return {'date':str(date)}
+                date = Run_job().get_date(self.ags.project_code)
+                return {'date': str(date)}
             else:
-                result = Run_job().run(self.ags.date)
+                result = Run_job().run(to_date=self.ags.date, project_code=self.ags.project_code)
             return result
         except:
             return {'message': False}
 
+
+class run_smokingtest(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('project_code', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        return {"status": TestCases().get_status()}
+
+    def post(self):
+        try:
+            result = TestCases().run_test(self.ags.project_code)
+            return {"sucess": True, "message": "后台处理中，请稍后刷新查看报告"}
+        except:
+            return {'message': False}
 
 
 api.add_resource(user, '/user')
@@ -605,3 +637,4 @@ api.add_resource(jmeter, '/jmeter')
 api.add_resource(apitest, '/apitest')
 api.add_resource(accesslog, '/accesslog')
 api.add_resource(runjob, '/runjob')
+api.add_resource(run_smokingtest, '/runsmoking')

@@ -110,8 +110,8 @@ class Incoming(BaseApi):
     data["repayCard"] = repay_card
     param = data
 
-    def set_cert_no(self,certNO):
-        self.cert_no=certNO
+    def set_cert_no(self, certNO):
+        self.cert_no = certNO
 
     def post(self):
         """
@@ -120,20 +120,23 @@ class Incoming(BaseApi):
         try:
             self.set_base()
             self.set_data()
+            b = datetime.now()
             self.r = requests.post(url=self.base_url + self.url, json=self.base_param)
+            a = datetime.now()
+            self.use_time = (a - b).microseconds / 1000
             key = self.r.json().get("data")
             if key is not None:
                 key = key.get("asset_no")
                 if key is not None:
                     Redis().set_key(key, self.base_param)
                     Redis().get_r().lpush("assets", key)
-            logging.info("请求参数：%s\n响应参数：%s",self.base_param,self.r.json())
+            logging.info("请求参数：%s\n响应参数：%s", self.base_param, self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
-                    "url": self.r.url}
+                    "url": self.r.url, "use_time": self.use_time}
         except Exception as e:
             logging.error("请求报错：%s \n %s", repr(e), self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
-                    "url": self.r.url}
+                    "url": self.r.url, "use_time": self.use_time}
 
 
 if __name__ == '__main__':

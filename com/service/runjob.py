@@ -20,13 +20,13 @@ class Run_job:
         self.mySession = self.session()
         self.result = self.mySession.query(CoreSysDate)
 
-    def get_core_sys_date(self):
+    def get_core_sys_date(self,project_code):
         return datetime.datetime.strptime(
-            str(self.result.filter(CoreSysDate.project_code == "xy").first().core_sys_date),
+            str(self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_date),
             "%Y-%m-%d")
 
-    def get_status(self):
-        self.status = self.result.filter(CoreSysDate.project_code == "xy").first().core_sys_status
+    def get_status(self,project_code):
+        self.status = self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_status
         return self.status
 
     def tear_down(self):
@@ -55,13 +55,13 @@ class Run_job:
         dataSet = self.r.lrange("logs", 0, 1000)
         return {"logs": dataSet[0:14][::-1], "run_status": self.r.get("run_status")}
 
-    def run(self, to_date):
+    def run(self, to_date, project_code="xy"):
         try:
-            if self.r.get("run_status") is None or self.r.get("run_status") == "running":
+            if self.r.get("run_status") == "running":
                 return {"message": "正在跑批，请待会重试"}
             else:
                 self.r.set("run_status", "running")
-            cur_day = self.get_core_sys_date()
+            cur_day = self.get_core_sys_date(project_code)
             try:
                 end_day = datetime.datetime.strptime(to_date, "%Y-%m-%d")
             except:
@@ -72,18 +72,18 @@ class Run_job:
             self.r.lpush("logs", log)
             logging.info(log)
             while cur_day < end_day:
-                cur_day = self.get_core_sys_date()
-                cur_status = self.get_status()
+                cur_day = self.get_core_sys_date(project_code)
+                cur_status = self.get_status(project_code)
                 if cur_status == "normal" and temp != cur_day:
-                    request = requests.post("http://172.16.0.13:8013/start")
+                    request = requests.post("http://172.16.0.13:8013/start?projectCode=" + project_code)
                     log = "批处理日期：" + str(cur_day.strftime("%Y-%m-%d"))
                     self.r.lpush("logs", log)
                     logging.info(log)
                     temp = cur_day
                     i = 0
                 time.sleep(3)
-                cur_day = self.get_core_sys_date()
-                cur_status = self.get_status()
+                cur_day = self.get_core_sys_date(project_code)
+                cur_status = self.get_status(project_code)
                 log = "查询批处理状态:" + str(cur_day) + cur_status
                 self.r.lpush("logs", log)
                 logging.info(log)
@@ -104,8 +104,8 @@ class Run_job:
         finally:
             self.tear_down()
 
-    def get_date(self):
-        date = self.get_core_sys_date().strftime("%Y-%m-%d")
+    def get_date(self,project_code):
+        date = self.get_core_sys_date(project_code).strftime("%Y-%m-%d")
         # self.tear_down()
         return str(date)
 
