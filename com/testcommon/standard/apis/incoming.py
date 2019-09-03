@@ -15,7 +15,7 @@ class Incoming(BaseApi):
     url = '/grant/incoming'
     apply_amt = random.randint(10, 1000) * 10000
     total_term = random.randint(1, 4) * 3
-    loan_order_no = datetime.now().strftime('%Y%m%d%H%M%S') + str(random.randint(0, 9999))
+    loan_order_no = datetime.now().strftime('%Y%m%d%H%M%S') + str(random.randint(8888, 99999))
     cert_no = Generate().generating_ID_card()
     name = Generate().generating_nanme()
     mobile = Generate().generating_phone_number()
