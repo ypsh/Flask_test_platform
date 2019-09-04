@@ -56,7 +56,8 @@ class ApiMangerOperate:
     def update_apis(self, *args):
         try:
             for item in args:
-                result = api_manager.query.filter_by(api_name=item['api_name']).first()
+                result = api_manager.query.filter_by(
+                    api_name=item['api_name']).first()
                 headers = JsonOperate().header_to_json(item.headers)
                 if result:
                     result.api_name = item.api_name
@@ -115,7 +116,8 @@ class ApiMangerOperate:
             return None
 
     def get_model_list(self):
-        result = api_manager.query.with_entities(api_manager.model).distinct().all()
+        result = api_manager.query.with_entities(
+            api_manager.model).distinct().all()
         models = []
         if result:
             for item in result:
@@ -129,7 +131,8 @@ class ApiMangerOperate:
                 # for i in range(2,item['Sheet'])
                 for n in item:
                     for i in range(2, item[n].__len__()):
-                        result = api_manager.query.filter_by(api_name=item[n][i][1]).first()
+                        result = api_manager.query.filter_by(
+                            api_name=item[n][i][1]).first()
                         headers = JsonOperate().header_to_json(item[n][i][5])
                         if result:
                             result.api_name = item[n][i][1]
@@ -144,7 +147,8 @@ class ApiMangerOperate:
                             result.update_time = datetime.datetime.now()
                             db.session.flush()
                         else:
-                            headers = JsonOperate().header_to_json(item[n][i][5])
+                            headers = JsonOperate().header_to_json(
+                                item[n][i][5])
                             admin = api_manager(
                                 api_name=item[n][i][1],
                                 model=item[n][i][2],

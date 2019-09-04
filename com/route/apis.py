@@ -604,9 +604,12 @@ class run_smokingtest(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('project_code', type=str)
+        self.parser.add_argument('type', type=str)
         self.ags = self.parser.parse_args()
 
     def get(self):
+        if self.ags.type =="log":
+            return TestCases().loadDataSet(20)
         return {"status": TestCases().get_status()}
 
     def post(self):

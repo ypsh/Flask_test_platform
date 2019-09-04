@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import configparser
 import logging.config
+import os
 import time
 import traceback
 from datetime import datetime
@@ -48,6 +49,14 @@ class TestCases:
                 return file_lines
         except Exception as e:
             logging.error(traceback.format_exc())
+
+    def loadDataSet(self, line, splitChar="\t"):
+        fileName = "schedule_times.txt"
+        file = os.path.join(Path().get_current_path(), "myapp.log")
+        dataSet = []
+        with open(file) as fr:
+            dataSet = fr.readlines()[-line:]
+        return {"data": dataSet}
 
     def output_report(self, report):
         try:

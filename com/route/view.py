@@ -1,20 +1,22 @@
 # -*- coding: UTF-8 -*-
 import configparser
 import json
+import os
 
-from flask import Blueprint, send_from_directory
+from flask import Blueprint
 from flask import render_template
 from flask import request
 
+from com.common.getIP import SaveIP
 from com.common.getPath import Path
 from com.service.mock import ServiceOperate
 from config.extendlink import get_titles
-from com.common.getIP import SaveIP
 
 view = Blueprint('view', __name__)
 
 conf = configparser.ConfigParser()
 conf.read(Path().get_current_path() + '/config/config.ini', encoding='utf-8')
+globalspath = Path().get_current_path()
 
 
 @view.route('/')
@@ -113,3 +115,15 @@ def task():
 def file_manager():
     SaveIP().save(request.headers, page='filesmanager')
     return render_template('subtemplates/filesmanager/filesmanager.html')
+
+
+@view.route('/log/<string:log_name>')
+def log(log_name):
+    body = []
+    log_file = os.path.join(globalspath, 'myapp.log')
+    if os.path.exists(log_file):
+        body = open(log_file, 'r').readlines()
+    else:
+        pass
+    html_body = '\n'.join('<p>%s</p>' % line for line in body)
+    return render_template('subtemplates/tools/logs.html', body=html_body, job_id=log_name)
