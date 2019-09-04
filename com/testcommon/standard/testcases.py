@@ -2,6 +2,7 @@
 import configparser
 import logging.config
 import time
+import traceback
 from datetime import datetime
 
 from com.common.compareUtil import Compare
@@ -46,7 +47,7 @@ class TestCases:
                 file_lines = file.readlines()
                 return file_lines
         except Exception as e:
-            logging.error(repr(e))
+            logging.error(traceback.format_exc())
 
     def output_report(self, report):
         try:
@@ -88,7 +89,7 @@ class TestCases:
                     f.write(line)
             logging.info('测试报告生成路径：' + report_path)
         except Exception as e:
-            logging.error("生成报告错误：%s", repr(e))
+            logging.error("生成报告错误：%s", traceback.format_exc())
 
     def test_incoming(self):
         incoming = Incoming()
@@ -114,10 +115,10 @@ class TestCases:
                                    use_time=result.get("use_time")
                                    )
         except Exception as e:
-            logging.error("资产进件：%s", repr(e))
+            logging.error("资产进件：%s", traceback.format_exc())
             self.report.add_result(name="进件测试",
                                    url=result.get("url"),
-                                   actual="进件失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -169,10 +170,10 @@ class TestCases:
                 response = result.get("response")["data"]
                 i += 1
         except Exception as e:
-            logging.error("资产查询：%s", repr(e))
+            logging.error("资产查询：%s", traceback.format_exc())
             self.report.add_result(name="资产查询",
                                    url=result.get("url"),
-                                   actual="资产查询失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -205,10 +206,10 @@ class TestCases:
                                    result=self.compare.not_equal(None, response.get("bind_card")[0].get("card_no"))
                                    )
         except Exception as e:
-            logging.error("查询二类户：%s", repr(e))
+            logging.error("查询二类户：%s", traceback.format_exc())
             self.report.add_result(name="查询二类户",
                                    url=result.get("url"),
-                                   actual="查询二类户失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -232,10 +233,10 @@ class TestCases:
                                    result=self.compare.equal(2, len(response.get("contracts")))
                                    )
         except Exception as e:
-            logging.error("合同查询：%s", repr(e))
+            logging.error("合同查询：%s", traceback.format_exc())
             self.report.add_result(name="合同查询",
                                    url=result.get("url"),
-                                   actual="合同查询失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -257,7 +258,7 @@ class TestCases:
                                    result=self.compare.not_equal(start_day, end_day)
                                    )
         except Exception as e:
-            logging.error("批处理测试：%s", repr(e))
+            logging.error("批处理测试：%s", traceback.format_exc())
 
     def test_get_repay_plan(self):
         get_repay_plan = GetRepayPlan()
@@ -277,10 +278,10 @@ class TestCases:
                                                              response.get("total_repay_amt"))
                                    )
         except Exception as e:
-            logging.error("查询还款计划：%s", repr(e))
+            logging.error("查询还款计划：%s", traceback.format_exc())
             self.report.add_result(name="查询还款计划",
                                    url=result.get("url"),
-                                   actual="查询还款计划失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -305,10 +306,10 @@ class TestCases:
                                                              response.get("assets")[0].get("repay_int_amt"))
                                    )
         except Exception as e:
-            logging.error(repr(e))
+            logging.error(traceback.format_exc())
             self.report.add_result(name="查询拖欠金额",
                                    url=result.get("url"),
-                                   actual="查询拖欠金额失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
@@ -333,10 +334,10 @@ class TestCases:
                                                              response.get("assets")[0].get("cleanup_amt"))
                                    )
         except Exception as e:
-            logging.error(repr(e))
+            logging.error(traceback.format_exc())
             self.report.add_result(name="查询结清金额",
                                    url=result.get("url"),
-                                   actual="查询结清金额失败",
+                                   actual=str(traceback.format_exc()),
                                    result=False,
                                    param=result.get("param"),
                                    response=result.get("response"),
