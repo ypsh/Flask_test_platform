@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import datetime
 import logging
 import time
 
@@ -6,7 +7,7 @@ import requests
 from dominate.tags import a
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime
+
 from com.common.redisUtil import Redis
 from com.service.model import CoreSysDate
 
@@ -21,7 +22,7 @@ class Run_job:
         self.result = self.mySession.query(CoreSysDate)
 
     def get_core_sys_date(self,project_code):
-        return datetime.strptime(
+        return datetime.datetime.strptime(
             str(self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_date),
             "%Y-%m-%d")
 
