@@ -103,6 +103,7 @@
                 if (data["run_status"] === "finish") {
                     toastr.info("执行完成");
                     stop_clearInterval();
+                    $("#logs").append("批处理结束.....")
                     $("#submit").attr("disabled", false);
                     get_coredate();
                 }
