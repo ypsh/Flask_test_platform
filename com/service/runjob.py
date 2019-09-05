@@ -4,7 +4,6 @@ import logging
 import time
 
 import requests
-from dominate.tags import a
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -21,12 +20,12 @@ class Run_job:
         self.mySession = self.session()
         self.result = self.mySession.query(CoreSysDate)
 
-    def get_core_sys_date(self,project_code):
+    def get_core_sys_date(self, project_code):
         return datetime.datetime.strptime(
             str(self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_date),
             "%Y-%m-%d")
 
-    def get_status(self,project_code):
+    def get_status(self, project_code):
         self.status = self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_status
         return self.status
 
@@ -77,7 +76,8 @@ class Run_job:
                 cur_status = self.get_status(project_code)
                 if cur_status == "normal" and temp != cur_day:
                     request = requests.post("http://172.16.0.13:8013/start?projectCode=" + project_code)
-                    log = "批处理日期：" + str(cur_day.strftime("%Y-%m-%d"))
+                    log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " 批处理日期：" + str(
+                        cur_day.strftime("%Y-%m-%d"))
                     self.r.lpush("logs", log)
                     logging.info(log)
                     temp = cur_day
@@ -85,7 +85,8 @@ class Run_job:
                 time.sleep(3)
                 cur_day = self.get_core_sys_date(project_code)
                 cur_status = self.get_status(project_code)
-                log = "查询批处理状态:" + str(cur_day.strftime("%Y-%m-%d")) + " "+cur_status
+                log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " 查询批处理状态:" + str(
+                    cur_day.strftime("%Y-%m-%d")) + " " + cur_status
                 self.r.lpush("logs", log)
                 logging.info(log)
 
@@ -105,7 +106,7 @@ class Run_job:
         finally:
             self.tear_down()
 
-    def get_date(self,project_code):
+    def get_date(self, project_code):
         date = self.get_core_sys_date(project_code).strftime("%Y-%m-%d")
         # self.tear_down()
         return str(date)
