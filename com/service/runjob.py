@@ -84,7 +84,7 @@ class Run_job:
                 time.sleep(3)
                 cur_day = self.get_core_sys_date(project_code)
                 cur_status = self.get_status(project_code)
-                log = "查询批处理状态:" + str(cur_day) + cur_status
+                log = "查询批处理状态:" + str(cur_day) + " "+cur_status
                 self.r.lpush("logs", log)
                 logging.info(log)
 

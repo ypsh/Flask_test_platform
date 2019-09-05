@@ -154,7 +154,7 @@ if __name__ == '__main__':
             t.set_project(["xy", "360"][random.randint(0, 1)])
             # t.set_cert_no("522731196408032123")
             result = t.post()
-            # print(result)
+            print(result)
 
             if result.get("response").get("data").get("asset_no") is None:
                 print("失败：%s",result.get("response"))
@@ -168,7 +168,7 @@ if __name__ == '__main__':
     for asset in assets:
        r.delete_key(asset)
 
-    times = 1000
+    times = 1
     i = 0
     semaphore = threading.BoundedSemaphore(50)
     while i < times:
