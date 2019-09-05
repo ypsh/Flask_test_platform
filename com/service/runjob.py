@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
-import datetime
 import logging
 import time
 
 import requests
+from dominate.tags import a
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from datetime import datetime
 from com.common.redisUtil import Redis
 from com.service.model import CoreSysDate
 
@@ -21,7 +21,7 @@ class Run_job:
         self.result = self.mySession.query(CoreSysDate)
 
     def get_core_sys_date(self,project_code):
-        return datetime.datetime.strptime(
+        return datetime.strptime(
             str(self.result.filter(CoreSysDate.project_code == project_code).first().core_sys_date),
             "%Y-%m-%d")
 
@@ -84,7 +84,7 @@ class Run_job:
                 time.sleep(3)
                 cur_day = self.get_core_sys_date(project_code)
                 cur_status = self.get_status(project_code)
-                log = "查询批处理状态:" + str(cur_day) + " "+cur_status
+                log = "查询批处理状态:" + str(cur_day.strftime("%Y-%m-%d")) + " "+cur_status
                 self.r.lpush("logs", log)
                 logging.info(log)
 
