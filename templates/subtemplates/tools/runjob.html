@@ -55,30 +55,6 @@
 </div>
 
 <script>
-    // function datarange() {
-    //     $('#daterange').daterangepicker({
-    //         "singleDatePicker": true, //单日历
-
-    //         "showISOWeekNumbers": false,
-    //         "timePicker": false,
-    //         "showDropdowns": true,
-    //         "timePicker24Hour": true,
-    //         "timePickerSeconds": false,
-    //         "linkedCalendars": true,
-    //         "parentEl": "daterange",
-    //         "locale": {
-    //             format: 'YYYY-MM-DD',
-    //             applyLabel: "应用",
-    //             cancelLabel: "取消",
-    //             resetLabel: "重置",
-    //         }
-    //         // "startDate": starttime(),
-    //         // "endDate": starttime
-    //     }, function (start, end, label) {
-
-    //     });
-    //     $('#daterange').val('');
-    // }
     function run_job() {
         get_log();
         toastr.info("已提交");
@@ -119,12 +95,10 @@
     function get_log() {
         timeid = window.setInterval(function () {
             $.get("/apis/runjob", function (data) {
-                for (var i = 0; i < 15; i++) {
-                    item = '#' + (i + 1)
-                    if (data["logs"][i]) {
-                        $(item).text('')
-                    }
-                    $(item).text(data["logs"][i])
+                $("#logs").empty()
+                for (var i = 0, len = data.logs.length; i < len; i++) {
+                    str = "<p>" + data.logs[i] + "</p>"
+                    $("#logs").append(str)
                 }
                 if (data["run_status"] === "finish") {
                     toastr.info("执行完成");

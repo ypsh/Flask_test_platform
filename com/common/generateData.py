@@ -107,7 +107,7 @@ class Generate:
             city = self.district_code[random_city]['code']  # 地区项
             age = random.randint(self.min_age, self.max_age)
             id = city + str(age)  # 年份项
-            da = date.today() + timedelta(days=random.randint(1, 366))  # 月份和日期项
+            da = date.today() + timedelta(days=random.randint(1, 365))  # 月份和日期项
             id = id + da.strftime('%m%d')
             sex = self.get_sequentiancode()
             id = id + str(sex)
