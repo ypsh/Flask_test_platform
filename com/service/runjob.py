@@ -54,7 +54,7 @@ class Run_job:
         #         if str(line).find("runjob") != -1:
         #             dataSet.append(line)
         dataSet = self.r.lrange("logs", 0, 1000)
-        return {"logs": dataSet[0:40][::-1], "run_status": self.r.get("run_status")}
+        return {"logs": dataSet[0:25][::-1], "run_status": self.r.get("run_status")}
 
     def run(self, to_date, project_code="xy"):
         try:
