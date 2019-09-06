@@ -168,7 +168,7 @@ if __name__ == '__main__':
     for asset in assets:
        r.delete_key(asset)
 
-    times = 1
+    times = 2
     i = 0
     semaphore = threading.BoundedSemaphore(50)
     while i < times:

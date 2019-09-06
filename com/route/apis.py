@@ -14,6 +14,7 @@ from com.common.getIP import SaveIP
 from com.common.getPath import Path
 from com.common.uploadUtil import FileUpload
 from com.service.api_manger import ApiMangerOperate
+from com.service.asset import Asset
 from com.service.dashboard import ContCase
 from com.service.executeCase import ExecuteCase
 from com.service.files_manger import FilesManager
@@ -608,7 +609,7 @@ class run_smokingtest(Resource):
         self.ags = self.parser.parse_args()
 
     def get(self):
-        if self.ags.type =="log":
+        if self.ags.type == "log":
             return TestCases().loadDataSet(20)
         return {"status": TestCases().get_status()}
 
@@ -618,6 +619,28 @@ class run_smokingtest(Resource):
             return {"sucess": True, "message": "后台处理中，请稍后刷新查看报告"}
         except:
             return {'message': False}
+
+
+class get_assets(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('project_code', type=str)
+        self.parser.add_argument('type', type=str)
+        self.parser.add_argument('num', type=str)
+        self.parser.add_argument('asset_no', type=str)
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        if self.ags.type == "detail":
+            return Asset().get_info(self.ags.asset_no)
+        return {"data": eval(Asset().get_assets())}
+
+    def post(self):
+        try:
+            result = Asset().incomming(self.ags.project_code, int(self.ags.num))
+            return result
+        except:
+            return {'sucess': False}
 
 
 api.add_resource(user, '/user')
@@ -641,3 +664,4 @@ api.add_resource(apitest, '/apitest')
 api.add_resource(accesslog, '/accesslog')
 api.add_resource(runjob, '/runjob')
 api.add_resource(run_smokingtest, '/runsmoking')
+api.add_resource(get_assets, '/getassets')
