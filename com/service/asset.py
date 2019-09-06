@@ -58,7 +58,8 @@ AND a.asset_no = "@@@@@@" LIMIT 1
                          "certNo": data[0][3],
                          "cardiiNo": data[0][4],
                          "repayName": data[0][2],
-                         "cardNo": data[0][5]
+                         "cardNo": data[0][5],
+                         "mobile":data[0][7]
                          }}
 
     def incomming(self, project_code, num):
