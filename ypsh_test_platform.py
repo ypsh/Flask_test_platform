@@ -59,7 +59,7 @@ class Main():
 
     def add_admin_view(self):
         print(self.globalspath)
-        self.admin.add_view(FileAdmin(self.globalspath, '', name='后台文件管理'))
+        # self.admin.add_view(FileAdmin(self.globalspath+"/static/filesmanager", '', name='后台文件管理'))
         self.admin.add_view(MyView(name='返回主页', endpoint=''))
         self.admin.add_view(ModelView(User, self.db.session))
         self.admin.add_view(ModelView(Service, self.db.session))
