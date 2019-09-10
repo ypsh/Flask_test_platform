@@ -88,7 +88,7 @@ AND a.asset_no = "@@@@@@" LIMIT 1
 
         times = num
         i = 0
-        semaphore = threading.BoundedSemaphore(50)
+        semaphore = threading.BoundedSemaphore(5)
         while i < times:
             t = threading.Thread(target=run, args=(i, semaphore, project_code))
             t.start()
