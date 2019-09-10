@@ -103,7 +103,7 @@ class Incoming(BaseApi):
                 "yearRate": 0.18,
                 "callback": "http://119.27.173.43/mock/apis/callback"
                 }
-        data["productNo"] = self.project_code + "_" + random.randint(1, 2)
+        data["productNo"] = self.project_code + "_" + str(random.randint(1, 2))
         data["applyAmt"] = apply_amt
         data["totalTerm"] = total_term
         data["assetNo"] = "AUTO" + loan_order_no
