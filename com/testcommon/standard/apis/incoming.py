@@ -97,7 +97,6 @@ class Incoming(BaseApi):
         repayer = borrower
         data = {"channelCode": "xy channel",
                 "subChannelCode": "sub-xy-channel",
-                "productNo": "xy_1",
                 "IntCalcType": const.__getrandomvalue__("intCalcType"),
                 "loanUsage": "购物",
                 "yearRate": 0.18,
