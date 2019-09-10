@@ -25,7 +25,7 @@ class _const:
 
 const = _const()
 # 计息方式
-const.intCalcType = ['eq_prin_int', 'eq_prin_amt']
+const.intCalcType = ['eq_prin_int', 'eq_prin_amt','before_inte_after_prin']
 # 性别
 const.gender = ['F', 'M']
 # 附件类型
