@@ -15,7 +15,6 @@ from com.testcommon.standard.common.dataDictionary import const
 class Incoming(BaseApi):
     url = '/grant/incoming'
 
-
     def set_body(self):
         apply_amt = random.randint(10, 1000) * 10000
         total_term = random.randint(1, 4) * 3
@@ -104,8 +103,10 @@ class Incoming(BaseApi):
                 "yearRate": 0.18,
                 "callback": "http://119.27.173.43/mock/apis/callback"
                 }
+        data["productNo"] = self.project_code + "_" + random.randint(1, 2)
         data["applyAmt"] = apply_amt
         data["totalTerm"] = total_term
+        data["assetNo"] = "AUTO" + loan_order_no
         data["loanOrderNo"] = loan_order_no
         data["attachments"] = attachments
         data["borrower"] = borrower
@@ -113,6 +114,7 @@ class Incoming(BaseApi):
         data["repayer"] = repayer
         data["repayCard"] = repay_card
         self.param = data
+
     def set_cert_no(self, certNO):
         self.cert_no = certNO
 
@@ -157,16 +159,17 @@ if __name__ == '__main__':
             print(result)
 
             if result.get("response").get("data").get("asset_no") is None:
-                print("失败：%s",result.get("response"))
+                print("失败：%s", result.get("response"))
         except Exception as e:
             print(traceback.format_exc())
         finally:
             se.release()
 
-    r =  Redis()
+
+    r = Redis()
     assets = r.get_list("assets")
     for asset in assets:
-       r.delete_key(asset)
+        r.delete_key(asset)
 
     times = 2
     i = 0

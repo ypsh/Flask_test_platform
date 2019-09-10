@@ -75,4 +75,5 @@ class Redis:
 
 
 if __name__ == '__main__':
-    print(Redis().get_key(""))
+    r =Redis()
+    print(r.get_key(""))
