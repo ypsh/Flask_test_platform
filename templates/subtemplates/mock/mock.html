@@ -8,54 +8,54 @@
     <div class="row clearfix" style="padding-top:10px;">
         <table id="table" class="table table-striped table-bordered table-hover" style="width:100%">
             <thead>
-            <tr>
-                <th width="5%">
-                    编号
-                </th>
-                <th width="10%">
-                    服务名
-                </th>
-                <th width="10%">
-                    请求类型
-                </th>
-                <th width="15%">
-                    服务路径
-                </th>
-                <th>
-                    返回数据
-                </th>
-                <th width="10%">
-                    运行状态
-                </th>
-                <th>
-                    创建人
-                </th>
-            </tr>
+                <tr>
+                    <th width="5%">
+                        编号
+                    </th>
+                    <th width="10%">
+                        服务名
+                    </th>
+                    <th width="10%">
+                        请求类型
+                    </th>
+                    <th width="15%">
+                        服务路径
+                    </th>
+                    <th>
+                        返回数据
+                    </th>
+                    <th width="10%">
+                        运行状态
+                    </th>
+                    <th>
+                        创建人
+                    </th>
+                </tr>
             </thead>
             <tfoot>
-            <tr>
-                <th width="5%">
-                    编号
-                </th>
-                <th width="10%">
-                    服务名
-                </th>
-                <th width="10%">
-                    请求类型
-                </th>
-                <th width="15%">
-                    服务路径
-                </th>
-                <th>
-                    返回数据
-                </th>
-                <th width="10%">
-                    运行状态
-                </th>
-                <th>
-                    创建人
-                </th>
-            </tr>
+                <tr>
+                    <th width="5%">
+                        编号
+                    </th>
+                    <th width="10%">
+                        服务名
+                    </th>
+                    <th width="10%">
+                        请求类型
+                    </th>
+                    <th width="15%">
+                        服务路径
+                    </th>
+                    <th>
+                        返回数据
+                    </th>
+                    <th width="10%">
+                        运行状态
+                    </th>
+                    <th>
+                        创建人
+                    </th>
+                </tr>
             </tfoot>
         </table>
     </div>
@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <label for="service_name" class="col-sm-2 control-label">服务名</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="service_name"/>
+                            <input type="text" class="form-control" id="service_name" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -92,7 +92,7 @@
                         <label for="data" class="col-sm-2 control-label">返回数据</label>
                         <div class="col-sm-9">
                             <textarea type="textare" class=" form-control" id="data" rows="10"
-                                      onmouseout="formate_json('data')"></textarea>
+                                onmouseout="formate_json('data')"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -120,6 +120,7 @@
 </div>
 <script>
     var table;
+
     function load() {
         table = $('#table').DataTable({
             language: {
@@ -128,12 +129,12 @@
             lengthChange: true,
             ajax: "/apis/service",
             select: true,
-            columnDefs: [
-                { className: "wordwrap ellipsis-hover", targets: [4] }
-            ],
+            columnDefs: [{
+                className: "wordwrap ellipsis-hover",
+                targets: [4]
+            }],
             dom: 'Bfrtip',
-            buttons: [
-                {
+            buttons: [{
                     text: '新增',
                     action: function () {
                         $("#myModal").modal();
@@ -158,7 +159,7 @@
                 },
                 {
                     'extend': 'copy',
-                    'text': '拷贝数据',//定义导出excel按钮的文字  
+                    'text': '拷贝数据', //定义导出excel按钮的文字  
                     // 'exportOptions': {
                     //     'modifier': {
                     //         'page': 'current'
@@ -167,25 +168,18 @@
                 },
                 {
                     'extend': 'excelHtml5',
-                    'text': '导出excel',//定义导出excel按钮的文字  
+                    'text': '导出excel', //定义导出excel按钮的文字  
                     // 'exportOptions': {
                     //     'modifier': {
                     //         'page': 'current'
                     //     }
                     // }
                 },
-                // {
-                //     text: '导入数据',
-                //     action: function () {
-                //         $("#upload").modal();
-                //     },
-                //     class: "btn-default",
-                // },
-                // 'pageLength',
             ]
 
         });
     }
+
     function delete_mock() {
         $.post("/apis/service", {
             service_name: table.rows(['.selected']).data()[0][1],
@@ -199,6 +193,7 @@
             toastr.info('删除失败')
         })
     }
+
     function update_mock() {
         $('#myModalLabel').text("更新");
         $('#submit').text("更新");
@@ -208,6 +203,7 @@
         $('#service_type').val(table.rows(['.selected']).data()[0][2]);
         $('#data').val(table.rows(['.selected']).data()[0][4]);
     }
+
     function add_mock() {
         $('#myModalLabel').text("新增");
         $('#submit').text("新增");
@@ -222,18 +218,15 @@
         $("#uploadfile").fileinput({
             language: 'zh', //设置语言
             uploadUrl: '/apis/upload', // 后台处理的PHP脚本
-            allowedFileExtensions: ['csv', 'xls', 'xlsx', 'png'],//限制文件上传的类型
+            allowedFileExtensions: ['csv', 'xls', 'xlsx', 'png'], //限制文件上传的类型
             uploadAsync: true,
             showCaption: true,
             showPreview: true, //是否显示预览
             overwriteInitial: false,
-            maxFileSize: 1000,//限制文件上传的大小
+            maxFileSize: 1000, //限制文件上传的大小
             maxFilesNum: 10
         });
     }
-
-
-
 </script>
 <script type="text/javascript">
     window.onload = function () {
@@ -248,10 +241,6 @@
             e.cancleBubble = true;
         }
     });
-
-
-
-
 </script>
 <style>
     #table {
@@ -280,8 +269,5 @@
         overflow: hidden;
         /*超长部分隐藏掉*/
     }
-
-
-
 </style>
 {% endblock %}

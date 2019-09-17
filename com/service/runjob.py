@@ -15,7 +15,7 @@ class Run_job:
 
     def __init__(self):
         self.r = Redis().get_r()
-        self.engine = create_engine("mysql+pymysql://tobuser:ts@123@172.16.0.13/xy_standard_asset?charset=utf8")
+        self.engine = create_engine("mysql+pymysql://tobuser:Ts@2o19_07@172.16.0.7/xy_standard_asset?charset=utf8")
         self.session = sessionmaker(self.engine)
         self.mySession = self.session()
         self.result = self.mySession.query(CoreSysDate)
@@ -39,28 +39,27 @@ class Run_job:
         except:
             pass
 
-    def loadDataSet(self, line, splitChar="\t"):
+    def loadDataSet(self, num, project_code='xy'):
         """
         输入：文件名
         输出：数据集
         描述：从文件读入数据集
         """
-        # fileName = "schedule_times.txt"
-        # file = os.path.join(Path().get_current_path() + "/logs", "myapp.log")
-        # dataSet = []
-        # with open(file) as fr:
-        #     for line in fr.readlines()[-200:]:
-        #         if str(line).find("runjob") != -1:
-        #             dataSet.append(line)
-        dataSet = self.r.lrange("logs", 0, 1000)
-        return {"logs": dataSet[0:25][::-1], "run_status": self.r.get("run_status")}
+        if project_code is None:
+            project_code = "xy"
+        lock_key = project_code + "_run_status"
+        log_key = project_code + "_logs"
+        dataSet = self.r.lrange(log_key, 0, 1000)
+        return {"logs": dataSet[0:25][::-1], "run_status": self.r.get(lock_key)}
 
     def run(self, to_date, project_code="xy"):
         try:
-            if self.r.get("run_status") == "running":
+            self.lock_key = project_code + "_run_status"
+            self.log_key = project_code + "_logs"
+            if self.r.get(self.lock_key) == "running":
                 return {"message": "正在跑批，请待会重试"}
             else:
-                self.r.set("run_status", "running")
+                self.r.set(self.lock_key, "running")
             cur_day = self.get_core_sys_date(project_code)
             try:
                 end_day = datetime.datetime.strptime(to_date, "%Y-%m-%d")
@@ -69,16 +68,22 @@ class Run_job:
             i = 0
             temp = ""
             log = "跑批至：" + str(end_day)
-            self.r.lpush("logs", log)
+            self.r.lpush(self.log_key, log)
             logging.info(log)
             while cur_day < end_day:
                 cur_day = self.get_core_sys_date(project_code)
                 cur_status = self.get_status(project_code)
                 if cur_status == "normal" and temp != cur_day:
-                    request = requests.post("http://172.16.0.13:8013/start?projectCode=" + project_code)
+                    request = requests.post("http://172.16.0.14:8013/start?projectCode=" + project_code)
+                    log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " 批处理接口返回：" + request.text
+                    self.r.lpush(self.log_key, log)
+                    logging.info(log)
+                    if request.text != '':
+                        self.r.set(self.lock_key, "finish")
+                        return {"message": "批处理异常"}
                     log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " 批处理日期：" + str(
                         cur_day.strftime("%Y-%m-%d"))
-                    self.r.lpush("logs", log)
+                    self.r.lpush(self.log_key, log)
                     logging.info(log)
                     temp = cur_day
                     i = 0
@@ -87,20 +92,20 @@ class Run_job:
                 cur_status = self.get_status(project_code)
                 log = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " 查询批处理状态:" + str(
                     cur_day.strftime("%Y-%m-%d")) + " " + cur_status
-                self.r.lpush("logs", log)
+                self.r.lpush(self.log_key, log)
                 logging.info(log)
 
                 i += 1
                 if i > 80:
                     break
             log = "跑批结束"
-            self.r.lpush("logs", log)
+            self.r.lpush(self.log_key, log)
             logging.info(log)
-            self.r.set("run_status", "finish")
+            self.r.set(self.lock_key, "finish")
             self.r.delete("logs")
             return {"message": "跑批完成", "success": True}
         except Exception as e:
-            self.r.set("run_status", "finish")
+            self.r.set(self.lock_key, "finish")
             logging.error(str(e))
             return {"message": "跑批异常", "success": False}
         finally:

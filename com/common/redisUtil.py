@@ -18,8 +18,12 @@ class Redis:
     password = ''
 
     def __init__(self):
-        self.r = redis.Redis(host='localhost', port=6379,
-                             decode_responses=True)  # host是redis主机，需要redis服务端和客户端都启动 redis默认端口是6379
+        self.path = Path().get_current_path()
+        conf = configparser.ConfigParser()
+        conf.read(self.path + '/config/config.ini', encoding='utf-8')
+        self.redis = conf.get('server', 'redis')
+        self.r = redis.Redis(host=self.redis, port=6379,
+                             decode_responses=True, password="ysyhl9d")  # host是redis主机，需要redis服务端和客户端都启动 redis默认端口是6379
 
     def get_nodes(self):
         nodes = []
@@ -75,5 +79,5 @@ class Redis:
 
 
 if __name__ == '__main__':
-    r =Redis()
+    r = Redis()
     print(r.get_key(""))

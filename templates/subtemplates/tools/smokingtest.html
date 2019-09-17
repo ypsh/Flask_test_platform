@@ -27,6 +27,10 @@
             <div>
               <div class="row clearfix">
                 <p style="text-align:right">.</p>
+                <label for="asset_no">查询资产：(双击删除数据)</label>
+                <input type="text" class="form-control" id="asset_no" name="asset_no" style="width:300px"
+                  placeholder="资产编号" ondblclick="clearval(this);get_assets()" onchange="get_assets()">
+                <p style="text-align:right">.</p>
                 <table id="testdata" class="table table-striped table-bordered table-hover" style="width:100%;">
                 </table>
               </div>
@@ -112,20 +116,38 @@
                 <div class="modal-body">
                   <form class="form-horizontal" role="form">
                     <div class="form-group">
-                      <label for="city" class="col-sm-2 control-label">项目</label>
+                      <label for="project" class="col-sm-2 control-label">项目</label>
                       <div class="col-sm-9">
                         <input type="text" class="form-control" id="project" list="datasourcelist" placeholder="选择项目"
                           ondblclick="clearval(this)" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="age" class="col-sm-2 control-label">数量</label>
+                      <label for="number" class="col-sm-2 control-label">数量</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" id="number" placeholder="输入需要进件的数量"
+                        <input type="text" class="form-control" id="number" placeholder="输入需要进件的数量（整数）"
                           ondblclick="clearval(this)" />
                       </div>
                     </div>
-
+                    <div class="form-group">
+                      <label for="totalterm" class="col-sm-2 control-label">期数</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="totalterm" placeholder="输入需期数（整数）"
+                          ondblclick="clearval(this)" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="intcaltype" class="col-sm-2 control-label">计息方式</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="intcaltype" placeholder="输入需计息方式"
+                          list="intcaltypelist" ondblclick="clearval(this)" />
+                        <datalist id="intcaltypelist">
+                          <option value="eq_prin_int">等额本金</option>
+                          <option value="eq_prin_amt">等额本息</option>
+                          <option value="before_inte_after_prin">先息后本</option>
+                        </datalist>
+                      </div>
+                    </div>
                   </form>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭 </button>
@@ -309,7 +331,8 @@
       url: "/apis/getassets",
       type: "get",
       data: {
-        "type": "getasset"
+        "type": "getasset",
+        "asset_no": $('#asset_no').val()
       },
       success: function (result) {
         testdata = result.data
@@ -318,24 +341,11 @@
     })
   }
 
-  // 获取资产详情
-  function get_assets() {
-    $.ajax({
-      url: "/apis/getassets",
-      type: "get",
-      data: {
-        "type": "assets"
-      },
-      success: function (result) {
-        testdata = result.data
-        initDetailTableData(testdata)
-      }
-    })
-  }
+
 
   function table_click() {
-    $('#testdata tbody').on('click', 'tr', function () {
-      var asset_no = $('td', this).eq(1).text();
+    $('#testdata tbody').click(function () {
+      var asset_no = testdata_table.rows(['.selected']).data()[0][1];
       // $("#detail").modal();
       $("#info").modal();
       $.ajax({
@@ -364,7 +374,9 @@
       type: "post",
       data: {
         "num": $('#number').val(),
-        "project_code": $('#project').val()
+        "project_code": $('#project').val(),
+        "totalterm": $('#totalterm').val(),
+        "intcaltype": $('#intcaltype').val()
       },
       success: function (result) {
         if (result.success) {
@@ -403,6 +415,8 @@
     }
     return []
   }
+
+  var timeid
 
   function get_logs() {
     timeid = window.setInterval(function () {

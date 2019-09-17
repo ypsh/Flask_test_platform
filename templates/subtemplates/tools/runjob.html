@@ -14,7 +14,7 @@
                         <label for="submit" style="padding-right:30px;"></label>
                         <label for="createrselect">数据源</label>
                         <input type="text" class="form-control" id="datasource" list="datasourcelist"
-                            onchange="setbuttondisplay()" ondblclick="clearval(this)" />
+                            ondblclick="clearval(this)" />
 
                         <datalist id="datasourcelist">
                             <option value="xy">自营</option>
@@ -68,7 +68,7 @@
                 "project_code": $('#datasource').val()
             },
             success: function (data) {
-
+                toastr.info(data.message);
             }
         })
     }
@@ -94,21 +94,24 @@
 
     function get_log() {
         timeid = window.setInterval(function () {
-            $.get("/apis/runjob", function (data) {
-                $("#logs").empty()
-                for (var i = 0, len = data.logs.length; i < len; i++) {
-                    str = "<p>" + data.logs[i] + "</p>"
-                    $("#logs").append(str)
-                }
-                if (data["run_status"] === "finish") {
-                    toastr.info("执行完成");
-                    stop_clearInterval();
-                    $("#logs").append("批处理结束.....")
-                    $("#submit").attr("disabled", false);
-                    get_coredate();
-                }
+            $.get("/apis/runjob", {
+                    project_code: $('#datasource').val()
+                },
+                function (data) {
+                    $("#logs").empty()
+                    for (var i = 0, len = data.logs.length; i < len; i++) {
+                        str = "<p>" + data.logs[i] + "</p>"
+                        $("#logs").append(str)
+                    }
+                    if (data["run_status"] === "finish") {
+                        toastr.info("执行完成");
+                        stop_clearInterval();
+                        $("#logs").append("批处理结束.....")
+                        $("#submit").attr("disabled", false);
+                        get_coredate();
+                    }
 
-            })
+                })
         }, 1000);
     }
 

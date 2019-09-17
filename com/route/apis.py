@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import json
+import logging
 import os
 from concurrent.futures.thread import ThreadPoolExecutor
 from urllib.parse import quote
@@ -587,7 +588,7 @@ class runjob(Resource):
         self.ags = self.parser.parse_args()
 
     def get(self):
-        return Run_job().loadDataSet(10)
+        return Run_job().loadDataSet(10, self.ags.project_code)
 
     def post(self):
         try:
@@ -628,18 +629,22 @@ class get_assets(Resource):
         self.parser.add_argument('type', type=str)
         self.parser.add_argument('num', type=str)
         self.parser.add_argument('asset_no', type=str)
+        self.parser.add_argument('totalterm', type=str)
+        self.parser.add_argument('intcaltype', type=str)
         self.ags = self.parser.parse_args()
 
     def get(self):
         if self.ags.type == "detail":
             return Asset().get_info(self.ags.asset_no)
-        return {"data": eval(Asset().get_assets())}
+        return {"data": eval(Asset().get_assets(self.ags.asset_no))}
 
     def post(self):
         try:
-            result = Asset().incomming(self.ags.project_code, int(self.ags.num))
+            result = Asset().incomming(self.ags.project_code, int(self.ags.num), self.ags.totalterm,
+                                       self.ags.intcaltype)
             return result
-        except:
+        except Exception as e:
+            logging.error(repr(e))
             return {'sucess': False}
 
 

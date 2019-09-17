@@ -15,9 +15,18 @@ from com.testcommon.standard.common.dataDictionary import const
 class Incoming(BaseApi):
     url = '/grant/incoming'
 
-    def set_body(self):
+    def set_body(self, totalterm=None, intcaltype=None):
+        if totalterm is not None and totalterm != "":
+            total_term = totalterm
+        else:
+            total_term = random.randint(1, 4) * 3
+
+        if intcaltype is not None and intcaltype != "":
+            intcaltype = intcaltype
+        else:
+            intcaltype = const.__getrandomvalue__("intCalcType")
+
         apply_amt = random.randint(10, 1000) * 10000
-        total_term = random.randint(1, 4) * 3
         loan_order_no = datetime.now().strftime('%Y%m%d%H%M%S') + str(random.randint(8888, 99999))
         cert_no = Generate().generating_ID_card()
         name = Generate().generating_nanme()
@@ -97,7 +106,7 @@ class Incoming(BaseApi):
         repayer = borrower
         data = {"channelCode": "xy channel",
                 "subChannelCode": "sub-xy-channel",
-                "IntCalcType": const.__getrandomvalue__("intCalcType"),
+                "IntCalcType": intcaltype,
                 "loanUsage": "购物",
                 "yearRate": 0.18,
                 "callback": "http://119.27.173.43/mock/apis/callback"
@@ -117,13 +126,13 @@ class Incoming(BaseApi):
     def set_cert_no(self, certNO):
         self.cert_no = certNO
 
-    def post(self):
+    def post(self, totalterm=None, intcaltype=None):
         """
         :return: {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,"url": self.r.url}
         """
         try:
             self.set_base()
-            self.set_body()
+            self.set_body(totalterm, intcaltype)
             self.set_data()
             b = datetime.now()
             self.r = requests.post(url=self.base_url + self.url, json=self.base_param)
@@ -131,10 +140,10 @@ class Incoming(BaseApi):
             self.use_time = (a - b).microseconds / 1000
             key = self.r.json().get("data")
             if key is not None:
-                key = key.get("asset_no")
-                if key is not None:
-                    Redis().set_key(key, self.base_param)
-                    Redis().get_r().lpush("assets", key)
+                key = "auto_" + key.get("asset_no")
+                # if key is not None:
+                # Redis().set_key(key, self.base_param)
+                # Redis().get_r().lpush("assets", key)
             logging.info("请求地址：%s\n请求参数：%s\n响应参数：%s", self.url, self.base_param, self.r.json())
             return {"param": self.base_param, "response": self.r.json(), "status": self.r.status_code,
                     "url": self.r.url, "use_time": self.use_time}

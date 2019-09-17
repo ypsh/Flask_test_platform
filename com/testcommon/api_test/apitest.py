@@ -1,18 +1,23 @@
 # -*- coding: UTF-8 -*-
 """完成对Markdown 文件接口测试用例的解析，接口请求机参数校验"""
+import configparser
 import copy
 import logging
 import os
+from datetime import datetime
 
 import requests
-from datetime import datetime
 from faker import Faker
+
 from com.common.getPath import Path
 
 
 class APITest:
     def __init__(self):
         self.path = Path().get_current_path()
+        conf = configparser.ConfigParser()
+        conf.read(self.path + '/config/config.ini', encoding='utf-8')
+        self.server = conf.get('server', 'server')
 
     def read_file(self, path):
         try:
@@ -236,7 +241,7 @@ class APITest:
                             elif str(parameter_type.get(temp[0])).lower() == 'date':
                                 normal_json['data'][temp[0]] = datetime.strptime(temp[1], '%Y-%m-%d')
                         except Exception as e:
-                            logging.info('尝试数据格式转换报错'+repr(e))
+                            logging.info('尝试数据格式转换报错' + repr(e))
                             normal_json['data'][temp[0]] = temp[1]
             return normal_json
         except Exception as e:
@@ -247,7 +252,7 @@ class APITest:
     def output_handle(self, output, response):
         try:
             try:
-                if type(response)==type(str(12)):
+                if type(response) == type(str(12)):
                     response = eval(response)
             except Exception as e:
                 logging.info('请求返回结果非json' + response + repr(e))
@@ -327,7 +332,7 @@ class APITest:
             for item in test_cases['apis']:
                 test_result = {'api_name': '', 'test_cases': []}
                 # 根据模块名称获取host、ip
-                base_url = 'http://172.16.0.13:8012/'
+                base_url = 'http://' + self.server + ':8012/'
                 model_name = test_cases['model_name']
                 service_path = item['service_path']
                 # request_type = item['request_type']
