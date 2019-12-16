@@ -12,8 +12,8 @@ class FilesManager:
     def get_all(self):
         return files_manager.query.all()
 
-    def get_all_by_filepath(self, file_path):
-        return files_manager.query.filter_by(file_path=file_path)
+    def get_all_by_filepath(self, file_path, page, limit):
+        return files_manager.query.filter_by(file_path=file_path).paginate(page, per_page=limit)
 
     def get_file_name(self, id):
         result = files_manager.query.filter_by(id=id).first()
@@ -23,28 +23,28 @@ class FilesManager:
         result = files_manager.query.filter_by(id=id).first()
         return result.file_path
 
-    def get_list(self, file_path):
+    def get_list(self, file_path, page, limit):
         data = []
         try:
-            result = self.get_all_by_filepath(file_path)
+            result = self.get_all_by_filepath(file_path, page, limit)
             if result:
-                for item in result:
+                for item in result.items:
                     size = str(item.file_size / 1024).split('.')
                     if size.__len__() == 2:
                         size = size[0] + size[1][0:1]
                     else:
                         size = size[0]
-                    data.append([item.id,
-                                 item.file_name,
-                                 item.file_type,
-                                 size + ' kb',
-                                 item.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-                                 item.creater,
-                                 item.file_path,
-                                 item.remark])
-                return data
+                    data.append({'id': item.id,
+                                 'filename': item.file_name,
+                                 'type': item.file_type,
+                                 'size': size + ' kb',
+                                 'uploadtime': item.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+                                 'creator': item.creater,
+                                 'filepath': item.file_path,
+                                 'remark': item.remark})
+                return {'data': data, 'total': result.total}
         except Exception as e:
-            logging.error(str(e))
+            logging.error("查询文件列表异常：%s" % str(e))
             return None
 
     def add_file(self, *args):
@@ -80,6 +80,17 @@ class FilesManager:
         except Exception as e:
             db.session.close()
             logging.error(str(e))
+            return False
+
+    def del_item(self, id):
+        try:
+            db.session.delete(files_manager.query.filter_by(id=id).first())
+            db.session.commit()
+            db.session.close()
+            return True
+        except Exception as e:
+            db.session.close()
+            logging.error("删除文件失败")
             return False
 
     def batch_update(self, *args):

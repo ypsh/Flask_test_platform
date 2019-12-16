@@ -5,7 +5,6 @@ import os
 
 from flask import Flask
 from flask_admin import Admin
-from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
 from flask_apscheduler import APScheduler
 from flask_bootstrap import Bootstrap
@@ -74,12 +73,13 @@ class Main():
     def add_apis_path(self):
         self.app.register_blueprint(apis, url_prefix='/apis')
 
+    def run(self):
+        self.add_views_path()
+        self.add_admin_view()
+        self.add_apis_path()
 
-main = Main()
-mapp = main.get_app()
-main.add_apis_path()
-main.add_views_path()
-main.add_admin_view()
+
+Main().run()
 
 if __name__ == '__main__':
     # app.run(debug=False, host='0.0.0.0', threaded=True, ssl_context=(main.get_crt(), main.get_key()))

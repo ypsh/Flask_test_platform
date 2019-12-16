@@ -4,8 +4,8 @@ from com.common.model import db
 
 
 class ServiceOperate:
-    def get_all(self):
-        return Service.query.all()
+    def get_all(self, page, limit):
+        return Service.query.paginate(page, per_page=limit)
 
     def get_service(self, service_name):
         service = Service.query.filter_by(service_name=service_name).first()
@@ -27,10 +27,10 @@ class ServiceOperate:
             )
             db.session.add(admin)
             db.session.commit()
-            return {"message": True}
+            return True
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
     def update_service(self, *args):
         try:
@@ -45,13 +45,13 @@ class ServiceOperate:
                 db.session.flush()
                 db.session.commit()
                 db.session.close()
-            return {"message": True}
+            return True
         except Exception as e:
-            return {"message": str(e)}
+            return False
 
-    def del_item(self, service_name):
+    def del_item(self, id):
         try:
-            service = Service.query.filter_by(service_name=service_name).first()
+            service = Service.query.filter_by(id=id).first()
             db.session.delete(service)
             db.session.commit()
             db.session.close()
@@ -59,16 +59,15 @@ class ServiceOperate:
         except Exception as e:
             return {"message": str(e)}
 
-    def get_mock_list(self):
+    def get_mock_list(self, page, limit):
         result = []
-        data = self.get_all()
+        data = self.get_all(page, limit)
         if data is not None:
-            number = 1
-            for item in data:
-                line = [number, str(item.service_name), item.type, item.path, item.data, item.status, item.creater]
+            for item in data.items:
+                line = {'id': item.id, 'serviceName': str(item.service_name), 'requestType': item.type,
+                        'servicePath': item.path, 'response': item.data, 'status': item.status, 'creator': item.creater}
                 result.append(line)
-                number += 1
-        return result
+        return {'data': result, 'total': data.total}
 
 
 if __name__ == '__main__':

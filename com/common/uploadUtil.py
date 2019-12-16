@@ -37,6 +37,16 @@ class FileUpload:
             logging.error(str(e))
             return False
 
+    def delete_file(self, path, filename):
+        try:
+            file_path = os.path.join(Path().get_current_path(), path,
+                                     filename)
+            os.remove(file_path)
+            return True
+        except Exception as e:
+            logging.error(str(e))
+            return False
+
     def exists_path(self, upload_path, path, file_name):
         if os.path.exists(upload_path):
             upload_path = os.path.join(Path().get_current_path(), path,

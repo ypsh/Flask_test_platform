@@ -10,7 +10,7 @@ class UserOperate():
     def get_user(self, user):
         user = User.query.filter_by(user=user).first()
         if user is not None:
-            return {'id': user.id, 'user': user.user, 'password': user.password, 'image': user.image}
+            return {'id': user.id, 'user': user.user, 'password': user.password, 'avatar': user.image,'roles':['admin'],'introduction':'固定管理员权限'}
         else:
             return None
 

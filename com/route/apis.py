@@ -43,11 +43,11 @@ resource_fields = {
 }
 
 """
-系统用户处理
+登录
 """
 
 
-class user(Resource):
+class login(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('username', type=str, help='Rate to charge for this resource')
@@ -55,43 +55,59 @@ class user(Resource):
         self.parser.add_argument('token', type=str, help='Rate to charge for this resource')
         self.ags = self.parser.parse_args()
 
-    def get(self):
-        result = UserOperate().get_user(self.ags['username'])
-        if result is not None:
-            username = AesUtil().decypt(self.ags['token']).replace(str(result['password']), '')
-            if username == self.ags['username']:
-                return {'status': True}
-            return {'status': False}
-        else:
-            return {'status': False}
-
     def post(self):
         result = UserOperate().get_user(self.ags['username'])
         if result is not None and self.ags['password'] == str(result['password']):
-            return {'login': True, 'token': AesUtil().encypt(str(result['user']) + str(result['password']))}, 200
+            return {'data': {'token': AesUtil().encypt(str(result['user']))}, 'code': 20000}
         else:
-            return {'login': False, 'token': None}, 200
+            return {'message': '账号密码错误'}
+
+
+"""退出登录"""
+
+
+class logout(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.ags = self.parser.parse_args()
+
+    def post(self):
+        return {'data': 'success'}
+
+
+"""获取用户信息"""
+
+
+class user_info(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('token', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+
+    def get(self):
+        username = AesUtil().decypt(self.ags['token'])
+        result = UserOperate().get_user(username)
+        if result is not None:
+            return {'data': {'avatar': result['avatar'], 'roles': result['roles'],
+                             'introduction': result['introduction']}, 'code': 20000}
+        else:
+            return {'message': '账号密码错误'}
 
 
 """
-模拟服务，接口处理
+系统用户处理
 """
 
 
 class services(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('service_name', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('service_type', type=str, help='Rate to charge for this resource')
         self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('operate', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('status', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('user', type=str, help='Rate to charge for this resource')
         self.ags = self.parser.parse_args()
+        self.data = eval(self.ags.data)
 
     def get(self):
-        data = ServiceOperate().get_mock_list()
-        result = {"data": data}
+        result = ServiceOperate().get_mock_list(self.data.get('page'), self.data.get('limit'))
         return result
 
     def post(self):
@@ -113,6 +129,74 @@ class services(Resource):
                      'status': self.ags['status'], 'user': self.ags['user']})
                 return result
         return result
+
+
+"""添加服务"""
+
+
+class add_service(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+        self.data = json.loads(request.data)
+
+    def post(self):
+        try:
+            self.data['response'] = eval(self.data['response'])
+            result = ServiceOperate().add_service(
+                {'service_name': self.data['serviceName'], 'type': self.data['requestType'],
+                 'data': str(self.data['response']), 'path': '/mock/apis/' + self.data['serviceName'],
+                 'status': {0: "stop", 1: "running"}[int(self.data['status'])], 'user': 'admin'})
+            if result:
+                return {"message": "添加成功", "success": True}
+            else:
+                return {"message": "添加失败", "success": False}
+        except Exception as e:
+            return {"message": "系统异常", "success": False}
+
+
+"""更新模拟服务"""
+
+
+class update_service(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+        self.data = json.loads(request.data)
+
+    def post(self):
+        try:
+            result = ServiceOperate().update_service(
+                {'service_name': self.data['serviceName'], 'type': self.data['requestType'],
+                 'data': str(self.data['response']), 'path': '/mock/apis/' + self.data['serviceName'],
+                 'status': {0: "stop", 1: "running"}[int(self.data['status'])], 'user': 'admin'})
+            if result:
+                return {"message": "更新成功", "success": True}
+            else:
+                return {"message": "更新失败", "success": False}
+        except Exception as e:
+            return {"message": "系统异常", "success": False}
+
+
+"""删除模拟服务"""
+
+
+class delete_service(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('id', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+
+    def post(self):
+        try:
+            if ServiceOperate().del_item(self.ags.id):
+                return {"message": "删除成功", "success": True}
+            else:
+                return {"message": "删除失败", "success": False}
+        except Exception as e:
+            return {"message": "系统异常", "success": False}
 
 
 """
@@ -453,6 +537,93 @@ class files_manager(Resource):
             return {'message': data}
 
 
+"""查询文件"""
+
+
+class get_files(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.ags = self.parser.parse_args()
+        self.data = eval(self.ags.data)
+
+    def get(self):
+        result = FilesManager().get_list('static/filesmanager', self.data.get('page'), self.data.get('limit'))
+        if result:
+            return result
+        else:
+            return {'message': False, 'data': None, 'total': 0}
+
+    def post(self):
+        if self.ags['type'] == 'upload':
+            if self.ags['filepath'] == 'jmeter':
+                result = FileUpload().save_file(request.files['files'], 'jmeter/jmx')
+            elif self.ags['filepath'] == 'testcase':
+                result = FileUpload().save_file(request.files['files'], 'com/common/api_test/testcases')
+            else:
+                result = FileUpload().save_file(request.files['files'], 'static/filesmanager')
+            if result:
+                result['user'] = self.ags['user']
+                result['remark'] = self.ags['remark']
+                data = FilesManager().add_file(result)
+                return {'message': data}
+        elif request.json['type'] == 'delete':
+            if FilesManager().del_items(json.loads(request.json['data'])):
+                data = FileUpload().delete_files(json.loads(request.json['data']))
+                return {'message': data}
+        elif request.json['type'] == 'deletereport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/report')
+            return {'message': data}
+        elif request.json['type'] == 'apireport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/api_report')
+            return {'message': data}
+        elif request.json['type'] == 'smokingreport':
+            data = FileUpload().delete_reports(json.loads(request.json['data']), path='static/standard')
+            return {'message': data}
+        elif request.json['type'] == 'remark':
+            data = FilesManager().batch_update(json.loads(request.json['data']))
+            return {'message': data}
+
+
+"""删除文件"""
+
+
+class delete_file(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.parser.add_argument('path', type=str)
+        self.ags = self.parser.parse_args()
+        self.data = eval(request.data).get('data')
+
+    def post(self):
+        # data = FileUpload().delete_files(self.ags.id)
+        for item in self.data:
+            if FilesManager().del_item(item.get('id')):
+                if FileUpload().delete_file(item.get('path'), item.get('filename')):
+                    return {'message': '已删除', "success": True}
+        return {'message': "删除失败", 'success': False}
+
+
+"""上传文件"""
+
+
+class upload(Resource):
+
+    def post(self):
+        try:
+            result = FileUpload().save_file(request.files['file'], 'static/filesmanager')
+            if result:
+                result['user'] = 'admin'
+                result['remark'] = ''
+                data = FilesManager().add_file(result)
+                return {'message': data}
+            else:
+                return {'message': '上传失败'}
+        except Exception as e:
+            return {'message': '上传失败' + str(e)}
+
+
 class dash_board(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -648,8 +819,13 @@ class get_assets(Resource):
             return {'sucess': False}
 
 
-api.add_resource(user, '/user')
-api.add_resource(services, '/service')
+api.add_resource(login, '/login')
+api.add_resource(logout, '/logout')
+api.add_resource(user_info, '/userinfo')
+api.add_resource(services, '/services')
+api.add_resource(add_service, '/addService')
+api.add_resource(update_service,'/updateService')
+api.add_resource(delete_service, '/deleteService')
 api.add_resource(api_manger, '/apimanager')
 api.add_resource(test_case, '/testcase')
 api.add_resource(ApiUpload, '/apiupload')
@@ -660,7 +836,9 @@ api.add_resource(get_modellist, '/modelist')
 api.add_resource(get_reportdata, '/report')
 api.add_resource(time_task, '/task')
 api.add_resource(scheduling, '/scheduling')
-api.add_resource(files_manager, '/filesmanager')
+api.add_resource(get_files, '/get_files')
+api.add_resource(upload, '/upload')
+api.add_resource(delete_file, '/deletefiles')
 api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
 api.add_resource(makedata, '/makedata')
