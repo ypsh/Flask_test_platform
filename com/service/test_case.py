@@ -9,8 +9,8 @@ from com.service.api_manger import ApiMangerOperate
 
 
 class TestCaseOperate:
-    def get_all(self):
-        return test_case.query.all()
+    def get_all(self, page, limit):
+        return test_case.query.paginate(page, per_page=limit)
 
     def get_one(self, api_name):
         result = test_case.query.filter_by(api_name=api_name).first()
@@ -34,18 +34,18 @@ class TestCaseOperate:
             db.session.close()
             return {"message": str(e)}
 
-    def get_list(self):
+    def get_list(self, page, limit):
         result = []
-        data = self.get_all()
+        data = self.get_all(page, limit)
         if data is not None:
-            number = 1
-            for item in data:
-                line = [number, item.id, item.case_name, item.api.model, item.api.api_name, item.parameter, item.result,
-                        item.validation_type, item.mark, item.creater, item.updater
-                        ]
+            for item in data.items:
+                line = {'id': item.id, 'caseName': item.case_name, 'project': item.api.model,
+                        'apiName': item.api.api_name, 'requestBody': item.parameter, 'expectedResult': item.result,
+                        'validationType': item.validation_type, 'remark': item.mark, 'creator': item.creater,
+                        'updater': item.updater}
+
                 result.append(line)
-                number += 1
-        return result
+        return {'data': result, 'total': data.total}
 
     def get_id_by_mode(self, model):
         result = self.get_all()

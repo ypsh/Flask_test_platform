@@ -171,7 +171,8 @@ class update_service(Resource):
             result = ServiceOperate().update_service(
                 {'service_name': self.data['serviceName'], 'type': self.data['requestType'],
                  'data': str(self.data['response']), 'path': '/mock/apis/' + self.data['serviceName'],
-                 'status': {0: "stop", 1: "running"}[int(self.data['status'])], 'user': 'admin'})
+                 'status': {0: "stop", 1: "running"}[int(self.data['status'])], 'user': 'admin',
+                 'id': self.data['id']}, )
             if result:
                 return {"message": "更新成功", "success": True}
             else:
@@ -207,36 +208,43 @@ class delete_service(Resource):
 class api_manger(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('api_name', help='Rate to charge for this resource')
-        self.parser.add_argument('model', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('type', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('path', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('headers', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('need_token', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('status', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('mark', type=str, help=' Rate to charge for this resource')
-        self.parser.add_argument('user', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('operate', type=str, help='Rate to charge for this resource')
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
         self.ags = self.parser.parse_args()
+        self.data = eval(self.ags.data)
 
     def get(self):
-        data = ApiMangerOperate().get_list()
-        result = {"data": data}
+        result = ApiMangerOperate().get_list(self.data.get('page'), self.data.get('limit'))
         return result
 
+
+"""增删改接口"""
+
+
+class updata_api(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.data = json.loads(request.data)
+        self.operate = self.data.get('operate')
+
     def post(self):
-        result = {"message": None}
-        if (self.ags['api_name'] is not None):
-            if (self.ags['operate'] == 'delete'):
-                result = ApiMangerOperate().del_item(self.ags['api_name'])
-                return result
-            elif (self.ags['operate'] == 'add'):
-                result = ApiMangerOperate().add_apis(self.ags)
-                return result
-            elif (self.ags['operate'] == 'update'):
-                result = ApiMangerOperate().update_apis(self.ags)
-                return result
-        return result
+        if (self.operate == 'delete'):
+            if ApiMangerOperate().del_item(self.data.get('id')):
+                return {"message": "已删除", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
+        elif (self.operate == 'add'):
+            self.data['status'] = {0: "stop", 1: "running"}[int(self.data['status'])]
+            if ApiMangerOperate().add_apis(self.data):
+                return {"message": "已添加", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
+        elif (self.operate == 'update'):
+            self.data['status'] = {0: "stop", 1: "running"}[(self.data['status'])]
+            if ApiMangerOperate().update_apis(self.data):
+                return {"message": "已更新", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
 
 
 """
@@ -267,35 +275,12 @@ class ApiUpload(Resource):
 class test_case(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('case_name', help='Rate to charge for this resource')
-        self.parser.add_argument('case_id', help='Rate to charge for this resource')
-        self.parser.add_argument('servi_name', help='Rate to charge for this resource')
-        self.parser.add_argument('api_id', help='Rate to charge for this resource')
-        self.parser.add_argument('parameter', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('result', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('validation_type', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('mark', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('user', type=str, help='Rate to charge for this resource')
-        self.parser.add_argument('operate', type=str, help='Rate to charge for this resource')
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
         self.ags = self.parser.parse_args()
+        self.data = eval(self.ags.data)
 
     def get(self):
-        data = TestCaseOperate().get_list()
-        result = {"data": data}
-        return result
-
-    def post(self):
-        result = {"message": None}
-        if (self.ags['operate'] == 'delete'):
-            result = TestCaseOperate().del_case(self.ags['case_id'])
-            return result
-        if (self.ags['case_name'] is not None):
-            if (self.ags['operate'] == 'add'):
-                result = TestCaseOperate().add_case(self.ags)
-                return result
-            elif (self.ags['operate'] == 'update'):
-                result = TestCaseOperate().update_case(self.ags)
-                return result
+        result = TestCaseOperate().get_list(self.data.get('page'), self.data.get('limit'))
         return result
 
 
@@ -600,7 +585,10 @@ class delete_file(Resource):
         # data = FileUpload().delete_files(self.ags.id)
         for item in self.data:
             if FilesManager().del_item(item.get('id')):
-                if FileUpload().delete_file(item.get('path'), item.get('filename')):
+                try:
+                    FileUpload().delete_file(item.get('path'), item.get('filename'))
+                    return {'message': '已删除', "success": True}
+                except:
                     return {'message': '已删除', "success": True}
         return {'message': "删除失败", 'success': False}
 
@@ -622,6 +610,34 @@ class upload(Resource):
                 return {'message': '上传失败'}
         except Exception as e:
             return {'message': '上传失败' + str(e)}
+
+
+"""下载文件"""
+
+
+class download_file(Resource):
+    def __init__(self):
+        self.data = request.args
+
+    def get(self):
+        try:
+            path = self.data.get('path')
+            basename = self.data.get('name')
+            file_path = os.path.join(Path().get_current_path(), path,
+                                     basename)
+            dir_path = os.path.join(Path().get_current_path(), path)
+            if os.path.exists(file_path):
+                response = make_response(send_from_directory(dir_path, basename, as_attachment=True))
+                response.headers["Content-Disposition"] = \
+                    "attachment;" \
+                    "filename*=UTF-8''{utf_filename}".format(
+                        utf_filename=quote(basename.encode('utf-8'))
+                    )
+                return response
+            else:
+                return None
+        except:
+            return None
 
 
 class dash_board(Resource):
@@ -824,9 +840,10 @@ api.add_resource(logout, '/logout')
 api.add_resource(user_info, '/userinfo')
 api.add_resource(services, '/services')
 api.add_resource(add_service, '/addService')
-api.add_resource(update_service,'/updateService')
+api.add_resource(update_service, '/updateService')
 api.add_resource(delete_service, '/deleteService')
 api.add_resource(api_manger, '/apimanager')
+api.add_resource(updata_api, '/updataApi')
 api.add_resource(test_case, '/testcase')
 api.add_resource(ApiUpload, '/apiupload')
 api.add_resource(TestCaseUpload, '/testcaseupload')
@@ -839,6 +856,7 @@ api.add_resource(scheduling, '/scheduling')
 api.add_resource(get_files, '/get_files')
 api.add_resource(upload, '/upload')
 api.add_resource(delete_file, '/deletefiles')
+api.add_resource(download_file, '/downloadFile')
 api.add_resource(dash_board, '/dashboard')
 api.add_resource(aes, '/aes')
 api.add_resource(makedata, '/makedata')

@@ -34,7 +34,7 @@ class ServiceOperate:
 
     def update_service(self, *args):
         try:
-            service = Service.query.filter_by(service_name=args[0]['service_name']).first()
+            service = Service.query.filter_by(id=args[0]['id']).first()
             if service:
                 service.service_name = args[0]['service_name']
                 service.type = args[0]['type']

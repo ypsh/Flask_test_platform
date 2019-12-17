@@ -9,8 +9,8 @@ from com.common.model import db
 
 # noinspection PyShadowingNames
 class ApiMangerOperate:
-    def get_all(self):
-        return api_manager.query.all()
+    def get_all(self, page, limit):
+        return api_manager.query.paginate(page, per_page=limit)
 
     def get_api(self, api_name):
         result = api_manager.query.filter_by(api_name=api_name).first()
@@ -31,86 +31,76 @@ class ApiMangerOperate:
         global headers
         try:
             for item in args:
-                if item.headers is not None:
-                    headers = JsonOperate().header_to_json(item.headers)
                 admin = api_manager(
-                    api_name=item.api_name,
-                    model=item.model,
-                    type=item.type,
-                    path=item.path,
-                    status=item.status,
-                    headers=str(headers).replace("'", '"'),
-                    need_token=item.need_token,
-                    mark=item.mark,
-                    creater=item.user
+                    api_name=item.get('apiName'),
+                    model=item.get('project'),
+                    type=item.get('requestType'),
+                    path=item.get('servicePath'),
+                    status=item.get('status'),
+                    headers=item.get('header'),
+                    need_token="No",
+                    mark="",
+                    creater="Admin"
                 )
                 db.session.add(admin)
             db.session.commit()
             db.session.close()
-            return {"message": True}
+            return True
 
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
     def update_apis(self, *args):
         try:
             for item in args:
                 result = api_manager.query.filter_by(
-                    api_name=item['api_name']).first()
-                headers = JsonOperate().header_to_json(item.headers)
+                    id=item['id']).first()
                 if result:
-                    result.api_name = item.api_name
-                    result.model = item.model
-                    result.type = item.type
-                    result.path = item.path
-                    result.status = item.status
-                    result.headers = str(headers).replace("'", '"')
-                    result.need_token = item.need_token
-                    result.mark = item.mark
-                    result.updater = item.user
+                    result.api_name = item['apiName']
+                    result.model = item['project']
+                    result.type = item['requestType']
+                    result.path = item['servicePath']
+                    result.status = item['status']
+                    result.headers = item['header']
+                    result.mark = '更新'
+                    result.updater = 'Admin'
                     result.update_time = datetime.datetime.now()
                     db.session.flush()
             db.session.commit()
             db.session.close()
-            return {"message": True}
+            return True
 
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
-    def del_item(self, api_name):
+    def del_item(self, id):
         try:
-            service = api_manager.query.filter_by(api_name=api_name).first()
+            service = api_manager.query.filter_by(id=id).first()
             db.session.delete(service)
             db.session.commit()
             db.session.close()
-            return {"message": True}
+            return True
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
-    def get_list(self, *args):
+    def get_list(self, page, limit):
         try:
             result = []
-            data = self.get_all()
-            if args.__len__():
-                for item in data:
-                    line = [item.id, item.api_name]
-                    result.append(line)
-                return result
+            data = self.get_all(page, limit)
             if data is not None:
-                number = 1
-                for item in data:
+                for item in data.items:
                     if item.cases.__len__() != 0:
                         cases = 'Yes'
                     else:
                         cases = 'No'
-                    line = [number, item.api_name, item.model, item.type, item.path, item.headers, item.need_token,
-                            item.status, item.mark, cases, item.updater]
+                    line = {'id': item.id, 'apiName': item.api_name, 'project': item.model, 'requestType': item.type,
+                            'servicePath': item.path, 'header': item.headers, 'token': item.need_token,
+                            'status': item.status, 'remark': item.mark, 'caseStatus': cases, 'updater': item.updater}
                     result.append(line)
-                    number += 1
-            return result
+            return {'data': result, 'total': data.total}
         except Exception as e:
             logging.error(str(e))
             return None
