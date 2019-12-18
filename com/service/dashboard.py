@@ -32,13 +32,13 @@ class ContCase:
         models = ApiMangerOperate().get_model_list()
         for model in models:
             data[model] = [0, 0]
-        result = ApiMangerOperate().get_list()
+        result = ApiMangerOperate().get_list(1,100000)['data']
         for item in result:
-            if item[2] in data:
-                if item[9] == 'Yes':
-                    data[item[2]][0] += 1
-                elif item[9] == 'No':
-                    data[item[2]][1] += 1
+            if item['project'] in data:
+                if item['caseStatus'] == 'Yes':
+                    data[item['project']][0] += 1
+                elif item['caseStatus'] == 'No':
+                    data[item['project']][1] += 1
 
         return {'message': True, 'data': data}
 

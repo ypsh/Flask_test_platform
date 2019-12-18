@@ -12,6 +12,13 @@ class ApiMangerOperate:
     def get_all(self, page, limit):
         return api_manager.query.paginate(page, per_page=limit)
 
+    def get_api_names(self):
+        names = []
+        result = api_manager.query.with_entities(api_manager.api_name).distinct().all()
+        if result:
+            for item in result:
+                names.append(item.api_name)
+        return names
     def get_api(self, api_name):
         result = api_manager.query.filter_by(api_name=api_name).first()
         if result is not None:

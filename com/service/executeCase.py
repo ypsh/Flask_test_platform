@@ -36,7 +36,7 @@ class ExecuteCase:
         self.fail = 0
 
     def get_all_case(self):
-        cases = TestCaseOperate().get_all()
+        cases = TestCaseOperate().get_all(1,10000)
         if cases:
             self.cases = cases
             return cases
@@ -45,7 +45,7 @@ class ExecuteCase:
     def get_case_info(self, api_id):
         case_info = {}
         if self.cases is not None:
-            for item in self.cases:
+            for item in self.cases.items:
                 if item.id == int(api_id):
                     case_info['case_id'] = api_id
                     case_info['api_id'] = item.api_id
@@ -212,10 +212,10 @@ class ExecuteCase:
 
     def execute_all(self):
         try:
-            for item in self.cases:
+            for item in self.cases.items:
                 self.execute_bycaseid(item.id)
         except Exception as e:
-            logging.error(str(e)+result)
+            logging.error(str(e))
 
     def execute_bymodel(self, model):
         try:

@@ -27,22 +27,27 @@ class TestCaseOperate:
                 db.session.delete(service)
                 db.session.commit()
                 db.session.close()
-                return {"message": True}
+                return True
             else:
-                return {"message": False}
+                return True
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return True
 
     def get_list(self, page, limit):
         result = []
         data = self.get_all(page, limit)
         if data is not None:
             for item in data.items:
+                try:
+                    executeTime = item.execute_time.strftime('%Y-%m-%d %H:%M:%S')
+                except:
+                    executeTime = item.execute_time
                 line = {'id': item.id, 'caseName': item.case_name, 'project': item.api.model,
                         'apiName': item.api.api_name, 'requestBody': item.parameter, 'expectedResult': item.result,
                         'validationType': item.validation_type, 'remark': item.mark, 'creator': item.creater,
-                        'updater': item.updater}
+                        'updater': item.updater, 'executeTime': executeTime, 'executor': item.executer,
+                        'result': item.last_result}
 
                 result.append(line)
         return {'data': result, 'total': data.total}
@@ -72,48 +77,47 @@ class TestCaseOperate:
         global admin
         try:
             for item in args:
-                if item.case_name is not None:
-                    api_id = ApiMangerOperate().get_id(item.servi_name)
+                if item.get('caseName') is not None:
+                    api_id = ApiMangerOperate().get_id(item.get('apiName'))
                     admin = test_case(
-                        case_name=item.case_name,
-                        parameter=JsonOperate().parameter_to_json(item.parameter),
-                        result=item.result,
-                        validation_type=item.validation_type,
-                        mark=item.mark,
+                        case_name=item.get('caseName'),
+                        parameter=JsonOperate().parameter_to_json(item.get('requestBody')),
+                        result=item.get('expectedResult'),
+                        validation_type=item.get('validationType'),
                         api_id=api_id,
-                        creater=item.user
+                        creater="Admin"
                     )
                 db.session.add(admin)
             db.session.commit()
             db.session.close()
-            return {"message": True}
+            return True
 
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
     def update_case(self, *args):
         try:
             for item in args:
-                api_id = ApiMangerOperate().get_id(item.servi_name)
-                result = test_case.query.filter_by(id=item['case_id']).first()
+                api_id = ApiMangerOperate().get_id(item.get("apiName"))
+                result = test_case.query.filter_by(id=item.get("id")).first()
                 if result:
-                    result.case_name = item.case_name
-                    result.parameter = JsonOperate().parameter_to_json(item.parameter)
-                    result.result = item.result
-                    result.validation_type = item.validation_type
-                    result.mark = item.mark
+                    result.case_name = item.get("caseName")
+                    result.parameter = JsonOperate().parameter_to_json(item.get("requestBody"))
+                    result.result = item.get("expectedResult")
+                    result.validation_type = item.get("validationType")
+                    result.mark = "更新"
                     result.api_id = str(api_id)
-                    result.updater = item.user
+                    result.updater = "Admin"
                     result.update_time = datetime.datetime.now()
                     db.session.flush()
             db.session.commit()
             db.session.close()
-            return {"message": True}
+            return True
 
         except Exception as e:
             db.session.close()
-            return {"message": str(e)}
+            return False
 
     def update_execute_result(self, *args):
         try:

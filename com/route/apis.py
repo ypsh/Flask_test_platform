@@ -220,7 +220,13 @@ class api_manger(Resource):
 """增删改接口"""
 
 
-class updata_api(Resource):
+class api_names(Resource):
+    def get(self):
+        result = ApiMangerOperate().get_api_names()
+        return {'data': result}
+
+
+class update_api(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
@@ -272,6 +278,9 @@ class ApiUpload(Resource):
         return result
 
 
+"""查询用例"""
+
+
 class test_case(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -282,6 +291,34 @@ class test_case(Resource):
     def get(self):
         result = TestCaseOperate().get_list(self.data.get('page'), self.data.get('limit'))
         return result
+
+
+"""用例增删改"""
+
+
+class update_case(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('data', type=str, help='Rate to charge for this resource')
+        self.data = json.loads(request.data)
+        self.operate = self.data.get('operate')
+
+    def post(self):
+        if (self.operate == 'delete'):
+            if TestCaseOperate().del_case(self.data.get('id')):
+                return {"message": "已删除", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
+        elif (self.operate == 'add'):
+            if TestCaseOperate().add_case(self.data):
+                return {"message": "已添加", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
+        elif (self.operate == 'update'):
+            if TestCaseOperate().update_case(self.data):
+                return {"message": "已更新", "success": True}
+            else:
+                return {"message": "系统错误", "success": False}
 
 
 class TestCaseUpload(Resource):
@@ -843,8 +880,10 @@ api.add_resource(add_service, '/addService')
 api.add_resource(update_service, '/updateService')
 api.add_resource(delete_service, '/deleteService')
 api.add_resource(api_manger, '/apimanager')
-api.add_resource(updata_api, '/updataApi')
+api.add_resource(api_names, '/getApiNames')
+api.add_resource(update_api, '/updateApi')
 api.add_resource(test_case, '/testcase')
+api.add_resource(update_case, '/updateCase')
 api.add_resource(ApiUpload, '/apiupload')
 api.add_resource(TestCaseUpload, '/testcaseupload')
 api.add_resource(set_project_url, '/seturl')
