@@ -23,7 +23,7 @@ Flask-SQLAlchemy==2.3.2
 gunicorn==19.9.0
 idna==2.7
 itsdangerous==0.24
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.0
 MyApplication==0.1.0
 Naked==0.1.31
