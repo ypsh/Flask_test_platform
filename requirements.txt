@@ -27,7 +27,7 @@ Jinja2==2.10.1
 MarkupSafe==1.0
 MyApplication==0.1.0
 Naked==0.1.31
-paramiko==2.4.2
+paramiko==2.10.1
 pipreqs==0.4.9
 pyasn1==0.4.5
 pycparser==2.18
